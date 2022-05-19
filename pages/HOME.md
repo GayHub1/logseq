@@ -17,6 +17,8 @@
 	  #+END_QUERY
 	- 🌞 待做计划事项
 	  query-table:: false
+	  query-sort-by:: block
+	  query-sort-desc:: false
 	  #+BEGIN_QUERY
 	  {:query [:find (pull ?b [*])
 	           :where
@@ -57,3 +59,6 @@
 	           [(contains? #{"LATER"} ?marker)]]
 	   }
 	  #+END_QUERY
+-
+-
+-
