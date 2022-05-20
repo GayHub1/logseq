@@ -1,12 +1,9 @@
-[{:block/name ".v-eisenhower-matrix",
-  :block/created-at 1652975727291,
-  :block/updated-at 1652975727291}
- {:block/name ".v-isenhower-matrix",
-  :block/created-at 1652975728089,
-  :block/updated-at 1652975728089}
- {:block/name "2022",
-  :block/created-at 1652882592215,
-  :block/updated-at 1652882634145}
+[{:block/name "",
+  :block/created-at 1652935498477,
+  :block/updated-at 1652935498477}
+ {:block/name ".v-eisenhower-matrix",
+  :block/created-at 1653021484550,
+  :block/updated-at 1653021484550}
  {:block/name "2022-okr-o1-kr-1",
   :block/created-at 1652882674873,
   :block/updated-at 1652882674873}
@@ -16,9 +13,6 @@
  {:block/name "2022-okr-o1-kr-3",
   :block/created-at 1652882678896,
   :block/updated-at 1652882678896}
- {:block/name "2022-okr-o1-krs",
-  :block/created-at 1652882592603,
-  :block/updated-at 1652882678897}
  {:block/name "2022-okr-o2-kr-1",
   :block/created-at 1652882695042,
   :block/updated-at 1652882695042}
@@ -43,15 +37,9 @@
  {:block/name "2022-okr-o3-kr-2",
   :block/created-at 1652882592801,
   :block/updated-at 1652882592801}
- {:block/name "2022-okr-o3-krs",
-  :block/created-at 1652882592803,
-  :block/updated-at 1652882710139}
  {:block/name "2022-okr-o4-kr-1",
   :block/created-at 1652882592949,
   :block/updated-at 1652882592949}
- {:block/name "2022-okr-o4-krs",
-  :block/created-at 1652882615246,
-  :block/updated-at 1652882649267}
  {:block/name "6.4.0版本",
   :block/created-at 1652968896926,
   :block/updated-at 1652968896926}
@@ -82,6 +70,12 @@
  {:block/name "create",
   :block/created-at 1652968896612,
   :block/updated-at 1652968896612}
+ {:block/name "decide",
+  :block/created-at 1652935531709,
+  :block/updated-at 1652935531709}
+ {:block/name "delegate",
+  :block/created-at 1652935531713,
+  :block/updated-at 1652935531713}
  {:block/name "docker-compose 安装",
   :block/created-at 1652968896780,
   :block/updated-at 1652968896780}
@@ -97,6 +91,9 @@
  {:block/name "elasticsearch windows 安装",
   :block/created-at 1652968896801,
   :block/updated-at 1652968896801}
+ {:block/name "eliminate",
+  :block/created-at 1652935531716,
+  :block/updated-at 1652935531716}
  {:block/name "elk",
   :block/created-at 1652968895846,
   :block/updated-at 1652968895846}
@@ -127,24 +124,21 @@
  {:block/name "logseq theme",
   :block/created-at 1652894301435,
   :block/updated-at 1652894301435}
- {:block/name "may 18th, 2022",
-  :block/created-at 1652882592309,
-  :block/updated-at 1652882592309}
  {:block/name "may 19th, 2022",
   :block/created-at 1652923136846,
-  :block/updated-at 1652971703910}
+  :block/updated-at 1653022759021}
+ {:block/name "may 20th, 2022",
+  :block/created-at 1653016186581,
+  :block/updated-at 1653016186581}
  {:block/name "now",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
- {:block/name "ps去水印",
-  :block/created-at 1652796973848,
-  :block/updated-at 1652796973848}
  {:block/name "spring-data-elasticsearch 使用记录",
   :block/created-at 1652968896120,
   :block/updated-at 1652968896120}
- {:block/name "spring-data-elasticsearch 使用记录/md",
-  :block/created-at 1652968896324,
-  :block/updated-at 1652968896324}
+ {:block/name "spring-data-elasticsearch 使用记录.md",
+  :block/created-at 1652925333051,
+  :block/updated-at 1652925342576}
  {:block/name "todo",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -163,15 +157,6 @@
  {:block/name "windows安装",
   :block/created-at 1652968896778,
   :block/updated-at 1652968896778}
- {:block/name "个人简历",
-  :block/created-at 1652796990399,
-  :block/updated-at 1652798473806}
- {:block/name "个人评价",
-  :block/created-at 1652798473805,
-  :block/updated-at 1652798610459}
- {:block/name "个人资料",
-  :block/created-at 1652797150599,
-  :block/updated-at 1652797302621}
  {:block/name "分片状态",
   :block/created-at 1652968896609,
   :block/updated-at 1652968896609}
@@ -181,15 +166,9 @@
  {:block/name "在原文档上增加字段",
   :block/created-at 1652968896613,
   :block/updated-at 1652968896613}
- {:block/name "学历信息",
-  :block/created-at 1652797334697,
-  :block/updated-at 1652797825050}
  {:block/name "安装",
   :block/created-at 1652968896782,
   :block/updated-at 1652968896782}
- {:block/name "工作经历",
-  :block/created-at 1652797889054,
-  :block/updated-at 1652802365302}
  {:block/name "执行两次，查看每次的结果",
   :block/created-at 1652968896621,
   :block/updated-at 1652968896621}
@@ -218,8 +197,5 @@
   :block/created-at 1652968895843,
   :block/updated-at 1652968895843}
  {:block/name "集群设置",
-  :block/created-at 1652968896610,
-  :block/updated-at 1652968896610}
- {:block/name "项目经历",
-  :block/created-at 1652798235752, 
-  :block/updated-at 1652798315946}]
+  :block/created-at 1652968896610, 
+  :block/updated-at 1652968896610}]

@@ -11,12 +11,13 @@
 .genshin {
   font-family: Genshin;
 }
+
 /* WIP css eisenhower matrix by cannibalox v202100306 */
 /* works best with the `v-eisenhower` template        */
 /* activate with:  `/template v-eisenhower		      */
 /* or tag a block with `#.v-eisenhower-matrix`        */  
 /* define vars */ 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 1000px) {
 	[data-refs-self*="eisenhower-matrix"]{
 		--eisen-caption-color: #fff;
 		--eisen-caption-bg: #0000;
@@ -132,7 +133,7 @@
 	}
 	div[data-refs-self*="eisenhower-matrix"] > .block-children-container > .block-children-container > .block-children {
 		border:none;
-		margin: 0px 0px 0 30px !important;
+		margin: 0px 0px 0 0px !important;
 	}
 
 	div[data-refs-self*="eisenhower-matrix"] .dsl-query > div > div > div > div.content {
@@ -140,9 +141,9 @@
 	}
 
 	div[data-refs-self*="eisenhower-matrix"] .block-body > div > div > div.initial {
-	  margin-top: -32px;
+	  margin-top: 1px;
 	  margin-left: -20px;
-	  margin-right: 20px;
+	  margin-right: -10px;
 	}
 
 	div[data-refs-self*="eisenhower-matrix"] .block-body > div > div > div.initial > div > div > div {
@@ -185,4 +186,3 @@ a.tag[data-ref*=".v-"]{
    /*border: 1px solid #a1c65d; border-radius: 3px;*/
    padding: 0 2px;
    }
-@GayHub1

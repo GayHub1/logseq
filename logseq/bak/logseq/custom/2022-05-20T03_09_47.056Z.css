@@ -13,6 +13,9 @@
 }
 
 
+/*
+/* Theme custom css end
+/*
 /* WIP css eisenhower matrix by cannibalox v202100306 */
 /* works best with the `v-eisenhower` template        */
 /* activate with:  `/template v-eisenhower		      */
@@ -187,4 +190,3 @@ a.tag[data-ref*=".v-"]{
    /*border: 1px solid #a1c65d; border-radius: 3px;*/
    padding: 0 2px;
    }
-@GayHub1
