@@ -1,0 +1,165 @@
+[33mcommit 00aa3e4a0b931ef2041a7f969107ccd33027fbdb[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 24 00:23:32 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit 1232148b797f555a42595b8e52e2c13df1c6b25d[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 24 00:22:32 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit b61321961f0242cc604169d1440e94c53a55f384[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 24 00:21:32 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit a1feda8b1d0b8c7f84199482fa3639bb9ed708f4[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Sun May 22 18:12:13 2022 +0800
+
+    初始数据
+
+[33mcommit e1ab7074d21bc07c2f7dd479da4b22b9b9f3f99f[m
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Sun May 22 18:11:16 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit b1320053d27b26c1b6aed955dda1eeb7d2845ddb[m
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Sun May 22 18:10:17 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit e22456397c42f581b60c61a86918afb9c8a30d72[m
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Sun May 22 09:15:44 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit 0d343b7919227f4236f5142dbeccf51bd4767189[m
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Sun May 22 09:03:44 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit 722a84546dd3c67b7b03ddda37ed9cbc0f58bb6f[m
+Merge: 9a7b883 d663bea
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Sun May 22 08:58:47 2022 +0800
+
+    Auto saved by Logseq
+
+[33mcommit 9a7b8834c3be1bd7454cf71f01389991be4251db[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Fri May 20 17:22:29 2022 +0800
+
+    完成简陋的kanban
+
+[33mcommit d663bea16101e7520f85db789b7aa41668eb2a19[m
+Author: GayHub1 <GayHub1@users.noreply.github.com>
+Date:   Thu May 19 16:12:05 2022 +0000
+
+    Deploying to gh-pages from @ GayHub1/logseq@bd9b6aa48feb0aa01c68e1a654fad8960ce41005 🚀
+
+[33mcommit bd9b6aa48feb0aa01c68e1a654fad8960ce41005[m
+Merge: b3b79c7 56736cb
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Fri May 20 00:03:08 2022 +0800
+
+    Merge remote-tracking branch 'origin/gh-pages' into gh-pages
+    
+    # Conflicts:
+    #       logseq/bak/logseq/config/2022-05-19T01_20_14.715Z.edn
+    #       logseq/pages-metadata.edn
+    #       pages/2022-OKR-O2-KRS.md
+    #       pages/HOME.md
+    #       pages/contents.md
+    #       pages/logseq dev theme.md
+
+[33mcommit b3b79c7e26516ee0b694db4d56845cd2603e9d81[m
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Fri May 20 00:00:33 2022 +0800
+
+    Test
+
+[33mcommit 56736cb2615840d3d1040f08f32dd9172f314382[m
+Author: GayHub1 <GayHub1@users.noreply.github.com>
+Date:   Wed May 18 17:15:29 2022 +0000
+
+    Deploying to gh-pages from @ GayHub1/logseq@ec40d9a6a83a642706bc8629e9519a9674daecd0 🚀
+
+[33mcommit ec40d9a6a83a642706bc8629e9519a9674daecd0[m
+Author: GayHub1 <GayHub1@users.noreply.github.com>
+Date:   Wed May 18 17:11:46 2022 +0000
+
+    Deploying to gh-pages from @ GayHub1/logseq@a57b91a18da38f7d13302572526b197f03472a94 🚀
+
+[33mcommit a57b91a18da38f7d13302572526b197f03472a94[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Thu May 19 01:09:43 2022 +0800
+
+    Update main.yml
+
+[33mcommit be335a56dd0673eb4dc61db9d455efe913aac155[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Thu May 19 00:57:21 2022 +0800
+
+    Create main.yml
+
+[33mcommit b5bcf95a2951baa71693f2e0081f5a82ff54d2da[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Thu May 19 00:52:55 2022 +0800
+
+    Delete .github directory
+
+[33mcommit f9f6901fa876a0bf990cc447f837487f26807e3f[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Thu May 19 00:45:34 2022 +0800
+
+    Create main.yml
+
+[33mcommit 815b1238089652378d575248cc87bdafbc932f55[m
+Author: 酌客 <lzhuokex@gmail.com>
+Date:   Thu May 19 00:31:37 2022 +0800
+
+    初始化个人 OKR
+
+[33mcommit e269627a78aeb00dcb3f1038c65d834a9a6724bf[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 17 10:13:35 2022 +0800
+
+    MM
+
+[33mcommit 2b8775857e49bd77efe239503eac8ad9a6af7a37[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 17 09:49:56 2022 +0800
+
+    Rename blank.yml to main.yml
+
+[33mcommit 87e485fccc508acd0507fbdb5930047fd8693fe8[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 17 09:49:11 2022 +0800
+
+    Create blank.yml
+
+[33mcommit ab42cde9c999f9e1456118b85b19eb7f37e647f3[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 17 09:35:47 2022 +0800
+
+    First
+
+[33mcommit 43c699e9ce13e87be99ddede69ffb44294e98fbe[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 17 08:59:22 2022 +0800
+
+    Create index.md
+
+[33mcommit 101b8f5449cebb2b8fdfe955c06807f638c2136f[m
+Author: GayHub1 <942418004@qq.com>
+Date:   Tue May 17 08:59:16 2022 +0800
+
+    Set theme jekyll-theme-tactile
