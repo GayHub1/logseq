@@ -1,34 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/logseq.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/Spring-Data-ElasticSearch_使用记录_1652925332508_0.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/journals/2022_05_19.md" beforeDir="false" afterPath="$PROJECT_DIR$/journals/2022_05_19.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/.recycle/pages_8%2F0.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/.recycle/pages_8.0.3.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/.recycle/pages_untitled.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/logseq/config/2022-05-19T01_22_10.984Z.edn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/logseq/config/2022-05-19T14_01_35.818Z.edn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/logseq/config/2022-05-20T03_09_46.770Z.edn" beforeDir="false" afterPath="$PROJECT_DIR$/logseq/bak/logseq/config/2022-05-20T03_09_46.770Z.edn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/logseq/custom/2022-05-19T16_43_07.235Z.css" beforeDir="false" afterPath="$PROJECT_DIR$/logseq/bak/logseq/custom/2022-05-19T16_43_07.235Z.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/logseq/custom/2022-05-20T03_09_47.056Z.css" beforeDir="false" afterPath="$PROJECT_DIR$/logseq/bak/logseq/custom/2022-05-20T03_09_47.056Z.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/pages/.v-eisenhower-matrix/2022-05-19T14_01_36.098Z.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/pages/2022-OKR-O2-KRS/2022-05-19T01_29_21.234Z.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/pages/2022-OKR-O2-KRS/2022-05-19T14_01_36.244Z.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/bak/pages/logseq dev theme/2022-05-19T14_01_36.254Z.md" beforeDir="false" afterPath="$PROJECT_DIR$/logseq/bak/pages/logseq dev theme/2022-05-19T14_01_36.254Z.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logseq/graphs-txid.edn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/2022-OKR-O2-KRS.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/Windows安装.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/docker-compose 安装.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/logseq dev theme.md" beforeDir="false" afterPath="$PROJECT_DIR$/pages/logseq dev theme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/安装.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trace.zip" beforeDir="false" afterPath="$PROJECT_DIR$/trace.zip" afterDir="false" />
-    </list>
+    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="初始数据" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,9 +35,32 @@
       <workItem from="1652922981998" duration="1236000" />
       <workItem from="1653038608783" duration="568000" />
     </task>
+    <task id="LOCAL-00001" summary="初始数据">
+      <created>1653214333762</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1653214333762</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="初始数据" />
+    <option name="LAST_COMMIT_MESSAGE" value="初始数据" />
   </component>
 </project>
