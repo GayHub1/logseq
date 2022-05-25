@@ -236,7 +236,9 @@ collapsed:: true
 		- Elasticseach 中的 keyword
 		  *  不做特殊的分词处理
 		  * 字段与索引一一对应
-	- 全文本，非结构化的文本数据（Elasticsearch 中的 text）
+	- * 全文本，非结构化的文本数据
+	  * （Elasticsearch 中的 text）
+	  *
 -
 -
 - ## 查询语句
