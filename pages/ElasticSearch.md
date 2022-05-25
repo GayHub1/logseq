@@ -228,6 +228,7 @@ collapsed:: true
 	- copy_to :
 	- * copy_to将字段的数值拷贝到目标字段，实现类似_all的作用
 	  * copy_to的目标字段不出现在_source中
+	  *
 -
 -
 - ## 查询语句
