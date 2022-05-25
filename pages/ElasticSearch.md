@@ -230,6 +230,8 @@ collapsed:: true
 	  	* copy_to的目标字段不出现在_source中
 	- Elasticsearch中不提供专门的数组类型。但是任何字段，都可以包含多个相同类类型的数值
 	- 多字段特性
+	  * 使用不同的**analyzer**
+	  *
 -
 -
 - ## 查询语句
