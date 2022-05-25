@@ -229,6 +229,7 @@ collapsed:: true
 	   * copy_to将字段的数值拷贝到目标字段，实现类似_all的作用
 	  	* copy_to的目标字段不出现在_source中
 	- Elasticsearch中不提供专门的数组类型。但是任何字段，都可以包含多个相同类类型的数值
+	- 多字段特性
 -
 -
 - ## 查询语句
