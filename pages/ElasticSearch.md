@@ -226,8 +226,8 @@ collapsed:: true
 		- 记录内容越多，占用存储空间越大
 	- null_Value : 对空值赋一个空值对应属性，使得可以被搜索
 	- copy_to :
-		- *  copy_to将字段的数值拷贝到目标字段，实现类似_all的作用
-		  * copy_to的目标字段不出现在_source中
+	- * copy_to将字段的数值拷贝到目标字段，实现类似_all的作用
+	  * copy_to的目标字段不出现在_source中
 -
 -
 - ## 查询语句
