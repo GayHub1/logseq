@@ -232,11 +232,11 @@ collapsed:: true
 	- 多字段特性
 	  * 使用不同的**analyzer**
 	- Excat values V.S Full Text
-	  * Exact Value:包括数字/日期/具体一个字符串（例如“Apple Stare") （  ）
-		- * Elasticseach 中的 keyword
-			- * 不做特殊的分词处理
-			  * 字段与索引一一对应
-	- * 全文本，非结构化的文本数据（Elasticsearch 中的 text）
+	  * Exact Value:包括数字/日期/具体一个字符串（例如“Apple Stare")
+		- Elasticseach 中的 keyword
+		  *  不做特殊的分词处理
+		  * 字段与索引一一对应
+	- 全文本，非结构化的文本数据（Elasticsearch 中的 text）
 -
 -
 - ## 查询语句
