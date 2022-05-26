@@ -14,7 +14,7 @@
 	   }
 	  #+END_QUERY
 	- 🌞  待做计划事项。
-	  query-table:: false
+	  query-table:: true
 	  #+BEGIN_QUERY
 	  {:query [:find (pull ?b [*])
 	        :where
@@ -42,7 +42,7 @@
 	   }
 	  #+END_QUERY
 	- 🚮  待做其他事项。
-	  query-table:: true
+	  query-table:: false
 	  #+BEGIN_QUERY
 	  {:query [:find (pull ?b [*])
 	        :where
