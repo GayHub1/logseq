@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据" />
+    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/journals/2022-05-26.md" beforeDir="false" afterPath="$PROJECT_DIR$/journals/2022-05-26.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/journals/2022_05_19.md" beforeDir="false" afterPath="$PROJECT_DIR$/journals/2022_05_19.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="gh-pages" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
