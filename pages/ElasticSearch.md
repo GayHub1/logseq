@@ -354,12 +354,12 @@ GET /_mget
 {
 "docs" : [
 {
-  "_index" : "test",
-  "_id" : "1"
+"_index" : "test",
+"_id" : "1"
 },
 {
-  "_index" : "test",
-  "_id" : "2"
+"_index" : "test",
+"_id" : "2"
 }
 ]
 }
@@ -371,11 +371,11 @@ GET /test/_mget
 "docs" : [
 {
 
-  "_id" : "1"
+"_id" : "1"
 },
 {
 
-  "_id" : "2"
+"_id" : "2"
 }
 ]
 }
@@ -385,22 +385,22 @@ GET /_mget
 {
 "docs" : [
 {
-  "_index" : "test",
-  "_id" : "1",
-  "_source" : false
+"_index" : "test",
+"_id" : "1",
+"_source" : false
 },
 {
-  "_index" : "test",
-  "_id" : "2",
-  "_source" : ["field3", "field4"]
+"_index" : "test",
+"_id" : "2",
+"_source" : ["field3", "field4"]
 },
 {
-  "_index" : "test",
-  "_id" : "3",
-  "_source" : {
-      "include": ["user"],
-      "exclude": ["user.location"]
-  }
+"_index" : "test",
+"_id" : "3",
+"_source" : {
+    "include": ["user"],
+    "exclude": ["user.location"]
+}
 }
 ]
 }
