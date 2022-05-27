@@ -59,6 +59,9 @@
 		- 获取文档
 		  collapsed:: true
 			- `GET users/_doc/1`
+		- 删除文档
+		  collapsed:: true
+			- `DELETE users/_doc/1`
 		-
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
