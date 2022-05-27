@@ -62,6 +62,9 @@
 		- 删除文档
 		  collapsed:: true
 			- `DELETE users/_doc/1`
+		- BULK操作
+		- ```
+		  ```
 		-
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
