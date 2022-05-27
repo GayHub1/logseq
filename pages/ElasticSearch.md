@@ -32,10 +32,12 @@ collapsed:: true
 	- Index - 索引是文档的容器，是一类文档的结合
 		- Index体现了逻辑空间的概念：每个索引都有自己的Mapping定义，用于定义包含的文档的字段名和字段类型
 		- Shard体现了物理空间的概念：索引中的数据分散在Shard上
-		-
 	- 索引的 Mapping 与 Settings
 		- Mapping 定义文档字段的类型
 		- Setting 定义不同的数据分布
+	- RESTAPI
+		- 查看索引相关信息
+		  GET kibana_sample_data_ecommerce
 ### 节点
 collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
