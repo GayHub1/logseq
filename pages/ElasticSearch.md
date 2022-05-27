@@ -30,12 +30,15 @@ collapsed:: true
 	- 每个文档都有一个Unique ID
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
+	  collapsed:: true
 		- Index体现了逻辑空间的概念：每个索引都有自己的Mapping定义，用于定义包含的文档的字段名和字段类型
 		- Shard体现了物理空间的概念：索引中的数据分散在Shard上
 	- 索引的 Mapping 与 Settings
+	  collapsed:: true
 		- Mapping 定义文档字段的类型
 		- Setting 定义不同的数据分布
 	- RESTAPI
+	  collapsed:: true
 		- 查看索引相关信息
 		  `GET kibana_sample_data_ecommerce`
 		- 查看索引的文档总数
@@ -49,7 +52,6 @@ collapsed:: true
 		- 索引具体内容使用情况
 		  GET /_cat/indices?v&h=i,tm&s=tm:desc
 ### 节点
-collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
 	  collapsed:: true
 		- 每个节点启动后，默认就是一个Master eligible节点
@@ -71,11 +73,17 @@ collapsed:: true
 			- 负责接受Client的请求，将请求分发到合适的节点，最终把结果汇集到一起
 			- 每个节点默认都起到了Coordinating Node的职责
 	- #### Hot & Warm Node
+	  collapsed:: true
 		- 不同硬件配置的Data Node,用来实现Hot&Warm架构，降低集群部署的成本
 	- #### Machine Learning Node
+	  collapsed:: true
 		- 负责跑机器学习的Job,用来做异常检测
 	- #### Tribe Node
+	  collapsed:: true
 		- Tribe Node连接到不同的Elasticsearch集群，并且支持将这些集群当成一个单独的集群处理5.3开始使用Cross Cluster Serarch)
+	- RESTAPI
+	-
+	-
 ### 分片
 collapsed:: true
 	- 主分片(Primary Shard )，用以解决数据水平扩展的问题。通过主分片，可以将数据分布到集群内的所有节点之上
