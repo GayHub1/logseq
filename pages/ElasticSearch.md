@@ -40,7 +40,8 @@ collapsed:: true
 		  `GET kibana_sample_data_ecommerce`
 		- 查看索引的文档总数
 		  `GET kibana_sample_data_ecommerce/_count`
-		- 查看节点indices状态
+		- 查看节点**indices**状态
+		- `GET /_cat/indices/kibana*?v&s=index`
 ### 节点
 collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
