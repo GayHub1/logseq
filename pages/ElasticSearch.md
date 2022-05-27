@@ -40,8 +40,9 @@ collapsed:: true
 		  `GET kibana_sample_data_ecommerce`
 		- 查看索引的文档总数
 		  `GET kibana_sample_data_ecommerce/_count`
-		- 查看节点**indices**状态
-		- `GET /_cat/indices/kibana*?v&s=index`
+		- 查看节点**indices**状态(查看集群中该索引情况)
+		- 查看状态为绿的索引
+		  GET /_cat/indices?v&health=green
 ### 节点
 collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
