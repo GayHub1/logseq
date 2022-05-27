@@ -62,9 +62,19 @@
 		- 删除文档
 		  collapsed:: true
 			- `DELETE users/_doc/1`
-		- BULK操作
-		- ```
-		  ```
+		- 批量操作
+			- BULK
+			  collapsed:: true
+				- ```
+				  POST _bulk
+				  {"index":{"_index":"test","_id":"1"}}
+				  {"field1":"value1"}
+				  {"delete":{"_index":"test","_id":"2"}}
+				  {"create":{"_index":"test2","_id":"3"}}
+				  {"field1":"value3"}
+				  {"update":{"_id":"1","_index":"test"}}
+				  {"doc":{"field2":"value2"}}
+				  ```
 		-
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
