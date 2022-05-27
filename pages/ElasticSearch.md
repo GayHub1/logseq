@@ -64,6 +64,7 @@
 			- `DELETE users/_doc/1`
 		- 批量操作
 			- bulk
+			  collapsed:: true
 				- ```
 				  POST _bulk
 				  {"index":{"_index":"test","_id":"1"}}
@@ -75,6 +76,7 @@
 				  {"doc":{"field2":"value2"}}
 				  ```
 			- mget
+			  collapsed:: true
 				- ```
 				  GET /_mget
 				  {
@@ -100,6 +102,12 @@
 				      ]
 				  }
 				  ```
+			- msearch
+			- ```POST kibana_sample_data_ecommerce/_msearch
+			  {}
+			  {"query" : {"match_all" : {}},"size":1}
+			  {"index" : "kibana_sample_data_flights"}
+			  {"query" : {"match_all" : {}},"size":2}```
 		-
 	-
 ### 索引
