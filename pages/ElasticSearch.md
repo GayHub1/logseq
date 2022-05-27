@@ -82,7 +82,8 @@ collapsed:: true
 	  collapsed:: true
 		- Tribe Node连接到不同的Elasticsearch集群，并且支持将这些集群当成一个单独的集群处理5.3开始使用Cross Cluster Serarch)
 	- RESTAPI
-	-
+	- 列出所有node 以及node节点机器状态
+	  `GET /_cat/nodes?v`
 	-
 ### 分片
 collapsed:: true
