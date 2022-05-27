@@ -37,7 +37,6 @@ collapsed:: true
 		- Mapping 定义文档字段的类型
 		- Setting 定义不同的数据分布
 ### 节点
-collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
 	  collapsed:: true
 		- 每个节点启动后，默认就是一个Master eligible节点
