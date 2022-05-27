@@ -124,7 +124,6 @@ collapsed:: true
 		- Mapping 定义文档字段的类型
 		- Setting 定义不同的数据分布
 	- RESTAPI
-	  collapsed:: true
 		- 查看索引相关信息
 		  `GET kibana_sample_data_ecommerce`
 		- 查看索引的文档总数
