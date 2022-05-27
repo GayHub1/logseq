@@ -64,7 +64,6 @@
 			- `DELETE users/_doc/1`
 		- 批量操作
 			- bulk
-			  collapsed:: true
 				- ```
 				  POST _bulk
 				  {"index":{"_index":"test","_id":"1"}}
@@ -76,8 +75,31 @@
 				  {"doc":{"field2":"value2"}}
 				  ```
 			- mget
-			  collapsed:: true
-				- RESTAPI
+				- ```
+				  GET /_mget
+				  {
+				      "docs" : [
+				          {
+				              "_index" : "test",
+				              "_id" : "1",
+				              "_source" : false
+				          },
+				          {
+				              "_index" : "test",
+				              "_id" : "2",
+				              "_source" : ["field3", "field4"]
+				          },
+				          {
+				              "_index" : "test",
+				              "_id" : "3",
+				              "_source" : {
+				                  "include": ["user"],
+				                  "exclude": ["user.location"]
+				              }
+				          }
+				      ]
+				  }
+				  ```
 		-
 	-
 ### 索引
