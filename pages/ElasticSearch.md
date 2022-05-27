@@ -84,8 +84,8 @@ collapsed:: true
 	- RESTAPI
 	- 列出所有node 以及node节点机器状态
 	  `GET /_cat/nodes?v`
-	  | ip |    heap.percent |   ram.percent |   cpu |   load_1m |   load_5m |   load_15m |   node.role  |  master name |
-	- |:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+	- | ip |    heap.percent |   ram.percent |   cpu |   load_1m |   load_5m |   load_15m |   node.role  |  master name |
+	-
 	- |  10.42.4.198           33          64   3    1.82    1.81     1.43 himrst    -      instance-0000000001
 	  10.42.6.65            49          66   3    1.69    1.78     1.62 himrst    *      instance-0000000000
 	  10.42.5.59            70          82   0    1.47    2.18     2.59 mv        -      tiebreaker-0000000002
