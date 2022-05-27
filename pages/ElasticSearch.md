@@ -38,6 +38,8 @@ collapsed:: true
 	- RESTAPI
 		- 查看索引相关信息
 		  `GET kibana_sample_data_ecommerce`
+		- 查看索引的文档总数
+		  `GET kibana_sample_data_ecommerce/_count`
 ### 节点
 collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
