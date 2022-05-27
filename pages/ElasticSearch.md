@@ -215,7 +215,15 @@ collapsed:: true
 			- 偏移（Offset)-记录单词的开始结束位置，实现高亮显示
 			  
 			    ![image-20220504182115226](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504182115226.png)
-	-
+	- RESTAPI
+	  collapsed:: true
+		- ```
+		  POST _analyze
+		  {
+		    "analyzer": "standard",
+		    "text": "Mastering Elasticsearch"
+		  }
+		  ```
 - ### 分词器
   collapsed:: true
 	- 常见分词器
