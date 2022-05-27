@@ -46,7 +46,7 @@ collapsed:: true
 		  `GET /_cat/indices?v&health=green`
 		- 查看具体的字段
 		  `GET /_cat/indices/kibana*?pri&v&h=health,index,pri,rep,docs.count,mt`
-		- 索引具体
+		- 索引具体内容使用情况
 		  GET /_cat/indices?v&h=i,tm&s=tm:desc
 ### 节点
 collapsed:: true
