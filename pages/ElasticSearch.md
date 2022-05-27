@@ -29,6 +29,7 @@
 	- 每个文档都有一个Unique ID
 	- RESTAPI
 	- 创建文档
+	- 指定id存在时就更新
 	- ```
 	  POST users/_doc
 	  {
@@ -37,7 +38,14 @@
 	      "message" : "trying out Kibana"
 	  }
 	  ```
-	-
+	- ```
+	  POST users/_doc/1
+	  {
+	  	"user" : "Mike",	
+	      "post_date" : "2019-04-15T14:12:12",
+	      "message" : "trying out Kibana"
+	  }
+	  ```
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
 	  collapsed:: true
