@@ -29,6 +29,7 @@
 	- 每个文档都有一个Unique ID
 	- RESTAPI
 		- 创建文档
+		  collapsed:: true
 			- 指定id存在时就报错
 			- ```
 			  PUT users/_create/1
@@ -55,6 +56,10 @@
 			      "message" : "trying out Kibana"
 			  }
 			  ```
+		- 获取文档
+		  collapsed:: true
+			- `GET users/_doc/1`
+		-
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
 	  collapsed:: true
