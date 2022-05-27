@@ -37,7 +37,9 @@ collapsed:: true
 		- Setting 定义不同的数据分布
 	- RESTAPI
 		- 查看索引相关信息
+		  ````
 		  GET kibana_sample_data_ecommerce
+		  ```
 ### 节点
 collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
