@@ -93,8 +93,8 @@ collapsed:: true
 	  * **ram.percent** 内存占用百分比
 	  * **cpu** CPU占用百分比
 	  * **master** *表示节点是集群中的主节点
-	  * name 节点名
-	-
+	  * **name** 节点名
+	- `GET /_cat/nodes?v&h=id,ip,port,v,m`
 	-
 	-
 ### 分片
