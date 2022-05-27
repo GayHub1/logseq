@@ -52,6 +52,7 @@ collapsed:: true
 		- 索引具体内容使用情况
 		  GET /_cat/indices?v&h=i,tm&s=tm:desc
 ### 节点
+collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
 	  collapsed:: true
 		- 每个节点启动后，默认就是一个Master eligible节点
@@ -97,6 +98,7 @@ collapsed:: true
 	- `GET /_cat/nodes?v&h=id,ip,port,v,m`
 	-
 	-
+-
 ### 分片
 collapsed:: true
 	- 主分片(Primary Shard )，用以解决数据水平扩展的问题。通过主分片，可以将数据分布到集群内的所有节点之上
