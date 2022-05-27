@@ -103,11 +103,14 @@
 				  }
 				  ```
 			- msearch
-			- ```POST kibana_sample_data_ecommerce/_msearch
-			  {}
-			  {"query" : {"match_all" : {}},"size":1}
-			  {"index" : "kibana_sample_data_flights"}
-			  {"query" : {"match_all" : {}},"size":2}```
+			  collapsed:: true
+				- ```
+				  POST kibana_sample_data_ecommerce/_msearch
+				  {}
+				  {"query" : {"match_all" : {}},"size":1}
+				  {"index" : "kibana_sample_data_flights"}
+				  {"query" : {"match_all" : {}},"size":2}
+				  ```
 		-
 	-
 ### 索引
