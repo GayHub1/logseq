@@ -28,7 +28,15 @@
 	- 文档会被序列化成JSON格式，保存在Elasticsearch中
 	- 每个文档都有一个Unique ID
 	- RESTAPI
-	- 创建文档 如果存在就更新
+	- 创建文档
+	- ```
+	  POST users/_doc
+	  {
+	  	"user" : "Mike",	
+	      "post_date" : "2019-04-15T14:12:12",
+	      "message" : "trying out Kibana"
+	  }
+	  ```
 	-
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
