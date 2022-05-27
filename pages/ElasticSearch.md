@@ -98,6 +98,9 @@ collapsed:: true
 	- `GET /_cat/nodes?v&h=id,ip,port,v,m`
 	-
 	-
+- ### 集群
+	- RESTAPI
+	-
 -
 ### 分片
 collapsed:: true
