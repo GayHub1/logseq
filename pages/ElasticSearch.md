@@ -28,6 +28,7 @@
 	- 文档会被序列化成JSON格式，保存在Elasticsearch中
 	- 每个文档都有一个Unique ID
 	- RESTAPI
+	- 创建文档 如果存在就更新
 	-
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
