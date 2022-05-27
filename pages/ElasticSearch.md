@@ -207,6 +207,7 @@ collapsed:: true
 	- 单词词典（Term Dictionary),记录所有文档的单词，记录单词到倒排列表的关联关系
 		- 单词词典一般比较大，可以通过B+树或哈希拉链法实现，以满足高性能的插入与查询
 	- 倒排列表（Posting List)-记录了单词对应的文档结合，由倒排索引项组成
+	  collapsed:: true
 		- 倒排索引项（Posting)
 			- 文档ID
 			- 词频TF-该单词在文档中出现的次数，用于相关性评分
@@ -214,6 +215,7 @@ collapsed:: true
 			- 偏移（Offset)-记录单词的开始结束位置，实现高亮显示
 			  
 			    ![image-20220504182115226](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504182115226.png)
+	-
 - ### 分词器
   collapsed:: true
 	- 常见分词器
