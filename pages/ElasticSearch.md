@@ -24,10 +24,11 @@
 	  | Schema | Mapping       |
 	  | SQL    | DSL           |
 ### 文档
-collapsed:: true
 	- Elasticsearch 是面向文档的，文档是所有可搜索数据的最小单位
 	- 文档会被序列化成JSON格式，保存在Elasticsearch中
 	- 每个文档都有一个Unique ID
+	- RESTAPI
+	-
 ### 索引
 	- Index - 索引是文档的容器，是一类文档的结合
 	  collapsed:: true
