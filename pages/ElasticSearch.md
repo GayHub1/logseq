@@ -198,7 +198,7 @@ collapsed:: true
 	- RESTAPI
 		- 查看集群健康情况
 		- `GET _cluster/health`
-		-
+		- ![image.png](../assets/image_1653748056183_0.png)
 	-
 -
 ### 分片
