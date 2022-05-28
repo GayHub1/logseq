@@ -266,7 +266,6 @@ collapsed:: true
 	  
 	    如果安装插件后重启容器失败，可以将插件压缩包解压到plugins文件夹下ik文件夹
 - ### Search API
-  collapsed:: true
 	- 指定索引
 	  
 	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png)
