@@ -188,8 +188,15 @@ collapsed:: true
 	- `GET /_cat/nodes?v&h=id,ip,port,v,m`
 	-
 	-
-- ### LATER 集群
+- ### 集群
+  :LOGBOOK:
+  CLOCK: [2022-05-28 Sat 21:28:06]--[2022-05-28 Sat 21:28:07] =>  00:00:01
+  :END:
+	- 不同的集群通过不同的名字来区分，默认名字“elasticsearch”
+	- 通过配置文件修改，或者在命令行中-E cluster.name=geektime进行设定
+	  一个集群可以有一个或者多个节点
 	- RESTAPI
+		-
 	-
 -
 ### 分片
