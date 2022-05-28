@@ -222,6 +222,10 @@ collapsed:: true
 			- 影响搜索结果的相关性打分，影响统计结果的准确性
 			- 单个节点上过多的分片，会导致资源浪费，同时也会影响性能
 	- RESTAPI
+	- ```
+	  GET _cat/shards
+	  GET _cat/shards?h=index,shard,prirep,state,unassigned.reason
+	  ```
 	-
 ### 倒排索引
 collapsed:: true
@@ -281,6 +285,88 @@ collapsed:: true
 	    ```
 	  
 	    如果安装插件后重启容器失败，可以将插件压缩包解压到plugins文件夹下ik文件夹
+	- **RESTAPI**
+		- ```
+		  #Simple Analyzer – 按照非字母切分（符号被过滤），小写处理
+		  #Stop Analyzer – 小写处理，停用词过滤（the，a，is）
+		  #Whitespace Analyzer – 按照空格切分，不转小写
+		  #Keyword Analyzer – 不分词，直接将输入当作输出
+		  #Patter Analyzer – 正则表达式，默认 \W+ (非字符分隔)
+		  #Language – 提供了30多种常见语言的分词器
+		  #2 running Quick brown-foxes leap over lazy dogs in the summer evening
+		  
+		  #查看不同的analyzer的效果
+		  #standard
+		  GET _analyze
+		  {
+		    "analyzer": "standard",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  #simpe
+		  GET _analyze
+		  {
+		    "analyzer": "simple",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  GET _analyze
+		  {
+		    "analyzer": "stop",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  #stop
+		  GET _analyze
+		  {
+		    "analyzer": "whitespace",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  #keyword
+		  GET _analyze
+		  {
+		    "analyzer": "keyword",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  GET _analyze
+		  {
+		    "analyzer": "pattern",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  #english
+		  GET _analyze
+		  {
+		    "analyzer": "english",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  POST _analyze
+		  {
+		    "analyzer": "icu_analyzer",
+		    "text": "他说的确实在理”"
+		  }
+		  
+		  
+		  POST _analyze
+		  {
+		    "analyzer": "standard",
+		    "text": "他说的确实在理”"
+		  }
+		  
+		  
+		  POST _analyze
+		  {
+		    "analyzer": "icu_analyzer",
+		    "text": "这个苹果不大好吃"
+		  }
+		  ```
 - ### Search API
   collapsed:: true
 	- 指定索引
@@ -322,9 +408,9 @@ collapsed:: true
 		- title:befutifl~1
 		- title:"lord rings"~2
 - ### Request Body Search
+  collapsed:: true
 	- ![image-20220518232842975](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518232842975.png)
 - ### Mapping
-  collapsed:: true
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
 		   * 定义索引中的字段的名称
