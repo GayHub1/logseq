@@ -368,7 +368,6 @@ collapsed:: true
 		  }
 		  ```
 - ### Search API
-  collapsed:: true
 	- 指定索引
 	  
 	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png)
