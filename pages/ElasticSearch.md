@@ -305,7 +305,6 @@ collapsed:: true
 		- title:befutifl~1
 		- title:"lord rings"~2
 - ### Request Body Search
-  collapsed:: true
 	- ![image-20220518232842975](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518232842975.png)
 - ### Mapping
   collapsed:: true
