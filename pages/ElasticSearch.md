@@ -309,6 +309,7 @@ collapsed:: true
   collapsed:: true
 	- ![image-20220518232842975](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518232842975.png)
 - ### Mapping
+  collapsed:: true
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
 		   * 定义索引中的字段的名称
