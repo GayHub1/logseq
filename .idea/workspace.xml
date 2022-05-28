@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,7 +41,7 @@
       <workItem from="1652922981998" duration="1236000" />
       <workItem from="1653038608783" duration="568000" />
       <workItem from="1653577859427" duration="1361000" />
-      <workItem from="1653661566368" duration="881000" />
+      <workItem from="1653661566368" duration="1500000" />
     </task>
     <task id="LOCAL-00001" summary="初始数据">
       <created>1653214333762</created>
@@ -68,11 +66,41 @@
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="32fa3dda-2f65-4457-b785-58f5369be96d">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State />
           </value>
         </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="32fa3dda-2f65-4457-b785-58f5369be96d" value="TOOL_WINDOW" />
       </map>
     </option>
   </component>
