@@ -197,7 +197,12 @@ collapsed:: true
 	  一个集群可以有一个或者多个节点
 	- RESTAPI
 		- 查看集群健康情况
-		- `GET _cluster/health`
+		- ```
+		  GET _cluster/health
+		  GET _cluster/health?level=shards
+		  GET /_cluster/health/kibana_sample_data_ecommerce,kibana_sample_data_flights
+		  GET /_cluster/health/kibana_sample_data_flights?level=shards
+		  ```
 		- ![image.png](../assets/image_1653748056183_0.png)
 	-
 -
