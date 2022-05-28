@@ -1,6 +1,6 @@
 - # Elasticsearch 核心技术与实战
 	- ElasticSearch起源于Lucene的一款搜索引擎.具有**易扩展**,**高可用**的特点.支持不同的节点类型.支持多种语言类库接入.常用于**实时**搜索.分析.
-- ##  [[ELK安装]]
+- ###  [[ELK安装]]
 - ### 安装与查看插件
   collapsed:: true
 	- 查看插件
@@ -530,8 +530,8 @@ GET /_mget
 "_index" : "test",
 "_id" : "3",
 "_source" : {
-    "include": ["user"],
-    "exclude": ["user.location"]
+  "include": ["user"],
+  "exclude": ["user.location"]
 }
 }
 ]
