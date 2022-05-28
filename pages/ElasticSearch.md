@@ -189,6 +189,7 @@ collapsed:: true
 	-
 	-
 - ### 集群
+  collapsed:: true
   :LOGBOOK:
   CLOCK: [2022-05-28 Sat 21:28:06]--[2022-05-28 Sat 21:28:07] =>  00:00:01
   :END:
@@ -233,8 +234,7 @@ collapsed:: true
 			- 偏移（Offset)-记录单词的开始结束位置，实现高亮显示
 			  
 			    ![image-20220504182115226](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504182115226.png)
-	- RESTAPI
-	  collapsed:: true
+	- collapsed:: true
 		- ```
 		  POST _analyze
 		  {
@@ -242,8 +242,8 @@ collapsed:: true
 		    "text": "Mastering Elasticsearch"
 		  }
 		  ```
+		-
 - ### 分词器
-  collapsed:: true
 	- 常见分词器
 	  
 	  | 名称                                                         | 作用                                                         |
@@ -280,6 +280,7 @@ collapsed:: true
 	  
 	    如果安装插件后重启容器失败，可以将插件压缩包解压到plugins文件夹下ik文件夹
 - ### Search API
+  collapsed:: true
 	- 指定索引
 	  
 	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png)
