@@ -196,6 +196,8 @@ collapsed:: true
 	- 通过配置文件修改，或者在命令行中-E cluster.name=geektime进行设定
 	  一个集群可以有一个或者多个节点
 	- RESTAPI
+		- 查看集群健康情况
+		- `GET _cluster/health`
 		-
 	-
 -
