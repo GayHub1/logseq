@@ -1,6 +1,10 @@
 - # Elasticsearch 核心技术与实战
 	- ElasticSearch起源于Lucene的一款搜索引擎.具有**易扩展**,**高可用**的特点.支持不同的节点类型.支持多种语言类库接入.常用于**实时**搜索.分析.
-- ###  [[ELK安装]]
+- ###  ELK安装
+  collapsed:: true
+	- [[ELK Windows安装]]
+	- [[ELK docker-compose 安装]]
+	- [[报错]]
 - ### 安装与查看插件
   collapsed:: true
 	- 查看插件
@@ -115,6 +119,7 @@ collapsed:: true
 		-
 	-
 ### 索引
+collapsed:: true
 	- Index - 索引是文档的容器，是一类文档的结合
 	  collapsed:: true
 		- Index体现了逻辑空间的概念：每个索引都有自己的Mapping定义，用于定义包含的文档的字段名和字段类型
