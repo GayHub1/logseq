@@ -208,7 +208,6 @@ collapsed:: true
 	-
 -
 ### 分片
-collapsed:: true
 	- 主分片(Primary Shard )，用以解决数据水平扩展的问题。通过主分片，可以将数据分布到集群内的所有节点之上
 		- 一个分片是一个运行的Lucene的实例
 		- 主分片数在索引创建时指定，后续不允许修改，除非Reindex
@@ -229,7 +228,6 @@ collapsed:: true
 	  ```
 	-
 ### 倒排索引
-collapsed:: true
 	- 单词词典（Term Dictionary),记录所有文档的单词，记录单词到倒排列表的关联关系
 		- 单词词典一般比较大，可以通过B+树或哈希拉链法实现，以满足高性能的插入与查询
 	- 倒排列表（Posting List)-记录了单词对应的文档结合，由倒排索引项组成
@@ -287,6 +285,7 @@ collapsed:: true
 	  
 	    如果安装插件后重启容器失败，可以将插件压缩包解压到plugins文件夹下ik文件夹
 	- **RESTAPI**
+	  collapsed:: true
 		- ```
 		  #Simple Analyzer – 按照非字母切分（符号被过滤），小写处理
 		  #Stop Analyzer – 小写处理，停用词过滤（the，a，is）
@@ -371,10 +370,10 @@ collapsed:: true
 - ### Search API
 	- 指定索引
 	  
-	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png)
+	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png){:height 324, :width 747}
 	- #### URL Search
 	  
-	  ![image-20220518233406287.png](../assets/image-20220518233406287_1653743572042_0.png){:height 156, :width 747}
+	  ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518233406287_1653743572042_0.png){:height 156, :width 747}
 	- q:  指定查询语句，使用Query String Syntax
 	- df: 默认字段，不指定时，会对所有字段进行查询
 	- Sort 排序/from和size用于分页
