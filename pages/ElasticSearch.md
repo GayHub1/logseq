@@ -399,19 +399,56 @@ collapsed:: true
 		  {
 		  	"profile":"true"
 		  }
+		  
+		  #分组，Bool查询
+		  GET /movies/_search?q=title:(Beautiful Mind)
+		  {
+		  	"profile":"true"
+		  }
+		  
 		  ```
 	- 布尔操作
 		- AND/OR/NOT或者&&/ll/!
 		- 必须大写
 			- title:(matrix NOT reloaded)
+		- ```
+		  #布尔操作符
+		  # 查找美丽心灵
+		  GET /movies/_search?q=title:(Beautiful AND Mind)
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  # 查找美丽心灵
+		  GET /movies/_search?q=title:(Beautiful NOT Mind)
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  ```
 	- 分组
 		- \+ 表示must
 		- \- 表示must_not
 		- title:(+matrix -reloaded)
+		- ```
+		  # 查找美丽心灵  %2B 代表+号
+		  GET /movies/_search?q=title:(Beautiful %2BMind)
+		  {
+		  	"profile":"true"
+		  }
+		  ```
 	- 范围查询
 		- 区间表示：[] 闭区间 ，{} 开区间
 			- year:{2019 TO 2018}
 			- year:[* TO 2018]
+			- ```
+			  #范围查询 ,区间写法
+			  GET /movies/_search?q=title:beautiful AND year:[2002 TO 2018%7D
+			  {
+			  	"profile":"true"
+			  }
+			  
+			  ```
 	- 算数符号
 		- year:&gt;2010
 		- year:(>2010 && &lt;=2018)
@@ -420,6 +457,13 @@ collapsed:: true
 		- ？代表1个字符，* 代表 0 或 多个字符
 			- title:mi?d
 			- title:be*
+		- ```
+		  #通配符查询
+		  GET /movies/_search?q=title:b*
+		  {
+		  	"profile":"true"
+		  }
+		  ```
 	- ·正则表达
 		- title:[bt]oy
 	- 模糊匹配与近似查询
