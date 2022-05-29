@@ -711,4 +711,13 @@ collapsed:: true
 	- 全文本，非结构化的文本数据
 	  * （Elasticsearch 中的 text）
 - ### IndexTemplate和DynamicTemplate
+	- Index Templates - 帮助你设定 Mappings 和 Settings,并按照一定的规则，自动匹配到新创建的索引之上
+	  * 模版仅在一个索引被新创建时，才会产生作用。修改模版不会影响已创建的索引
+	  * 你可以设定多个索引模版，这些设置会被“merge”在一起
+	  * 你可以指定“order”的数值，控制“merging”的过程
+	- 当一个索引被新创建时
+	  * 应用Elasticsearch默认的settings和mappings
+	  * 应用order数值低的IndexTemplate中的设定
+	  * 应用order高的IndexTemplate中的设定，之前的设定会被覆盖
+	  * 应用创建索引时，用户所指定的Settings和Mappings,并覆盖之前模版中的设定
 -
