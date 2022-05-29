@@ -711,6 +711,7 @@ collapsed:: true
 	- 全文本，非结构化的文本数据
 	  * （Elasticsearch 中的 text）
 - ### IndexTemplate和DynamicTemplate
+  collapsed:: true
 	- IndexTemplate
 		- Index Templates - 帮助你设定 Mappings 和 Settings,并按照一定的规则，自动匹配到新创建的索引之上
 		  * 模版仅在一个索引被新创建时，才会产生作用。修改模版不会影响已创建的索引
