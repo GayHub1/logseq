@@ -378,7 +378,8 @@ collapsed:: true
 	- Sort 排序/from和size用于分页
 	- Profile 可以查看查询是如何被执行的
 	- ```
-	  GET /movies/_search?q=2012&df=title
+	  指定字段
+	  GET /movies/_search?q=title:2012&sort=year:desc&from=0&size=10&timeout=1s
 	  {
 	  	"profile":"true"
 	  }
@@ -386,6 +387,19 @@ collapsed:: true
 	- Term V.S Phrase
 		- Beautiful Mind 等效于 Beautiful OR  Mind    title:(Beautiful AND Mind)
 		- “Beautiful Mind”，等效于 Beautiful AND Mind。Phrase查询，还要求前后顺序保持一致 title="Beautiful Mind"
+		- ```
+		  # 查找美丽心灵, Mind为泛查询
+		  GET /movies/_search?q=title:Beautiful Mind
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  #使用引号，Phrase查询
+		  GET /movies/_search?q=title:"Beautiful Mind"
+		  {
+		  	"profile":"true"
+		  }
+		  ```
 	- 布尔操作
 		- AND/OR/NOT或者&&/ll/!
 		- 必须大写
