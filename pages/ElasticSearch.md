@@ -551,7 +551,94 @@ collapsed:: true
 	  ```
 	-
 - ### QueryString&SimpleQueryString
--
+  collapsed:: true
+	- ```
+	  POST users/_search
+	  {
+	    "query": {
+	      "query_string": {
+	        "default_field": "name",
+	        "query": "Ruan AND Yiming"
+	      }
+	    }
+	  }
+	  
+	  
+	  POST users/_search
+	  {
+	    "query": {
+	      "query_string": {
+	        "fields":["name","about"],
+	        "query": "(Ruan AND Yiming) OR (Java AND Elasticsearch)"
+	      }
+	    }
+	  }
+	  
+	  
+	  #Simple Query 默认的operator是 Or 不支持 AND 会被识别成字符串 用default_operator来指定AND
+	  POST users/_search
+	  {
+	    "query": {
+	      "simple_query_string": {
+	        "query": "Ruan AND Yiming",
+	        "fields": ["name"]
+	      }
+	    }
+	  }
+	  
+	  
+	  POST users/_search
+	  {
+	    "query": {
+	      "simple_query_string": {
+	        "query": "Ruan Yiming",
+	        "fields": ["name"],
+	        "default_operator": "AND"
+	      }
+	    }
+	  }
+	  
+	  
+	  GET /movies/_search
+	  {
+	  	"profile": true,
+	  	"query":{
+	  		"query_string":{
+	  			"default_field": "title",
+	  			"query": "Beafiful AND Mind"
+	  		}
+	  	}
+	  }
+	  
+	  
+	  # 多fields
+	  GET /movies/_search
+	  {
+	  	"profile": true,
+	  	"query":{
+	  		"query_string":{
+	  			"fields":[
+	  				"title",
+	  				"year"
+	  			],
+	  			"query": "2012"
+	  		}
+	  	}
+	  }
+	  
+	  
+	  
+	  GET /movies/_search
+	  {
+	  	"profile":true,
+	  	"query":{
+	  		"simple_query_string":{
+	  			"query":"Beautiful +mind",
+	  			"fields":["title"]
+	  		}
+	  	}
+	  }	
+	  ```
 - ### Mapping
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
