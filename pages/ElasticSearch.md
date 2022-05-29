@@ -367,6 +367,7 @@ collapsed:: true
 		  }
 		  ```
 - ### Search API
+  collapsed:: true
 	- 指定索引
 	  
 	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png){:height 324, :width 747}
@@ -469,9 +470,50 @@ collapsed:: true
 	- 模糊匹配与近似查询
 		- title:befutifl~1
 		- title:"lord rings"~2
+	- ```
+	  //模糊匹配&近似度匹配
+	  GET /movies/_search?q=title:beautifl~1
+	  {
+	  	"profile":"true"
+	  }
+	  
+	  GET /movies/_search?q=title:"Lord Rings"~2
+	  {
+	  	"profile":"true"
+	  }
+	  ```
 - ### Request Body Search
-  collapsed:: true
 	- ![image-20220518232842975](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518232842975.png)
+	- **RESTAPI**
+	- ```
+	  POST /kibana_sample_data_ecommerce/_search
+	  {
+	    "from":10,
+	    "size":20,
+	    "sort":[{"order_date":"desc"}],
+	    "_source":["order_date"],
+	    "query":{
+	      "match_all": {}
+	    }
+	  }
+	  
+	  #脚本字段
+	  GET kibana_sample_data_ecommerce/_search
+	  {
+	    "script_fields": {
+	      "new_field": {
+	        "script": {
+	          "lang": "painless",
+	          "source": "doc['order_date'].value+'hello'"
+	        }
+	      }
+	    },
+	    "query": {
+	      "match_all": {}
+	    }
+	  }
+	  ```
+	-
 - ### Mapping
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
