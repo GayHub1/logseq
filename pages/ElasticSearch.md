@@ -367,6 +367,7 @@ collapsed:: true
 		  }
 		  ```
 - ### Search API
+  collapsed:: true
 	- 指定索引
 	  
 	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png){:height 324, :width 747}
@@ -549,7 +550,8 @@ collapsed:: true
 	  }
 	  ```
 	-
-- ###
+- ### QueryString&SimpleQueryString
+-
 - ### Mapping
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
