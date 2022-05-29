@@ -208,6 +208,7 @@ collapsed:: true
 	-
 -
 ### 分片
+collapsed:: true
 	- 主分片(Primary Shard )，用以解决数据水平扩展的问题。通过主分片，可以将数据分布到集群内的所有节点之上
 		- 一个分片是一个运行的Lucene的实例
 		- 主分片数在索引创建时指定，后续不允许修改，除非Reindex
@@ -636,8 +637,8 @@ GET /_mget
 "_index" : "test",
 "_id" : "3",
 "_source" : {
-  "include": ["user"],
-  "exclude": ["user.location"]
+"include": ["user"],
+"exclude": ["user.location"]
 }
 }
 ]
