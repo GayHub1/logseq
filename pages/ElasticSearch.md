@@ -367,7 +367,6 @@ collapsed:: true
 		  }
 		  ```
 - ### Search API
-  collapsed:: true
 	- 指定索引
 	  
 	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png){:height 324, :width 747}
@@ -483,6 +482,7 @@ collapsed:: true
 	  }
 	  ```
 - ### Request Body Search
+  collapsed:: true
 	- ![image-20220518232842975](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518232842975.png)
 	- **RESTAPI**
 	- ```
@@ -512,8 +512,44 @@ collapsed:: true
 	      "match_all": {}
 	    }
 	  }
+	  #Term查询 默认是有其中一个 OR关系
+	  POST movies/_search
+	  {
+	    "query": {
+	      "match": {
+	        "title": "last christmas"
+	      }
+	    }
+	  }
+	  
+	  # 两个都必须有
+	  POST movies/_search
+	  {
+	    "query": {
+	      "match": {
+	        "title": {
+	          "query": "last christmas",
+	          "operator": "and"
+	        }
+	      }
+	    }
+	  }
+	  #Phrase查询 slop：允许中间插入指定数量的Team
+	  POST movies/_search
+	  {
+	    "query": {
+	      "match_phrase": {
+	        "title":{
+	          "query": "one love",
+	          "slop": 1
+	  
+	        }
+	      }
+	    }
+	  }
 	  ```
 	-
+- ###
 - ### Mapping
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
