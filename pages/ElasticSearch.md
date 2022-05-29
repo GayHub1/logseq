@@ -189,6 +189,7 @@ collapsed:: true
 	-
 	-
 - ### 集群
+  collapsed:: true
   :LOGBOOK:
   CLOCK: [2022-05-28 Sat 21:28:06]--[2022-05-28 Sat 21:28:07] =>  00:00:01
   :END:
@@ -205,8 +206,8 @@ collapsed:: true
 		  ```
 		- ![image.png](../assets/image_1653748056183_0.png)
 	-
--
 ### 分片
+collapsed:: true
 	- 主分片(Primary Shard )，用以解决数据水平扩展的问题。通过主分片，可以将数据分布到集群内的所有节点之上
 		- 一个分片是一个运行的Lucene的实例
 		- 主分片数在索引创建时指定，后续不允许修改，除非Reindex
@@ -227,6 +228,7 @@ collapsed:: true
 	  ```
 	-
 ### 倒排索引
+collapsed:: true
 	- 单词词典（Term Dictionary),记录所有文档的单词，记录单词到倒排列表的关联关系
 		- 单词词典一般比较大，可以通过B+树或哈希拉链法实现，以满足高性能的插入与查询
 	- 倒排列表（Posting List)-记录了单词对应的文档结合，由倒排索引项组成
@@ -248,6 +250,7 @@ collapsed:: true
 		  ```
 		-
 - ### 分词器
+  collapsed:: true
 	- 常见分词器
 	  
 	  | 名称                                                         | 作用                                                         |
@@ -640,6 +643,7 @@ collapsed:: true
 	  }	
 	  ```
 - ### Mapping
+  collapsed:: true
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
 		   * 定义索引中的字段的名称
@@ -706,5 +710,5 @@ collapsed:: true
 			  * 字段与索引一一对应
 	- 全文本，非结构化的文本数据
 	  * （Elasticsearch 中的 text）
--
+- ### IndexTemplate和DynamicTemplate
 -
