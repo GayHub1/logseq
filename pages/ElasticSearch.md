@@ -712,7 +712,6 @@ collapsed:: true
 	  * （Elasticsearch 中的 text）
 - ### IndexTemplate和DynamicTemplate
 	- IndexTemplate
-	  collapsed:: true
 		- Index Templates - 帮助你设定 Mappings 和 Settings,并按照一定的规则，自动匹配到新创建的索引之上
 		  * 模版仅在一个索引被新创建时，才会产生作用。修改模版不会影响已创建的索引
 		  * 你可以设定多个索引模版，这些设置会被“merge”在一起
@@ -751,3 +750,66 @@ collapsed:: true
 		  * *所有的字符串类型都设定成Keyword,或者关闭keyword字段
 		  * is开头的字段都设置成 boolean
 		  * long_开头的都设置成long类型
+	- ```
+	  PUT my_index
+	  {
+	    "mappings": {
+	      "dynamic_templates": [
+	              {
+	          "strings_as_boolean": {
+	            "match_mapping_type":   "string",
+	            "match":"is*",
+	            "mapping": {
+	              "type": "boolean"
+	            }
+	          }
+	        },
+	        {
+	          "strings_as_keywords": {
+	            "match_mapping_type":   "string",
+	            "mapping": {
+	              "type": "keyword"
+	            }
+	          }
+	        }
+	      ]
+	    }
+	  }
+	  ```
+	  * Dynamic Tempate 是定义在在某个索引的 Mapping 中
+	  * Template有一个名称
+	  * 匹配规则是一个数组
+	  * 为匹配到字段设置 Mapping
+	- **RESTAPI**
+	- ```
+	  PUT my_index
+	  {
+	    "mappings": {
+	      "dynamic_templates": [
+	        {
+	          "full_name": {
+	            "path_match":   "name.*",
+	            "path_unmatch": "*.middle",
+	            "mapping": {
+	              "type":       "text",
+	              "copy_to":    "full_name"
+	            }
+	          }
+	        }
+	      ]
+	    }
+	  }
+	  
+	  PUT my_index/_doc/1
+	  {
+	    "name": {
+	      "first":  "John",
+	      "middle": "Winston",
+	      "last":   "Lennon"
+	    }
+	  }
+	  
+	  GET my_index/_search?q=full_name:John
+	  get my_index/_settings
+	  get my_index/_mapping
+	  ```
