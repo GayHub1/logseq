@@ -814,3 +814,9 @@ collapsed:: true
 	  get my_index/_settings
 	  get my_index/_mapping
 	  ```
+- **Aggregation**
+	- Elasticsearch除搜索以外，提供的针对ES数据进行统计分析的功能
+	  * 实时性高
+	  * 而Hadoop需要 (T+1)
+	- 通过聚合，我们会得到一个数据的概览，是分析和总结全套的数据，而不是寻找单个文档
+	- 高性能，只需要一条语句，就可以从 Elasticsearch得到分析结果，无需在客户端自己去实现分析逻辑
