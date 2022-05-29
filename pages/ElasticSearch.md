@@ -189,7 +189,6 @@ collapsed:: true
 	-
 	-
 - ### 集群
-  collapsed:: true
   :LOGBOOK:
   CLOCK: [2022-05-28 Sat 21:28:06]--[2022-05-28 Sat 21:28:07] =>  00:00:01
   :END:
