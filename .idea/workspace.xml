@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据" />
+    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据">
+      <change beforePath="$PROJECT_DIR$/logseq/pages-metadata.edn" beforeDir="false" afterPath="$PROJECT_DIR$/logseq/pages-metadata.edn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/ElasticSearch.md" beforeDir="false" afterPath="$PROJECT_DIR$/pages/ElasticSearch.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,6 +39,7 @@
       <workItem from="1652922981998" duration="1236000" />
       <workItem from="1653038608783" duration="568000" />
       <workItem from="1653813288500" duration="363000" />
+      <workItem from="1653840426428" duration="1160000" />
     </task>
     <task id="LOCAL-00001" summary="初始数据">
       <created>1653214333762</created>
