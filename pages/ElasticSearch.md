@@ -816,7 +816,6 @@ collapsed:: true
 	  get my_index/_mapping
 	  ```
 - **Aggregation**
-  collapsed:: true
 	- Elasticsearch除搜索以外，提供的针对ES数据进行统计分析的功能
 	  * 实时性高
 	  * 而Hadoop需要 (T+1)
