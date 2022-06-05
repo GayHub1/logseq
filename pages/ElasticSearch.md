@@ -2,12 +2,10 @@
   collapsed:: true
 	- ElasticSearch起源于Lucene的一款搜索引擎.具有**易扩展**,**高可用**的特点.支持不同的节点类型.支持多种语言类库接入.常用于**实时**搜索.分析.
 - ###  ELK安装
-  collapsed:: true
 	- [[ELK Windows安装]]
 	- [[ELK docker-compose 安装]]
 	- [[报错]]
 - ### 安装与查看插件
-  collapsed:: true
 	- 查看插件
 	  ```
 	  .\bin\elasticsearch-plugin list
