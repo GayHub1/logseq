@@ -6,3 +6,5 @@
 	      }
 	  }
 	  ```
+- distributionUrl 使用本地文件
+	- `distributionUrl=file:///D:/gradle-6.4.1-all.zip`
