@@ -15,4 +15,4 @@
 	- `docker-compose logs -f --tail 100 nexus3`
 	- ![image.png](../assets/image_1654484789076_0.png)
 - 查看默认用户 admin 的 密码
-	- docker exec -it nexus3 cat /nexus-data/admin.password``
+	- `docker exec -it nexus3 cat /nexus-data/admin.password`
