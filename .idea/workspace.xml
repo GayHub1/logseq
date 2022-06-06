@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据" />
+    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,6 +44,7 @@
       <workItem from="1653038608783" duration="568000" />
       <workItem from="1653577859427" duration="1361000" />
       <workItem from="1653661566368" duration="1500000" />
+      <workItem from="1653894252943" duration="1878000" />
     </task>
     <task id="LOCAL-00001" summary="初始数据">
       <created>1653214333762</created>
