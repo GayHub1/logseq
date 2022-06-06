@@ -1,1 +1,2 @@
-- repositories下添加自定义
+- repositories下添加自定义maven仓库
+	- ·
