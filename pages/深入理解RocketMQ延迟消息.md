@@ -33,28 +33,31 @@
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565132382>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/iuvhrfhpff.jpeg)
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565141805>)  可以看到，总共有 6 个步骤，下面会对这 6 个步骤进行详细的讲解：
 -
-- 1.  修改消息 Topic 名称和队列信息
+- collapsed:: true
+  1.  修改消息 Topic 名称和队列信息
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565311792>)  由于消息一旦存储到 ConsumeQueue 中，消费者就能消费到，而延迟消息不能被立即消费，所以这里将 Topic 的名称修改为 SCHEDULE_TOPIC_XXXX，并根据延迟级别确定要投递到哪个队列下。
 	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565998386>)  org.apache.rocketmq.store.CommitLog#putMessage
 	  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/j4qjv0o9lm.jpeg)
 -
-- 2.  转发消息到延迟主题的 CosumeQueue 中
+- collapsed:: true
+  2.  转发消息到延迟主题的 CosumeQueue 中
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566025347>)  CommitLog 中的消息转发到 CosumeQueue 中是异步进行的。在转发过程中，会对延迟消息进行特殊处理，主要是计算这条延迟消息需要在什么时候进行投递
+	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566088250>)  ```
+	  投递时间=消息存储时间(storeTimestamp) + 延迟级别对应的时间
+	  ```
+	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566100973>)  *   **Commit Log Offset：**记录在 CommitLog 中的位置。
+	  	* **Size：**记录消息的大小
+	  	* **Message Tag HashCode：**记录消息 Tag 的哈希值，用于消息过滤。特别的，对于延迟消息，这个字段记录的是消息的投递时间戳。这也是为什么 java 中 hashCode 方法返回一个 int 型，只占用 4 个字节，而这里 Message Tag HashCode 字段却设计成 8 个字节的原因。
+	  
+	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566107270>)  需要注意的是，会将计算出的投递时间当做消息 Tag 的哈希值存储到 CosumeQueue 中，CosumeQueue 单个存储单元组成结构如下图所示：
+	    
+	  其中：
+	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566108446>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/7c2hsw38d0.jpeg)
 - 5.  延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
   6.  将信息重新存储到 CommitLog 中
   7.  将消息投递到目标 Topic 中
   8.  消费者消费目标 topic 中的数据
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566003541>)  **第二步：转发消息到延迟主题的 CosumeQueue 中**
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566025347>)  CommitLog 中的消息转发到 CosumeQueue 中是异步进行的。在转发过程中，会对延迟消息进行特殊处理，主要是计算这条延迟消息需要在什么时候进行投递
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566088250>)  ```
-  投递时间=消息存储时间(storeTimestamp) + 延迟级别对应的时间
-  ```
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566100973>)  *   **Commit Log Offset：**记录在 CommitLog 中的位置。
-  *   **Size：**记录消息的大小
-  *   **Message Tag HashCode：**记录消息 Tag 的哈希值，用于消息过滤。特别的，对于延迟消息，这个字段记录的是消息的投递时间戳。这也是为什么 java 中 hashCode 方法返回一个 int 型，只占用 4 个字节，而这里 Message Tag HashCode 字段却设计成 8 个字节的原因。
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566107270>)  需要注意的是，会将计算出的投递时间当做消息 Tag 的哈希值存储到 CosumeQueue 中，CosumeQueue 单个存储单元组成结构如下图所示：
-  
-  其中：
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566108446>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/7c2hsw38d0.jpeg)
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566120337>)  第三步：延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566524904>)  需要注意的是，每个 TimeTask 在检查消息是否到期时，首先检查对应队列中尚未投递第一条消息，如果这条消息没到期，那么之后的消息都不会检查。如果到期了，则进行投递，并检查之后的消息是否到期。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566534640>)  第四步：将信息重新存储到 CommitLog 中
