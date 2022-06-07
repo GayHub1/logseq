@@ -4,7 +4,7 @@
 	- {{embed ((de8f36e3-3138-4590-b6c5-bc83a58b9735))}}
 - 2.redis
 	- {{embed ((5afde44b-7e2e-456e-b23c-574cd0623862))}}
-	-
+	- {{embed ((235cc110-e11d-43f9-a70f-9c0b046d35da))}}
 - 2.定时器加扫表
 	- {{embed ((9833e0dc-26f0-4e6a-89ff-3ab5fd4bdba7))}}
 	- 对表压力大，但不用额外引用mq ，适合小项目
