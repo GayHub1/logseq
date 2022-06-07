@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据" />
+=======
     <list default="true" id="050b0fbd-a124-4575-bbc6-283f5b9770cb" name="Changes" comment="同步数据">
       <change beforePath="$PROJECT_DIR$/logseq/pages-metadata.edn" beforeDir="false" afterPath="$PROJECT_DIR$/logseq/pages-metadata.edn" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/ElasticSearch.md" beforeDir="false" afterPath="$PROJECT_DIR$/pages/ElasticSearch.md" afterDir="false" />
     </list>
+>>>>>>> origin/main
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,8 +42,15 @@
       <updated>1652922980016</updated>
       <workItem from="1652922981998" duration="1236000" />
       <workItem from="1653038608783" duration="568000" />
+<<<<<<< HEAD
+      <workItem from="1653577859427" duration="1361000" />
+      <workItem from="1653661566368" duration="1500000" />
+      <workItem from="1653894252943" duration="1878000" />
+      <workItem from="1654562109027" duration="2958000" />
+=======
       <workItem from="1653813288500" duration="363000" />
       <workItem from="1653840426428" duration="1160000" />
+>>>>>>> origin/main
     </task>
     <task id="LOCAL-00001" summary="初始数据">
       <created>1653214333762</created>
@@ -64,6 +75,31 @@
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="32fa3dda-2f65-4457-b785-58f5369be96d">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State />
@@ -99,6 +135,11 @@
     <option name="OPEN_GENERIC_TABS">
       <map>
         <entry key="d091c436-77eb-4c60-a7b0-af1548ba3b2f" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="32fa3dda-2f65-4457-b785-58f5369be96d" value="TOOL_WINDOW" />
       </map>
     </option>
   </component>

@@ -1,0 +1,29 @@
+- 实现种类
+- 1.原生
+  id:: 629ec4c9-460c-45cc-92d6-e0acdebafd1f
+	- {{embed ((de8f36e3-3138-4590-b6c5-bc83a58b9735))}}
+- 2.redis
+	- {{embed ((5afde44b-7e2e-456e-b23c-574cd0623862))}}
+	- {{embed ((235cc110-e11d-43f9-a70f-9c0b046d35da))}}
+- 2.定时器加扫表
+	- {{embed ((9833e0dc-26f0-4e6a-89ff-3ab5fd4bdba7))}}
+	- 对表压力大，但不用额外引用mq ，适合小项目
+	-
+- MQ
+	- 支持延迟队列的MQ
+		- {{embed ((403d12f1-af06-4b0c-ad60-ab2bc63bbbab))}}
+		- {{embed ((50044c01-fafd-43c0-b022-674ab4f0fb6a))}}
+		- RabbitMQ
+			- {{embed ((4cecb7da-45d3-467b-99b4-d8fc26f97e12))}}
+			- {{embed ((a9d7f098-e7e1-4186-9faa-87816c19e449))}}
+		- RocketMQ
+			- {{embed ((629ebfde-43e0-44b9-a85a-9ea9e5bc7e14))}}
+	- 不支持延迟队列的MQ
+		-
+		- {{embed ((9e421dbe-120e-4316-89c2-f212102e720d))}}
+		- {{embed ((629ebf96-ee20-4650-be2c-de0df99011e9))}}
+- 参考文档
+	- [[延迟消息如何实现]]
+	- [[深入理解RocketMQ延迟消息]]
+	- [[任意时间延时消息原理讲解]]
+-
