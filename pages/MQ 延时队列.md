@@ -15,7 +15,7 @@
 			- {{embed ((4cecb7da-45d3-467b-99b4-d8fc26f97e12))}}
 			- {{embed ((a9d7f098-e7e1-4186-9faa-87816c19e449))}}
 		- RocketMQ
-			- {{}}
+			- {{embed ((629ebfde-43e0-44b9-a85a-9ea9e5bc7e14))}}
 -
 - 参考文档
 	- [[延迟消息如何实现]]

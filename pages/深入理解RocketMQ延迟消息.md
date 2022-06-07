@@ -29,6 +29,7 @@
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564985823>)  为了避免重复投递，delay service 需要进行选主  ，可以借助于 zookeeper、etcd 等实现。
 -
 - RocketMQ
+  id:: 629ebfde-43e0-44b9-a85a-9ea9e5bc7e14
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565024047>)  开源 RocketMQ 支持延迟消息，但是不支持秒级精度。默认支持 18 个 level 的延迟消息，这是通过 broker 端的 messageDelayLevel 配置项确定的
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565051741>)  延迟级别的值可以进行修改，以满足自己的业务需求，可以修改 / 添加新的 level。例如：你想支持 2 天的延迟，修改最后一个 level 的值为 2d，这个时候依然是 18 个 level；也可以增加一个 2d，这个时候总共就有 19 个 level。
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565132382>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/iuvhrfhpff.jpeg)
