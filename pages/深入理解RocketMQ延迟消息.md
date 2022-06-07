@@ -15,6 +15,7 @@
 	  id:: 4cecb7da-45d3-467b-99b4-d8fc26f97e12
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564251474>)  **RocketMQ：**RocketMQ 开源版本延迟消息临时存储在一个内部主题中，
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564358985>)  一些消息中间件原生并不支持延迟消息，如 Kafka。在这种情况下，可以选择对 Kafka 进行改造，但是成本较大。另外一种方式是使用第三方临时存储，并加一层代理。
+  id:: 9e421dbe-120e-4316-89c2-f212102e720d
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564386796>)  第三方存储选型要求：
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564390232>)  高性能：
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564409786>)  **支持排序：**支持按照某个字段对消息进行排序，对于延迟消息需要按照时间进行排序。
