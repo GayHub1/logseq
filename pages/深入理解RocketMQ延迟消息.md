@@ -23,11 +23,12 @@
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564442978>)  **高可靠：**延迟消息写入后，不能丢失，需要进行持久化，并进行备份
 -
 - DDMQ
+  id:: 629ebf96-ee20-4650-be2c-de0df99011e9
 	- ![](https://ask.qcloudimg.com/http-save/yehe-5457352/bv64pwxfcb.jpeg)
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564838304>)  这种方式的好处是，因为 delay service 的延迟投递能力是独立于 broker 实现的，不需要对 broker 做任何改造，对于任意 MQ 类型都可以提供支持延迟消息的能力。
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564347706>)  显然，临时存储模块和延迟服务模块，是延迟消息实现的关键。
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564925637>)  为了保证服务的高可用
-	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564928550>)  为了保证数据不丢失
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564928550>)  为了保证数据不丢失 ，每个delay service节点都需要消费缓冲Topic中的全量数据，保存到各自的持久化存储中，这样就有了多个备份，并需要以时间为key。不过因为是各自拉取，并不能保证强一致。如果一定要强一致，那么delay service就不需要内置存储实现，可以借助于其他支持强一致的存储。
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564980463>)  master 要记录自己当前投递到的时间到一个共享存储中
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564985823>)  为了避免重复投递，delay service 需要进行选主  ，可以借助于 zookeeper、etcd 等实现。
 -
