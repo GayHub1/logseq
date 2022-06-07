@@ -16,9 +16,11 @@
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564390232>)  高性能：
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564409786>)  **支持排序：**支持按照某个字段对消息进行排序，对于延迟消息需要按照时间进行排序。
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564431338>)  **支持长时间保存：**一些业务的延迟消息，需要延迟几个月，甚至更长，所以延迟消息必须能长时间保留。
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564442978>)  **高可靠：**延迟消息写入后，不能丢失，需要进行持久化，并进行备份
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564688154>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/bv64pwxfcb.jpeg)
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564838304>)  这种方式的好处是，因为 delay service 的延迟投递能力是独立于 broker 实现的，不需要对 broker 做任何改造，对于任意 MQ 类型都可以提供支持延迟消息的能力。
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564442978>)  **高可靠：**延迟消息写入后，不能丢失，需要进行持久化，并进行备份
+-
+- DDMQ
+	- ![](https://ask.qcloudimg.com/http-save/yehe-5457352/bv64pwxfcb.jpeg)
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564838304>)  这种方式的好处是，因为 delay service 的延迟投递能力是独立于 broker 实现的，不需要对 broker 做任何改造，对于任意 MQ 类型都可以提供支持延迟消息的能力。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564347706>)  显然，临时存储模块和延迟服务模块，是延迟消息实现的关键。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564925637>)  为了保证服务的高可用
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564928550>)  为了保证数据不丢失
