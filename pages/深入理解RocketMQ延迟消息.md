@@ -10,6 +10,7 @@
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564179730>)  **NSQ：**这是一个 go 语言的消息中间件，其通过内存中的优先级队列来保存延迟消息，支持秒级精度
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564231604>)  **QMQ：**采用双重时间轮实现。
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564246738>)  **RabbitMQ：**需要安装一个 rabbitmq_delayed_message_exchange 插件。
+	  id:: 4cecb7da-45d3-467b-99b4-d8fc26f97e12
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564251474>)  **RocketMQ：**RocketMQ 开源版本延迟消息临时存储在一个内部主题中，
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564358985>)  一些消息中间件原生并不支持延迟消息，如 Kafka。在这种情况下，可以选择对 Kafka 进行改造，但是成本较大。另外一种方式是使用第三方临时存储，并加一层代理。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564386796>)  第三方存储选型要求：
