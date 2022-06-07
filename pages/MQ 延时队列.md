@@ -11,6 +11,8 @@
 	-
 - MQ
 	- 支持延迟队列的MQ
+		- {{embed ((403d12f1-af06-4b0c-ad60-ab2bc63bbbab))}}
+		-
 		- RabbitMQ
 			- {{embed ((4cecb7da-45d3-467b-99b4-d8fc26f97e12))}}
 			- {{embed ((a9d7f098-e7e1-4186-9faa-87816c19e449))}}
