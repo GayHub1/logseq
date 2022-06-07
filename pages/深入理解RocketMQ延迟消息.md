@@ -32,16 +32,17 @@
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565051741>)  延迟级别的值可以进行修改，以满足自己的业务需求，可以修改 / 添加新的 level。例如：你想支持 2 天的延迟，修改最后一个 level 的值为 2d，这个时候依然是 18 个 level；也可以增加一个 2d，这个时候总共就有 19 个 level。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565132382>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/iuvhrfhpff.jpeg)
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565141805>)  可以看到，总共有 6 个步骤，下面会对这 6 个步骤进行详细的讲解：
+-
+- 1.  修改消息 Topic 名称和队列信息
   
-  1.  修改消息 Topic 名称和队列信息
-  2.  转发消息到延迟主题的 CosumeQueue 中
-  3.  延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
-  4.  将信息重新存储到 CommitLog 中
-  5.  将消息投递到目标 Topic 中
-  6.  消费者消费目标 topic 中的数据
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565311792>)  由于消息一旦存储到 ConsumeQueue 中，消费者就能消费到，而延迟消息不能被立即消费，所以这里将 Topic 的名称修改为 SCHEDULE_TOPIC_XXXX，并根据延迟级别确定要投递到哪个队列下。
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565998386>)  org.apache.rocketmq.store.CommitLog#putMessage
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565999493>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/j4qjv0o9lm.jpeg)
+  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565311792>)  由于消息一旦存储到 ConsumeQueue 中，消费者就能消费到，而延迟消息不能被立即消费，所以这里将 Topic 的名称修改为 SCHEDULE_TOPIC_XXXX，并根据延迟级别确定要投递到哪个队列下。
+  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565998386>)  org.apache.rocketmq.store.CommitLog#putMessage
+  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565999493>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/j4qjv0o9lm.jpeg)
+  3.  转发消息到延迟主题的 CosumeQueue 中
+  4.  延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
+  5.  将信息重新存储到 CommitLog 中
+  6.  将消息投递到目标 Topic 中
+  7.  消费者消费目标 topic 中的数据
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566003541>)  **第二步：转发消息到延迟主题的 CosumeQueue 中**
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566025347>)  CommitLog 中的消息转发到 CosumeQueue 中是异步进行的。在转发过程中，会对延迟消息进行特殊处理，主要是计算这条延迟消息需要在什么时候进行投递
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566088250>)  ```
