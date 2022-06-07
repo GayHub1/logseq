@@ -7,19 +7,19 @@
 -
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564199168>)  延迟消息
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564184432>)  一些消息[中间件](https://cloud.tencent.com/product/tdmq?from=10680)的 Broker 端内置了延迟消息支持的能力
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564179730>)  **NSQ：**这是一个 go 语言的消息中间件，其通过内存中的优先级队列来保存延迟消息，支持秒级精度
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564231604>)  **QMQ：**采用双重时间轮实现。
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564246738>)  **RabbitMQ：**需要安装一个 rabbitmq_delayed_message_exchange 插件。
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564251474>)  **RocketMQ：**RocketMQ 开源版本延迟消息临时存储在一个内部主题中，
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564347706>)  显然，临时存储模块和延迟服务模块，是延迟消息实现的关键。
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564179730>)  **NSQ：**这是一个 go 语言的消息中间件，其通过内存中的优先级队列来保存延迟消息，支持秒级精度
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564231604>)  **QMQ：**采用双重时间轮实现。
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564246738>)  **RabbitMQ：**需要安装一个 rabbitmq_delayed_message_exchange 插件。
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564251474>)  **RocketMQ：**RocketMQ 开源版本延迟消息临时存储在一个内部主题中，
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564358985>)  一些消息中间件原生并不支持延迟消息，如 Kafka。在这种情况下，可以选择对 Kafka 进行改造，但是成本较大。另外一种方式是使用第三方临时存储，并加一层代理。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564386796>)  第三方存储选型要求：
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564390232>)  高性能：
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564409786>)  **支持排序：**支持按照某个字段对消息进行排序，对于延迟消息需要按照时间进行排序。
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564431338>)  **支持长时间保存：**一些业务的延迟消息，需要延迟几个月，甚至更长，所以延迟消息必须能长时间保留。
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564390232>)  高性能：
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564409786>)  **支持排序：**支持按照某个字段对消息进行排序，对于延迟消息需要按照时间进行排序。
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564431338>)  **支持长时间保存：**一些业务的延迟消息，需要延迟几个月，甚至更长，所以延迟消息必须能长时间保留。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564442978>)  **高可靠：**延迟消息写入后，不能丢失，需要进行持久化，并进行备份
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564688154>)  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/bv64pwxfcb.jpeg)
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564838304>)  这种方式的好处是，因为 delay service 的延迟投递能力是独立于 broker 实现的，不需要对 broker 做任何改造，对于任意 MQ 类型都可以提供支持延迟消息的能力。
+- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564347706>)  显然，临时存储模块和延迟服务模块，是延迟消息实现的关键。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564925637>)  为了保证服务的高可用
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564928550>)  为了保证数据不丢失
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564980463>)  master 要记录自己当前投递到的时间到一个共享存储中
