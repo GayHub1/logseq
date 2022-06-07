@@ -2,6 +2,7 @@
 - tags: #[[SimpRead]]
 - read date: [[2022_06_07  ]]
 - desc: 延迟消息是实际开发中一个非常有用的功能，本文第一部分从整体上介绍秒级精度延迟消息的实现思路，在第二部分结合RocketMQ的延迟消息实现，进行细致的讲解，点出关...
+-
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564179730>)  **NSQ：**这是一个 go 语言的消息中间件，其通过内存中的优先级队列来保存延迟消息，支持秒级精度
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564184432>)  一些消息[中间件](https://cloud.tencent.com/product/tdmq?from=10680)的 Broker 端内置了延迟消息支持的能力
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654564191307>)  基本概念：延迟消息是指生产者发送消息发送消息后，不能立刻被消费者消费，需要等待指定的时间后才可以被消费。
