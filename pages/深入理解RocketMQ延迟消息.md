@@ -39,7 +39,8 @@
 	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565998386>)  org.apache.rocketmq.store.CommitLog#putMessage
 	  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/j4qjv0o9lm.jpeg)
 -
-- 2.  转发消息到延迟主题的 CosumeQueue 中
+- collapsed:: true
+  2.  转发消息到延迟主题的 CosumeQueue 中
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566025347>)  CommitLog 中的消息转发到 CosumeQueue 中是异步进行的。在转发过程中，会对延迟消息进行特殊处理，主要是计算这条延迟消息需要在什么时候进行投递
 	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566088250>)  ```
 	  投递时间=消息存储时间(storeTimestamp) + 延迟级别对应的时间
@@ -56,6 +57,7 @@
 	  Message Tag HashCode：记录消息Tag的哈希值，用于消息过滤。特别的，对于延迟消息，这个字段记录的是消息的投递时间戳。这也是为什么java中hashCode方法返回一个int型，只占用4个字节，而这里Message Tag HashCode字段却设计成8个字节的原因。
 	  相关源码参见：
 	- CommitLog#checkMessageAndReturnSize
+	- ![](https://ask.qcloudimg.com/http-save/yehe-5457352/idt5jrib4n.jpeg)
 - 5.  延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
   6.  将信息重新存储到 CommitLog 中
   7.  将消息投递到目标 Topic 中
