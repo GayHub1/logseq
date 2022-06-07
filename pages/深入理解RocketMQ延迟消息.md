@@ -66,11 +66,11 @@
 	- ![](https://ask.qcloudimg.com/http-save/yehe-5457352/5e2ja5uzu0.jpeg)
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566524904>)  需要注意的是，每个 TimeTask 在检查消息是否到期时，首先检查对应队列中尚未投递第一条消息，如果这条消息没到期，那么之后的消息都不会检查。如果到期了，则进行投递，并检查之后的消息是否到期。
 - collapsed:: true
-  7.  将信息重新存储到 CommitLog 中
+  4.  将信息重新存储到 CommitLog 中
 	- 在将消息到期后，需要投递到目标Topic。由于在第一步已经记录了原来的Topic和队列信息，因此这里重新设置，再存储到CommitLog即可。此外，由于之前Message Tag HashCode字段存储的是消息的投递时间，这里需要重新计算tag的哈希值后再存储。
 	- 源码参见：DeliverDelayedMessageTimerTask的messageTimeup方法。
-- 9.  将消息投递到目标 Topic 中
+- 5.  将消息投递到目标 Topic 中
 - collapsed:: true
-  11.  消费者消费目标 topic 中的数据
+  6.  消费者消费目标 topic 中的数据
 	- 这一步与第二步类似，不过由于消息的Topic名称已经改为了目标Topic。因此消息会直接投递到目标Topic的ConsumeQueue中，之后消费者即消费到这条消息。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566604144>)  消息重试的 16 个级别，实际上是把延迟消息 18 个级别的前两个 level 去掉了。
