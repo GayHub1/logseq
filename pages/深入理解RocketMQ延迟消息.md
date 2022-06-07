@@ -38,7 +38,6 @@
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565311792>)  由于消息一旦存储到 ConsumeQueue 中，消费者就能消费到，而延迟消息不能被立即消费，所以这里将 Topic 的名称修改为 SCHEDULE_TOPIC_XXXX，并根据延迟级别确定要投递到哪个队列下。
 	  [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654565998386>)  org.apache.rocketmq.store.CommitLog#putMessage
 	  ![](https://ask.qcloudimg.com/http-save/yehe-5457352/j4qjv0o9lm.jpeg)
--
 - collapsed:: true
   2.  转发消息到延迟主题的 CosumeQueue 中
 	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566025347>)  CommitLog 中的消息转发到 CosumeQueue 中是异步进行的。在转发过程中，会对延迟消息进行特殊处理，主要是计算这条延迟消息需要在什么时候进行投递
@@ -58,13 +57,19 @@
 	  相关源码参见：
 	- CommitLog#checkMessageAndReturnSize
 	- ![](https://ask.qcloudimg.com/http-save/yehe-5457352/idt5jrib4n.jpeg)
-- 5.  延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
-  6.  将信息重新存储到 CommitLog 中
-  7.  将消息投递到目标 Topic 中
-  8.  消费者消费目标 topic 中的数据
+- collapsed:: true
+  3.  延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
+	- Broker内部有一个ScheduleMessageService类，其充当延迟服务，消费SCHEDULE_TOPIC_XXXX中的消息，并投递到目标Topic中。
+	- ScheduleMessageService在启动时，其会创建一个定时器Timer，并根据延迟级别的个数，启动对应数量的TimerTask，每个TimerTask负责一个延迟级别的消费与投递。
+	- 相关源码如下所示：
+	- ScheduleMessageService#start
+	- ![](https://ask.qcloudimg.com/http-save/yehe-5457352/5e2ja5uzu0.jpeg)
+	- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566524904>)  需要注意的是，每个 TimeTask 在检查消息是否到期时，首先检查对应队列中尚未投递第一条消息，如果这条消息没到期，那么之后的消息都不会检查。如果到期了，则进行投递，并检查之后的消息是否到期。
+- 7.  将信息重新存储到 CommitLog 中
+  8.  将消息投递到目标 Topic 中
+  9.  消费者消费目标 topic 中的数据
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566003541>)  **第二步：转发消息到延迟主题的 CosumeQueue 中**
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566120337>)  第三步：延迟服务消费 SCHEDULE_TOPIC_XXXX 消息
-- [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566524904>)  需要注意的是，每个 TimeTask 在检查消息是否到期时，首先检查对应队列中尚未投递第一条消息，如果这条消息没到期，那么之后的消息都不会检查。如果到期了，则进行投递，并检查之后的消息是否到期。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566534640>)  第四步：将信息重新存储到 CommitLog 中
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566562297>)  这一步与第二步类似，不过由于消息的 Topic 名称已经改为了目标 Topic。因此消息会直接投递到目标 Topic 的 ConsumeQueue 中，之后消费者即消费到这条消息。
 - [📌](<http://localhost:7026/reading/7?title=深入理解RocketMQ延迟消息 - 云+社区 - 腾讯云#id=1654566604144>)  消息重试的 16 个级别，实际上是把延迟消息 18 个级别的前两个 level 去掉了。
