@@ -1,8 +1,11 @@
 - # Elasticsearch 核心技术与实战
-	- ElasticSearch起源于Lucene的一款搜索引擎.具有**易扩展**,**高可用**的特点.支持不同的节点类型.支持多种语言类库接入.常用于**实时**搜索.分析.
-- ##  [[ELK安装]]
-- ### 安装与查看插件
   collapsed:: true
+	- ElasticSearch起源于Lucene的一款搜索引擎.具有**易扩展**,**高可用**的特点.支持不同的节点类型.支持多种语言类库接入.常用于**实时**搜索.分析.
+- ###  ELK安装
+	- [[ELK Windows安装]]
+	- [[ELK docker-compose 安装]]
+	- [[报错]]
+- ### 安装与查看插件
 	- 查看插件
 	  ```
 	  .\bin\elasticsearch-plugin list
@@ -115,6 +118,7 @@ collapsed:: true
 		-
 	-
 ### 索引
+collapsed:: true
 	- Index - 索引是文档的容器，是一类文档的结合
 	  collapsed:: true
 		- Index体现了逻辑空间的概念：每个索引都有自己的Mapping定义，用于定义包含的文档的字段名和字段类型
@@ -183,10 +187,24 @@ collapsed:: true
 	- `GET /_cat/nodes?v&h=id,ip,port,v,m`
 	-
 	-
-- ### LATER 集群
+- ### 集群
+  collapsed:: true
+  :LOGBOOK:
+  CLOCK: [2022-05-28 Sat 21:28:06]--[2022-05-28 Sat 21:28:07] =>  00:00:01
+  :END:
+	- 不同的集群通过不同的名字来区分，默认名字“elasticsearch”
+	- 通过配置文件修改，或者在命令行中-E cluster.name=geektime进行设定
+	  一个集群可以有一个或者多个节点
 	- RESTAPI
+		- 查看集群健康情况
+		- ```
+		  GET _cluster/health
+		  GET _cluster/health?level=shards
+		  GET /_cluster/health/kibana_sample_data_ecommerce,kibana_sample_data_flights
+		  GET /_cluster/health/kibana_sample_data_flights?level=shards
+		  ```
+		- ![image.png](../assets/image_1653748056183_0.png)
 	-
--
 ### 分片
 collapsed:: true
 	- 主分片(Primary Shard )，用以解决数据水平扩展的问题。通过主分片，可以将数据分布到集群内的所有节点之上
@@ -202,7 +220,14 @@ collapsed:: true
 		- 分片数设置过大，7.0开始，默认主分片设置成1,解决了over-sharding的问题
 			- 影响搜索结果的相关性打分，影响统计结果的准确性
 			- 单个节点上过多的分片，会导致资源浪费，同时也会影响性能
+	- RESTAPI
+	- ```
+	  GET _cat/shards
+	  GET _cat/shards?h=index,shard,prirep,state,unassigned.reason
+	  ```
+	-
 ### 倒排索引
+collapsed:: true
 	- 单词词典（Term Dictionary),记录所有文档的单词，记录单词到倒排列表的关联关系
 		- 单词词典一般比较大，可以通过B+树或哈希拉链法实现，以满足高性能的插入与查询
 	- 倒排列表（Posting List)-记录了单词对应的文档结合，由倒排索引项组成
@@ -214,8 +239,7 @@ collapsed:: true
 			- 偏移（Offset)-记录单词的开始结束位置，实现高亮显示
 			  
 			    ![image-20220504182115226](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504182115226.png)
-	- RESTAPI
-	  collapsed:: true
+	- collapsed:: true
 		- ```
 		  POST _analyze
 		  {
@@ -223,6 +247,7 @@ collapsed:: true
 		    "text": "Mastering Elasticsearch"
 		  }
 		  ```
+		-
 - ### 分词器
   collapsed:: true
 	- 常见分词器
@@ -260,33 +285,173 @@ collapsed:: true
 	    ```
 	  
 	    如果安装插件后重启容器失败，可以将插件压缩包解压到plugins文件夹下ik文件夹
+	- **RESTAPI**
+	  collapsed:: true
+		- ```
+		  #Simple Analyzer – 按照非字母切分（符号被过滤），小写处理
+		  #Stop Analyzer – 小写处理，停用词过滤（the，a，is）
+		  #Whitespace Analyzer – 按照空格切分，不转小写
+		  #Keyword Analyzer – 不分词，直接将输入当作输出
+		  #Patter Analyzer – 正则表达式，默认 \W+ (非字符分隔)
+		  #Language – 提供了30多种常见语言的分词器
+		  #2 running Quick brown-foxes leap over lazy dogs in the summer evening
+		  
+		  #查看不同的analyzer的效果
+		  #standard
+		  GET _analyze
+		  {
+		    "analyzer": "standard",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  #simpe
+		  GET _analyze
+		  {
+		    "analyzer": "simple",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  GET _analyze
+		  {
+		    "analyzer": "stop",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  #stop
+		  GET _analyze
+		  {
+		    "analyzer": "whitespace",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  #keyword
+		  GET _analyze
+		  {
+		    "analyzer": "keyword",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  GET _analyze
+		  {
+		    "analyzer": "pattern",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  #english
+		  GET _analyze
+		  {
+		    "analyzer": "english",
+		    "text": "2 running Quick brown-foxes leap over lazy dogs in the summer evening."
+		  }
+		  
+		  
+		  POST _analyze
+		  {
+		    "analyzer": "icu_analyzer",
+		    "text": "他说的确实在理”"
+		  }
+		  
+		  
+		  POST _analyze
+		  {
+		    "analyzer": "standard",
+		    "text": "他说的确实在理”"
+		  }
+		  
+		  
+		  POST _analyze
+		  {
+		    "analyzer": "icu_analyzer",
+		    "text": "这个苹果不大好吃"
+		  }
+		  ```
 - ### Search API
   collapsed:: true
 	- 指定索引
 	  
-	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png)
+	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png){:height 324, :width 747}
 	- #### URL Search
 	  
-	  ![image-20220518233406287](C:\Users\94241\AppData\Roaming\Typora\typora-user-images\image-20220518233406287.png)
+	  ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518233406287_1653743572042_0.png){:height 156, :width 747}
 	- q:  指定查询语句，使用Query String Syntax
 	- df: 默认字段，不指定时，会对所有字段进行查询
 	- Sort 排序/from和size用于分页
 	- Profile 可以查看查询是如何被执行的
+	- ```
+	  指定字段
+	  GET /movies/_search?q=title:2012&sort=year:desc&from=0&size=10&timeout=1s
+	  {
+	  	"profile":"true"
+	  }
+	  ```
 	- Term V.S Phrase
 		- Beautiful Mind 等效于 Beautiful OR  Mind    title:(Beautiful AND Mind)
 		- “Beautiful Mind”，等效于 Beautiful AND Mind。Phrase查询，还要求前后顺序保持一致 title="Beautiful Mind"
+		- ```
+		  # 查找美丽心灵, Mind为泛查询
+		  GET /movies/_search?q=title:Beautiful Mind
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  #使用引号，Phrase查询
+		  GET /movies/_search?q=title:"Beautiful Mind"
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  #分组，Bool查询
+		  GET /movies/_search?q=title:(Beautiful Mind)
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  ```
 	- 布尔操作
 		- AND/OR/NOT或者&&/ll/!
 		- 必须大写
 			- title:(matrix NOT reloaded)
+		- ```
+		  #布尔操作符
+		  # 查找美丽心灵
+		  GET /movies/_search?q=title:(Beautiful AND Mind)
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  # 查找美丽心灵
+		  GET /movies/_search?q=title:(Beautiful NOT Mind)
+		  {
+		  	"profile":"true"
+		  }
+		  
+		  ```
 	- 分组
 		- \+ 表示must
 		- \- 表示must_not
 		- title:(+matrix -reloaded)
+		- ```
+		  # 查找美丽心灵  %2B 代表+号
+		  GET /movies/_search?q=title:(Beautiful %2BMind)
+		  {
+		  	"profile":"true"
+		  }
+		  ```
 	- 范围查询
 		- 区间表示：[] 闭区间 ，{} 开区间
 			- year:{2019 TO 2018}
 			- year:[* TO 2018]
+			- ```
+			  #范围查询 ,区间写法
+			  GET /movies/_search?q=title:beautiful AND year:[2002 TO 2018%7D
+			  {
+			  	"profile":"true"
+			  }
+			  
+			  ```
 	- 算数符号
 		- year:&gt;2010
 		- year:(>2010 && &lt;=2018)
@@ -295,15 +460,189 @@ collapsed:: true
 		- ？代表1个字符，* 代表 0 或 多个字符
 			- title:mi?d
 			- title:be*
+		- ```
+		  #通配符查询
+		  GET /movies/_search?q=title:b*
+		  {
+		  	"profile":"true"
+		  }
+		  ```
 	- ·正则表达
 		- title:[bt]oy
 	- 模糊匹配与近似查询
 		- title:befutifl~1
 		- title:"lord rings"~2
+	- ```
+	  //模糊匹配&近似度匹配
+	  GET /movies/_search?q=title:beautifl~1
+	  {
+	  	"profile":"true"
+	  }
+	  
+	  GET /movies/_search?q=title:"Lord Rings"~2
+	  {
+	  	"profile":"true"
+	  }
+	  ```
 - ### Request Body Search
   collapsed:: true
 	- ![image-20220518232842975](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518232842975.png)
+	- **RESTAPI**
+	- ```
+	  POST /kibana_sample_data_ecommerce/_search
+	  {
+	    "from":10,
+	    "size":20,
+	    "sort":[{"order_date":"desc"}],
+	    "_source":["order_date"],
+	    "query":{
+	      "match_all": {}
+	    }
+	  }
+	  
+	  #脚本字段
+	  GET kibana_sample_data_ecommerce/_search
+	  {
+	    "script_fields": {
+	      "new_field": {
+	        "script": {
+	          "lang": "painless",
+	          "source": "doc['order_date'].value+'hello'"
+	        }
+	      }
+	    },
+	    "query": {
+	      "match_all": {}
+	    }
+	  }
+	  #Term查询 默认是有其中一个 OR关系
+	  POST movies/_search
+	  {
+	    "query": {
+	      "match": {
+	        "title": "last christmas"
+	      }
+	    }
+	  }
+	  
+	  # 两个都必须有
+	  POST movies/_search
+	  {
+	    "query": {
+	      "match": {
+	        "title": {
+	          "query": "last christmas",
+	          "operator": "and"
+	        }
+	      }
+	    }
+	  }
+	  #Phrase查询 slop：允许中间插入指定数量的Team
+	  POST movies/_search
+	  {
+	    "query": {
+	      "match_phrase": {
+	        "title":{
+	          "query": "one love",
+	          "slop": 1
+	  
+	        }
+	      }
+	    }
+	  }
+	  ```
+	-
+- ### QueryString&SimpleQueryString
+  collapsed:: true
+	- ```
+	  POST users/_search
+	  {
+	    "query": {
+	      "query_string": {
+	        "default_field": "name",
+	        "query": "Ruan AND Yiming"
+	      }
+	    }
+	  }
+	  
+	  
+	  POST users/_search
+	  {
+	    "query": {
+	      "query_string": {
+	        "fields":["name","about"],
+	        "query": "(Ruan AND Yiming) OR (Java AND Elasticsearch)"
+	      }
+	    }
+	  }
+	  
+	  
+	  #Simple Query 默认的operator是 Or 不支持 AND 会被识别成字符串 用default_operator来指定AND
+	  POST users/_search
+	  {
+	    "query": {
+	      "simple_query_string": {
+	        "query": "Ruan AND Yiming",
+	        "fields": ["name"]
+	      }
+	    }
+	  }
+	  
+	  
+	  POST users/_search
+	  {
+	    "query": {
+	      "simple_query_string": {
+	        "query": "Ruan Yiming",
+	        "fields": ["name"],
+	        "default_operator": "AND"
+	      }
+	    }
+	  }
+	  
+	  
+	  GET /movies/_search
+	  {
+	  	"profile": true,
+	  	"query":{
+	  		"query_string":{
+	  			"default_field": "title",
+	  			"query": "Beafiful AND Mind"
+	  		}
+	  	}
+	  }
+	  
+	  
+	  # 多fields
+	  GET /movies/_search
+	  {
+	  	"profile": true,
+	  	"query":{
+	  		"query_string":{
+	  			"fields":[
+	  				"title",
+	  				"year"
+	  			],
+	  			"query": "2012"
+	  		}
+	  	}
+	  }
+	  
+	  
+	  
+	  GET /movies/_search
+	  {
+	  	"profile":true,
+	  	"query":{
+	  		"simple_query_string":{
+	  			"query":"Beautiful +mind",
+	  			"fields":["title"]
+	  		}
+	  	}
+	  }	
+	  ```
 - ### Mapping
+  collapsed:: true
 	- 定义
 		- Mapping类似数据库中的schema的定义，作用如下
 		   * 定义索引中的字段的名称
@@ -370,182 +709,212 @@ collapsed:: true
 			  * 字段与索引一一对应
 	- 全文本，非结构化的文本数据
 	  * （Elasticsearch 中的 text）
--
--
-- ## 查询语句
-  :LOGBOOK:
-  CLOCK: [2022-05-24 Tue 23:07:18]
-  :END:
-  
-  ```
-  ###获取节点信息列表
-  GET /_cat/nodes?v
-  
-  GET /_cat/nodes?v&h=id,ip,port,v,m
-  ###获取对应节点详细信息
-  GET /_nodes/elasticsearch1,elasticsearch2
-  
-  
-  
-  
-  ###获取节点健康状态
-  GET _cluster/health
-  GET _cluster/health?level=shards
-  GET /_cluster/health/movies,.kibana_1
-  GET /_cluster/health/movies?level=shards
-  - #### 集群状态
-  - The cluster state API allows access to metadata representing the state of the whole cluster. This includes information such as
-  GET /_cluster/state
-  
-  #集群设置
-  GET /_cluster/settings
-  GET /_cluster/settings?include_defaults=true
-  #分片状态
-  GET _cat/shards
-  GET _cat/shards?h=index,shard,prirep,state,unassigned.reason
-  
-  ```
-### CRUD
-
-```
-############创建文档############
-#create document. 自动生成 _id
-POST users/_doc
-{
-	"user" : "Mike",
-"post_date" : "2019-04-15T14:12:12",
-"message" : "trying out Kibana"
-}
-
-#create document. 指定Id。如果id已经存在，报错
-PUT users/_doc/1?op_type=create
-{
-"user" : "Jack",
-"post_date" : "2019-05-15T14:12:12",
-"message" : "trying out Elasticsearch"
-}
-
-#create document. 指定 ID 如果已经存在，就报错
-PUT users/_create/1
-{
- "user" : "Jack",
-"post_date" : "2019-05-15T14:12:12",
-"message" : "trying out Elasticsearch"
-}
-### Get Document by ID
-#Get the document by ID
-GET users/_doc/1
-###  Index & Update
-#Update 指定 ID  (先删除，在写入)
-GET users/_doc/1
-
-PUT users/_doc/1
-{
-	"user" : "Mike"
-
-}
-
-
-#GET users/_doc/1
-#在原文档上增加字段
-POST users/_update/1/
-{
-"doc":{
-"post_date" : "2019-05-15T14:12:12",
-"message" : "trying out Elasticsearch"
-}
-}
-### Delete by Id
-# 删除文档
-DELETE users/_doc/1
-### Bulk 操作
-#执行两次，查看每次的结果
-
-#执行第1次
-POST _bulk
-{ "index" : { "_index" : "test", "_id" : "1" } }
-{ "field1" : "value1" }
-{ "delete" : { "_index" : "test", "_id" : "2" } }
-{ "create" : { "_index" : "test2", "_id" : "3" } }
-{ "field1" : "value3" }
-{ "update" : {"_id" : "1", "_index" : "test"} }
-{ "doc" : {"field2" : "value2"} }
-
-
-#执行第2次
-POST _bulk
-{ "index" : { "_index" : "test", "_id" : "1" } }
-{ "field1" : "value1" }
-{ "delete" : { "_index" : "test", "_id" : "2" } }
-{ "create" : { "_index" : "test2", "_id" : "3" } }
-{ "field1" : "value3" }
-{ "update" : {"_id" : "1", "_index" : "test"} }
-{ "doc" : {"field2" : "value2"} }
-### mget 操作
-GET /_mget
-{
-"docs" : [
-{
-"_index" : "test",
-"_id" : "1"
-},
-{
-"_index" : "test",
-"_id" : "2"
-}
-]
-}
-
-
-#URI中指定index
-GET /test/_mget
-{
-"docs" : [
-{
-
-"_id" : "1"
-},
-{
-
-"_id" : "2"
-}
-]
-}
-
-
-GET /_mget
-{
-"docs" : [
-{
-"_index" : "test",
-"_id" : "1",
-"_source" : false
-},
-{
-"_index" : "test",
-"_id" : "2",
-"_source" : ["field3", "field4"]
-},
-{
-"_index" : "test",
-"_id" : "3",
-"_source" : {
-    "include": ["user"],
-    "exclude": ["user.location"]
-}
-}
-]
-}
-### msearch 操作
-POST kibana_sample_data_ecommerce/_msearch
-{}
-{"query" : {"match_all" : {}},"size":1}
-{"index" : "kibana_sample_data_flights"}
-{"query" : {"match_all" : {}},"size":2}
-### 清除测试数据
-#清除数据
-DELETE users
-DELETE test
-DELETE test2
-```
--
+- ### IndexTemplate和DynamicTemplate
+  collapsed:: true
+	- IndexTemplate
+		- Index Templates - 帮助你设定 Mappings 和 Settings,并按照一定的规则，自动匹配到新创建的索引之上
+		  * 模版仅在一个索引被新创建时，才会产生作用。修改模版不会影响已创建的索引
+		  * 你可以设定多个索引模版，这些设置会被“merge”在一起
+		  * 你可以指定“order”的数值，控制“merging”的过程
+		- 当一个索引被新创建时
+		  * 应用Elasticsearch默认的settings和mappings
+		  * 应用order数值低的IndexTemplate中的设定
+		  * 应用order高的IndexTemplate中的设定，之前的设定会被覆盖
+		  * 应用创建索引时，用户所指定的Settings和Mappings,并覆盖之前模版中的设定
+		- **RESTAPI**
+			- ```
+			  PUT /_template/template_test
+			  {
+			      "index_patterns" : ["test*"],
+			      "order" : 1,
+			      "settings" : {
+			      	"number_of_shards": 1,
+			          "number_of_replicas" : 2
+			      },
+			      "mappings" : {
+			      	"date_detection": false,
+			      	"numeric_detection": true
+			      }
+			  }
+			  GET testtemplate/_mapping
+			  get testtemplate/_settings
+			  PUT testmy
+			  {
+			  	"settings":{
+			  		"number_of_replicas":5
+			  	}
+			  }
+			  ```
+	- DynamicTemplate
+		- 根据 Elasticsearch识别的数据类型，结合字段名称，来动态设定字段类型
+		  * *所有的字符串类型都设定成Keyword,或者关闭keyword字段
+		  * is开头的字段都设置成 boolean
+		  * long_开头的都设置成long类型
+	- ```
+	  PUT my_index
+	  {
+	    "mappings": {
+	      "dynamic_templates": [
+	              {
+	          "strings_as_boolean": {
+	            "match_mapping_type":   "string",
+	            "match":"is*",
+	            "mapping": {
+	              "type": "boolean"
+	            }
+	          }
+	        },
+	        {
+	          "strings_as_keywords": {
+	            "match_mapping_type":   "string",
+	            "mapping": {
+	              "type": "keyword"
+	            }
+	          }
+	        }
+	      ]
+	    }
+	  }
+	  ```
+	  * Dynamic Tempate 是定义在在某个索引的 Mapping 中
+	  * Template有一个名称
+	  * 匹配规则是一个数组
+	  * 为匹配到字段设置 Mapping
+	- **RESTAPI**
+	- ```
+	  PUT my_index
+	  {
+	    "mappings": {
+	      "dynamic_templates": [
+	        {
+	          "full_name": {
+	            "path_match":   "name.*",
+	            "path_unmatch": "*.middle",
+	            "mapping": {
+	              "type":       "text",
+	              "copy_to":    "full_name"
+	            }
+	          }
+	        }
+	      ]
+	    }
+	  }
+	  
+	  PUT my_index/_doc/1
+	  {
+	    "name": {
+	      "first":  "John",
+	      "middle": "Winston",
+	      "last":   "Lennon"
+	    }
+	  }
+	  
+	  GET my_index/_search?q=full_name:John
+	  get my_index/_settings
+	  get my_index/_mapping
+	  ```
+- **Aggregation**
+  collapsed:: true
+	- Elasticsearch除搜索以外，提供的针对ES数据进行统计分析的功能
+	  * 实时性高
+	  * 而Hadoop需要 (T+1)
+	- 通过聚合，我们会得到一个数据的概览，是分析和总结全套的数据，而不是寻找单个文档
+	- 高性能，只需要一条语句，就可以从 Elasticsearch得到分析结果，无需在客户端自己去实现分析逻辑
+	- 分类
+	  collapsed:: true
+		- Bucket Aggregation
+		  collapsed:: true
+			- 一些列满足特定条件的文档的集合
+		- Metric Aggregation
+			- 一些数学运算，可以对文档字段进行统计分析
+			- Metric 会基于数据集计算结果，除了支持在字段上进行计算，同样也支持在脚本
+			  (painless script)产生的结果之上进行计算
+			- 大多数 Metric 是数学计算，仅输出一个值
+			  *  min/max/sum/avg/cardinality
+			- 部分metric支持输出多个数值
+			  * stats/percentiles/percentile_ranks
+		- Pipeline Aggregation
+		  collapsed:: true
+			- 对其他的聚合结果进行二次聚合
+		- Matrix Aggregration
+		  collapsed:: true
+			- 支持对多个字段的操作并提供一个结果矩阵
+	- **RESTAPI**
+	  collapsed:: true
+		- ```
+		  #按照目的地进行分桶统计
+		  GET kibana_sample_data_flights/_search
+		  {
+		  	"size": 0,
+		  	"aggs":{
+		  		"flight_dest":{
+		  			"terms":{
+		  				"field":"DestCountry"
+		  			}
+		  		}
+		  	}
+		  }
+		  
+		  
+		  
+		  #查看航班目的地的统计信息，增加平均，最高最低价格
+		  GET kibana_sample_data_flights/_search
+		  {
+		  	"size": 0,
+		  	"aggs":{
+		  		"flight_dest":{
+		  			"terms":{
+		  				"field":"DestCountry"
+		  			},
+		  			"aggs":{
+		  				"avg_price":{
+		  					"avg":{
+		  						"field":"AvgTicketPrice"
+		  					}
+		  				},
+		  				"max_price":{
+		  					"max":{
+		  						"field":"AvgTicketPrice"
+		  					}
+		  				},
+		  				"min_price":{
+		  					"min":{
+		  						"field":"AvgTicketPrice"
+		  					}
+		  				}
+		  			}
+		  		}
+		  	}
+		  }
+		  
+		  
+		  
+		  #价格统计信息+天气信息
+		  GET kibana_sample_data_flights/_search
+		  {
+		  	"size": 0,
+		  	"aggs":{
+		  		"flight_dest":{
+		  			"terms":{
+		  				"field":"DestCountry"
+		  			},
+		  			"aggs":{
+		  				"stats_price":{
+		  					"stats":{
+		  						"field":"AvgTicketPrice"
+		  					}
+		  				},
+		  				"wather":{
+		  				  "terms": {
+		  				    "field": "DestWeather",
+		  				    "size": 5
+		  				  }
+		  				}
+		  
+		  			}
+		  		}
+		  	}
+		  }
+		  
+		  
+		  ```
