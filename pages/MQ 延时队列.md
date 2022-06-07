@@ -10,10 +10,12 @@
 	- 对表压力大，但不用额外引用mq ，适合小项目
 	-
 - MQ
-	- RabbitMQ
-		- {{embed ((4cecb7da-45d3-467b-99b4-d8fc26f97e12))}}
-		- {{embed ((a9d7f098-e7e1-4186-9faa-87816c19e449))}}
-	- {{embed ((MQ))}}
+	- 支持延迟队列的MQ
+		- RabbitMQ
+			- {{embed ((4cecb7da-45d3-467b-99b4-d8fc26f97e12))}}
+			- {{embed ((a9d7f098-e7e1-4186-9faa-87816c19e449))}}
+		- RocketMQ
+			- {{embed [[]]}}
 -
 - 参考文档
 	- [[延迟消息如何实现]]
