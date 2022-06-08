@@ -3,6 +3,7 @@
 	- 目录结构
 		- ![image.png](../assets/image_1654652794942_0.png)
 	- master-1文件夹
+	  collapsed:: true
 		- Dockerfile  -- docker 镜像打包文件
 			- ```Dockerfile  
 			  FROM mysql:5.7.17
@@ -31,8 +32,9 @@
 			  ## 如：1062错误是指一些主键重复，1032错误是因为主从数据库数据不一致
 			  slave_skip_errors=1062
 			  ```
-			-
+			- >>  **server_id** :在主从环境下的唯一标志符，给个任意数字，注意不能和 M2 重复，因为将来 server-id 用于标志 binlog 是由哪个库产生的，所以主从数据库的 server-id 千万不能一样，不然可能导致主从数据库 binlog 的循环复制问题。
 	- master-2文件夹
+	  collapsed:: true
 		- 结构与master-1一致 ，不同在于Dockerfile  中目录改为master-2，my.cnf 中**server_id**与master-1不能一样
 		- Dockerfile  -- docker 镜像打包文件
 			- ```Dockerfile  
@@ -97,5 +99,5 @@
 		  docker-compose up -d
 		  ```
 		- 会分别调用 master-1与master-2下的Dockerfile 构建镜像 将各自的 cnf配置文件打包进基础镜像为**mysql:5.7.17** ，新成两个新的镜像，并启动对应镜像。
-		- 启动好对应容器后,就代表准备工作完毕。我们进入到mysql中进行
+		- 启动好对应容器后,就代表准备工作完毕。我们进入到mysql中进行sql
 -
