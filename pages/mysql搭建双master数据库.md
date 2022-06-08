@@ -147,4 +147,5 @@
 	  ```
 - 查看从机状态
 - ```shell
+  show master status;
   ```
