@@ -152,5 +152,12 @@
 	  ```
 		- Slave_IO_Running 与 Slave_SQL_Running 为Yes时  即成功开启主从同步
 - 从库只读
-- 设置只读
-	- ·
+	- 设置只读
+	  collapsed:: true
+		- ```shell
+		  set global read_only=1;
+		  ```
+	- 查看是否只读
+		- ```shell
+		  show variables like 'read_only';
+		  ```
