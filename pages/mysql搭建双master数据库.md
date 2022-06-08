@@ -64,6 +64,7 @@
 			  slave_skip_errors=1062
 			  ```
 	- docker-compose.yaml
+	  collapsed:: true
 		- ```Yaml
 		  version: '2'
 		  services:
@@ -93,8 +94,9 @@
 		  #    hostname: mysql-2
 		  ```
 	- 运行docker-compose
-	- ```xshell
-	  docker-compose up -d
-	  ```
-	- 会分别调用 master-1与master-2下的Dockerfile 构建镜像 将各自的 cnf配置文件打包进基础镜像为**mysql:5.7.17** ，新成两个新的镜像，并启动对应镜像。
+		- ```xshell
+		  docker-compose up -d
+		  ```
+		- 会分别调用 master-1与master-2下的Dockerfile 构建镜像 将各自的 cnf配置文件打包进基础镜像为**mysql:5.7.17** ，新成两个新的镜像，并启动对应镜像。
+		- 启动好对应容器后,
 -
