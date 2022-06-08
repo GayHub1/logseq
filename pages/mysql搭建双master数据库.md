@@ -1,6 +1,7 @@
 - ![image.png](../assets/image_1654652170641_0.png)
 - ## docker-compose
 	- 目录结构
+	  collapsed:: true
 		- ![image.png](../assets/image_1654652794942_0.png)
 	- master-1文件夹
 	  collapsed:: true
@@ -99,5 +100,5 @@
 		  docker-compose up -d
 		  ```
 		- 会分别调用 master-1与master-2下的Dockerfile 构建镜像 将各自的 cnf配置文件打包进基础镜像为**mysql:5.7.17** ，新成两个新的镜像，并启动对应镜像。
-		- 启动好对应容器后,就代表准备工作完毕。我们进入到mysql中进行sql
+		-
 -
