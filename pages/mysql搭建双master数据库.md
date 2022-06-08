@@ -152,12 +152,15 @@
 	  ```
 		- Slave_IO_Running 与 Slave_SQL_Running 为Yes时  即成功开启主从同步
 - 从库只读
+  collapsed:: true
 	- 设置只读
-	  collapsed:: true
 		- ```shell
 		  set global read_only=1;
 		  ```
+		- >>  **read_only** 对 super 用户无效
 	- 查看是否只读
+	  collapsed:: true
 		- ```shell
 		  show variables like 'read_only';
 		  ```
+- 可以
