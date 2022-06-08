@@ -96,4 +96,4 @@
 	- ```xshell
 	  docker-compose up -d
 	  ```
-	-
+	- 1. 会分别调用 master-1与master-2下的Dockerfile 构建镜像
