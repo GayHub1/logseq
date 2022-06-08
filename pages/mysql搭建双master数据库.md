@@ -3,6 +3,7 @@
 	- 目录结构
 		- ![image.png](../assets/image_1654652794942_0.png)
 	- master-1文件夹
+	  collapsed:: true
 		- Dockerfile  -- docker 镜像打包文件
 			- ```Dockerfile  
 			  FROM mysql:5.7.17
@@ -32,7 +33,8 @@
 			  slave_skip_errors=1062
 			  ```
 	- master-2文件夹
-		- 结构与master-1一致 ，不同在于Dockerfile  中目录改为master-2，my.cnf 中
+	  collapsed:: true
+		- 结构与master-1一致 ，不同在于Dockerfile  中目录改为master-2，my.cnf 中**server_id**与master-1不能一样
 		- Dockerfile  -- docker 镜像打包文件
 			- ```Dockerfile  
 			  FROM mysql:5.7.17
@@ -61,3 +63,7 @@
 			  ## 如：1062错误是指一些主键重复，1032错误是因为主从数据库数据不一致
 			  slave_skip_errors=1062
 			  ```
+	- docker-compose.yaml
+		- ```Yaml
+		  
+		  ```
