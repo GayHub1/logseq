@@ -124,5 +124,10 @@
 		  ```
 		- ![image.png](../assets/image_1654654522766_0.png)
 - 主从配置
-- 分别在master-1与master-2执行主从同步
+	- 分别在master-1与master-2执行主从同步命令
+		- master-1
+		- ```shell
+		  change master to master_host='mysql-2',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=621;
+		  ```
+-
 -
