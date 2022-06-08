@@ -116,11 +116,12 @@
 		  
 		  GRANT Replication Slave ON *.* TO `rep1`@`%`;
 		  ```
+- 查看数据库偏移量
 	- 查看当前数据库二进制日志名和偏移量，待会设置主从同步会用上
 	  collapsed:: true
 		- ```shell
 		  show master status;
 		  ```
 		- ![image.png](../assets/image_1654654522766_0.png)
-	-
+-
 -
