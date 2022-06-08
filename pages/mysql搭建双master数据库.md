@@ -117,5 +117,8 @@
 		  GRANT Replication Slave ON *.* TO `rep1`@`%`;
 		  ```
 	- 查看当前数据库二进制日志名和偏移量，待会设置主从同步会用上
+	- ```shell
+	  show master status;
+	  ```
 -
 -
