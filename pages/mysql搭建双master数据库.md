@@ -118,6 +118,7 @@
 		  ```
 - 查看数据库偏移量
 	- 查看当前数据库二进制日志名和偏移量，待会设置主从同步会用上
+	  id:: 62a005ba-d6d8-466e-b1b6-334c800e9b68
 		- ```shell
 		  show master status;
 		  ```
@@ -128,6 +129,6 @@
 		- ```shell
 		  change master to master_host='mysql-2',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=2038;
 		  ```
-		-
+		- **master_log_file** 与**master_log_pos** 值需与 ((62a005ba-d6d8-466e-b1b6-334c800e9b68))
 -
 -
