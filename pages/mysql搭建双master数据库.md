@@ -163,4 +163,5 @@
 		- ```shell
 		  show variables like 'read_only';
 		  ```
-- 可以
+-
+- 其实既然用DockerFile 构建镜像，完全可以将创建用户这一步放在创建镜像中完成。以后有空再说吧
