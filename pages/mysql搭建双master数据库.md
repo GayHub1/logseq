@@ -92,4 +92,8 @@
 		      restart: always
 		  #    hostname: mysql-2
 		  ```
-- 运行
+	- 运行docker-compose
+	- ```xshell
+	  docker-compose up -d
+	  ```
+	-
