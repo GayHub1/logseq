@@ -65,5 +65,31 @@
 			  ```
 	- docker-compose.yaml
 		- ```Yaml
-		  
+		  version: '2'
+		  services:
+		    mysql-1:
+		      build:
+		        context: ./
+		        dockerfile: master-1/Dockerfile
+		      environment:
+		        - "MYSQL_ROOT_PASSWORD=root"
+		        - "MYSQL_DATABASE=replicas_db"
+		      links:
+		        -   mysql-2
+		      ports:
+		        - "33065:3306"
+		      restart: always
+		  #    hostname: mysql-1
+		    mysql-2:
+		      build:
+		        context: ./
+		        dockerfile: master-2/Dockerfile
+		      environment:
+		        - "MYSQL_ROOT_PASSWORD=root"
+		        - "MYSQL_DATABASE=replicas_db"
+		      ports:
+		        - "33066:3306"
+		      restart: always
+		  #    hostname: mysql-2
 		  ```
+- 运行
