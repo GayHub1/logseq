@@ -1,5 +1,6 @@
 - ![image.png](../assets/image_1654652170641_0.png)
 - ## docker-compose
+  collapsed:: true
 	- 目录结构
 	  collapsed:: true
 		- ![image.png](../assets/image_1654652794942_0.png)
@@ -102,17 +103,19 @@
 		  ```
 		- 会分别调用 master-1与master-2下的Dockerfile 构建镜像 将各自的 cnf配置文件打包进基础镜像为**mysql:5.7.17** ，新成两个新的镜像，并启动对应镜像。
 		-
-	- 创建用户
-		- 分别在master-1与master-2中创建专门用来同步的用户rep1，密码为 root，登录IP设为任意ip
-		  collapsed:: true
-			- ```shell
-			  GRANT REPLICATION SLAVE ON *.* to 'rep1'@'%' identified by 'root';
-			  ```
-			- Mysql 8.0 开始需分开设置
-			- ```shell
-			  CREATE USER `rep1`@`%` IDENTIFIED WITH caching_sha2_password BY 'root';
-			  
-			  GRANT Replication Slave ON *.* TO `rep1`@`%`;
-			  ```
+	-
+- 创建用户
+	- 分别在master-1与master-2中创建专门用来同步的用户rep1，密码为 root，登录IP设为任意ip
+	  collapsed:: true
+		- ```shell
+		  GRANT REPLICATION SLAVE ON *.* to 'rep1'@'%' identified by 'root';
+		  ```
+		- Mysql 8.0 开始需分开设置
+		- ```shell
+		  CREATE USER `rep1`@`%` IDENTIFIED WITH caching_sha2_password BY 'root';
+		  
+		  GRANT Replication Slave ON *.* TO `rep1`@`%`;
+		  ```
+	- 查看当前数据库二进制日志名和偏移量，待会设置主从同步会用上
 -
 -
