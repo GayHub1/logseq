@@ -126,9 +126,11 @@
 - 主从配置
 	- 分别在master-1与master-2执行主从同步命令
 		- master-1
-		- ```shell
-		  change master to master_host='mysql-2',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=2038;
-		  ```
-		- **master_log_file** 与**master_log_pos** 值需与 ((62a005ba-d6d8-466e-b1b6-334c800e9b68))
+			- ```shell
+			  change master to master_host='mysql-2',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=2038;
+			  ```
+			- **master_log_file** 与**master_log_pos** 值需与 ((62a005ba-d6d8-466e-b1b6-334c800e9b68))中**master-2**的值一致
+			- master-2
+			- change master to master_host='mysql-1',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=2038;
 -
 -
