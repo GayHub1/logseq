@@ -3,6 +3,7 @@
 	- 目录结构
 		- ![image.png](../assets/image_1654652794942_0.png)
 	- master-1文件夹
+	  collapsed:: true
 		- Dockerfile  -- docker 镜像打包文件
 			- ```Dockerfile  
 			  FROM mysql:5.7.17
@@ -15,7 +16,7 @@
 			  ## 设置server_id，一般设置为IP，注意要唯一
 			  server_id=1
 			  ## 复制过滤：也就是指定哪个数据库不用同步（mysql库一般不同步）
-			  binlog-ignore-db=mysql
+			  binlog-ignore-db=mysql,information_schema
 			  ## 开启二进制日志功能，可以随便取，最好有含义（关键就是这里了）
 			  log-bin=zhuoke-bin
 			  # 设置一个 binlog 文件的最大字节
@@ -46,7 +47,7 @@
 			  ## 设置server_id，一般设置为IP，注意要唯一
 			  server_id=2
 			  ## 复制过滤：也就是指定哪个数据库不用同步（mysql库一般不同步）
-			  binlog-ignore-db=mysql
+			  binlog-ignore-db=mysql,information_schema
 			  ## 开启二进制日志功能，可以随便取，最好有含义（关键就是这里了）
 			  log-bin=zhuoke-bin
 			  # 设置一个 binlog 文件的最大字节
