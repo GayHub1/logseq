@@ -124,5 +124,5 @@
 		  ```
 		- ![image.png](../assets/image_1654654522766_0.png)
 - 主从配置
--
+- 分别在master-1与master-2执行主从同步
 -
