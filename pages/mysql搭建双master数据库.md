@@ -141,6 +141,8 @@
 			  ```
 			- 与master-1配置基本一致
 - 启动 slave 进程
-- ```shell
-  
-  ```
+  collapsed:: true
+	- ```shell
+	  start slave;
+	  ```
+-
