@@ -118,7 +118,6 @@
 		  ```
 - 查看数据库偏移量
 	- 查看当前数据库二进制日志名和偏移量，待会设置主从同步会用上
-	  collapsed:: true
 		- ```shell
 		  show master status;
 		  ```
@@ -127,7 +126,8 @@
 	- 分别在master-1与master-2执行主从同步命令
 		- master-1
 		- ```shell
-		  change master to master_host='mysql-2',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=621;
+		  change master to master_host='mysql-2',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=2038;
 		  ```
+		-
 -
 -
