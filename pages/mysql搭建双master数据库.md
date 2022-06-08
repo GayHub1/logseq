@@ -105,6 +105,7 @@
 		-
 	-
 - 创建用户
+  collapsed:: true
 	- 分别在master-1与master-2中创建专门用来同步的用户rep1，密码为 root，登录IP设为任意ip
 	  collapsed:: true
 		- ```shell
@@ -117,6 +118,7 @@
 		  GRANT Replication Slave ON *.* TO `rep1`@`%`;
 		  ```
 - 查看数据库偏移量
+  collapsed:: true
 	- 查看当前数据库二进制日志名和偏移量，待会设置主从同步会用上
 	  id:: 62a005ba-d6d8-466e-b1b6-334c800e9b68
 		- ```shell
@@ -124,15 +126,21 @@
 		  ```
 		- ![image.png](../assets/image_1654654522766_0.png)
 - 主从配置
+  collapsed:: true
 	- 分别在master-1与master-2执行主从同步命令
 		- master-1
+		  collapsed:: true
 			- ```shell
 			  change master to master_host='mysql-2',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=2038;
 			  ```
 			- **master_log_file** 与**master_log_pos** 值需与 ((62a005ba-d6d8-466e-b1b6-334c800e9b68))中**master-2**的值一致
 		- master-2
+		  collapsed:: true
 			- ```shell
 			  change master to master_host='mysql-1',master_port=3306,master_user='rep1',master_password='root',master_log_file='zhuoke-bin.000003',master_log_pos=154;
 			  ```
-		-
--
+			- 与master-1配置基本一致
+- 启动 slave 进程
+- ```shell
+  
+  ```
