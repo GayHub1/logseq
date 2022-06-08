@@ -3,7 +3,6 @@
 	- 目录结构
 		- ![image.png](../assets/image_1654652794942_0.png)
 	- master-1文件夹
-	  collapsed:: true
 		- Dockerfile  -- docker 镜像打包文件
 			- ```Dockerfile  
 			  FROM mysql:5.7.17
@@ -96,4 +95,4 @@
 	- ```xshell
 	  docker-compose up -d
 	  ```
-	- 1. 会分别调用 master-1与master-2下的Dockerfile 构建镜像
+	- 1. 会分别调用 master-1与master-2下的Dockerfile 构建镜像 将各自的 cnf配置文件打包进基础镜像为**mysql:5.7.17** 的
