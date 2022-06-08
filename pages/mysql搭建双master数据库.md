@@ -145,7 +145,9 @@
 	- ```shell
 	  start slave;
 	  ```
-- 查看从机状态
+- 查看主从同步状态
 - ```shell
-  show master status;
+  show slave status;
   ```
+- Slave_IO_Running 与 Slave_SQL_Running 为Yes时  即成功开启主从同步
+  : Yes
