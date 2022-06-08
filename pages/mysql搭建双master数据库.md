@@ -123,5 +123,6 @@
 		  show master status;
 		  ```
 		- ![image.png](../assets/image_1654654522766_0.png)
+- 主从配置
 -
 -
