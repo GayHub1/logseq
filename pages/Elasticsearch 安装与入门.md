@@ -1,8 +1,10 @@
 - ### ELK安装
+  collapsed:: true
 	- [[ELK Windows安装]]
 	- [[ELK docker-compose 安装]]
 	- [[报错]]
 - ### 安装与查看插件
+  collapsed:: true
 	- 查看插件
 	  ```
 	  	  .\bin\elasticsearch-plugin list
@@ -13,6 +15,7 @@
 	  ```
 	- Kibana 相关插件 https://www.elastic.co/guide/en/kibana/current/known-plugins.html
 - ## 基本概念
+  collapsed:: true
 	- 与关系型数据库简单对比
 	  
 	  | RDBMS | Elasticsearch |
@@ -23,6 +26,7 @@
 	  | Schema | Mapping |
 	  | SQL | DSL |
 - ### 文档
+  collapsed:: true
 	- Elasticsearch 是面向文档的，文档是所有可搜索数据的最小单位
 	- 文档会被序列化成JSON格式，保存在Elasticsearch中
 	- 每个文档都有一个Unique ID
@@ -107,6 +111,7 @@
 		-
 	-
 - ### 索引
+  collapsed:: true
 	- Index - 索引是文档的容器，是一类文档的结合
 		- Index体现了逻辑空间的概念：每个索引都有自己的Mapping定义，用于定义包含的文档的字段名和字段类型
 		- Shard体现了物理空间的概念：索引中的数据分散在Shard上
@@ -127,6 +132,7 @@
 		- 索引具体内容使用情况
 		  GET /_cat/indices?v&h=i,tm&s=tm:desc
 - ### 节点
+  collapsed:: true
 	- #### Master-eligible nodes 和 Master Node
 		- 每个节点启动后，默认就是一个Master eligible节点
 			- 可以设置node.master:false禁止
@@ -167,6 +173,7 @@
 	-
 	-
 - ### 集群
+  collapsed:: true
   :logbook:
   CLOCK: [2022-05-28 Sat 21:28:06]--[2022-05-28 Sat 21:28:07] =>  00:00:01
   :END:
@@ -184,6 +191,7 @@
 		- ![image.png](../assets/image_1653748056183_0.png)
 	-
 - ### 分片
+  collapsed:: true
 	- 主分片(Primary Shard )，用以解决数据水平扩展的问题。通过主分片，可以将数据分布到集群内的所有节点之上
 		- 一个分片是一个运行的Lucene的实例
 		- 主分片数在索引创建时指定，后续不允许修改，除非Reindex
@@ -204,6 +212,7 @@
 	  ```
 	-
 - ### 倒排索引
+  collapsed:: true
 	- 单词词典（Term Dictionary),记录所有文档的单词，记录单词到倒排列表的关联关系
 		- 单词词典一般比较大，可以通过B+树或哈希拉链法实现，以满足高性能的插入与查询
 	- 倒排列表（Posting List)-记录了单词对应的文档结合，由倒排索引项组成
@@ -223,6 +232,7 @@
 		  ```
 		-
 - ### 分词器
+  collapsed:: true
 	- 常见分词器
 	  
 	  | 名称 | 作用 |
@@ -339,6 +349,7 @@
 		  		  }
 		  ```
 - ### Search API
+  collapsed:: true
 	- 指定索引
 	  ![image-20220504214925983](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220504214925983.png){:height 324, :width 747}
 	- #### URL Search
@@ -452,6 +463,7 @@
 	  	  }
 	  ```
 - ### Request Body Search
+  collapsed:: true
 	- ![image-20220518232842975](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image-20220518232842975.png)
 	- **RESTAPI**
 	- ```
@@ -519,6 +531,7 @@
 	  ```
 	-
 - ### QueryString&SimpleQueryString
+  collapsed:: true
 	- ```
 	  	  POST users/_search
 	  	  {
