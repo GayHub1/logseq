@@ -619,75 +619,87 @@
 	  	  	}
 	  	  }	
 	  ```
-	- ### Mapping
-		- 定义
-			- Mapping类似数据库中的schema的定义，作用如下
-			  				* 定义索引中的字段的名称
-			  				* 定义字段的数据类型，例如字符串，数字，布尔......
-			  				* 字段，倒排索引的相关配置，(Analyzed or Not Analyzed,Analyzer)
-			- Mapping会把JSON文档映射成Lucene所需要的扁平格式
-			- 一个Mapping属于一个索引的Type
-			- 每个文档都属于一个Type
-			  				* 一个Type有一个Mapping定义
-			  				* 7.0开始，不需要在Mapping定义中指定type信息
-		- 数据类型
-			- 简单类型
-			  				* Text/Keyword
-			  				* Date
-			  				* Integer / Floating
-			  				* Boolean
-			  				* Pv4&IPv6
-			- 复杂类型-对象和嵌套对象
-			  				* 对象类型/嵌套类型
-			- 特殊类型
-			  				* geo_point &  geo_shape/percolator
-		- Dynamic Mapping
-			- 在写入文档时候，如果索引不存在，
-			  会自动创建索引
-			- Dynamic Mapping的机制，使得
-			  我们无需手动定义Mappings。
-			  Elasticsearch 会自动根据文档信
-			  息（JSON类型），推算出字段的类型
-		- 能否修改Mapping字段类型(倒排索引有无建立，建立了就只能reindex 才能被索引)
-			- 新增加字段
-			  				* Dynamic设为true时，一旦有新增字段的文档写入，Mapping也同时被
-			   更新
-			  				* Dynamic设为false,Mapping不会被更新，新增字段的数据无法被索引，
-			   但是信息会出现在_source中返回到标签页
-			  				* Dynamic设置成Strict,文档写入失败
-			- 对已有字段，一旦已经有数据写入，就不再支持修改字段定义
-				- Lucene实现的倒排索引，一旦生成后，就不允许修改
-			- 如果希望改变字段类型，必须ReindexAPI,重建索引
-				- 原因
-				  					* 如果修改了字段的数据类型，会导致已被索引的属于无法被搜索
-				  					* 但是如果是增加新的字段，就不会有这样的影响
-		- 当dynamic被设置成false时候，存在新增字段的数据写入，该数据可以被索引，但是新增字段被丢弃
-		- 当设置成 Strict模式时候，数据写入直接出错
-		- **Index** ： 控制当前字段是否被索引。默认为true。如果设置成 false,该字段不可被搜索
-		- Index Options
-			- 四种不同级别的Index Options配置，可以控制倒排索引记录的内容
-			  				* docs 记录doc id
-			  				* freqs 记录 doc id 和 term frequencies
-			  				* positions 记录doc id/term frequencies/term position
-			  				* offsets  记录docid/termfrequencies/termposistion/characteroffects
-			- Text类型默认记录**postions**,其他默认为**docs**
-			- 记录内容越多，占用存储空间越大
-		- null_Value : 对空值赋一个空值对应属性，使得可以被搜索
-		- copy_to
-		  			* copy_to将字段的数值拷贝到目标字段，实现类似_all的作用
-		  			* copy_to的目标字段不出现在_source中
-		- Elasticsearch中不提供专门的数组类型。但是任何字段，都可以包含多个相同类类型的数值
-		- 多字段特性
-		  			* 使用不同的**analyzer**
-		- Excat values V.S Full Text
-			- Exact Value:包括数字/日期/具体一个字符串（例如“Apple Stare")
-				- Elasticseach 中的 keyword
-				  					* 不做特殊的分词处理
-				  					* 字段与索引一一对应
-		- 全文本，非结构化的文本数据
-		  			* （Elasticsearch 中的 text）
+- ### Mapping
+  collapsed:: true
+	- 定义
+	  collapsed:: true
+		- Mapping类似数据库中的schema的定义，作用如下
+		  				* 定义索引中的字段的名称
+		  				* 定义字段的数据类型，例如字符串，数字，布尔......
+		  				* 字段，倒排索引的相关配置，(Analyzed or Not Analyzed,Analyzer)
+		- Mapping会把JSON文档映射成Lucene所需要的扁平格式
+		- 一个Mapping属于一个索引的Type
+		- 每个文档都属于一个Type
+		  				* 一个Type有一个Mapping定义
+		  				* 7.0开始，不需要在Mapping定义中指定type信息
+	- 数据类型
+	  collapsed:: true
+		- 简单类型
+		  				* Text/Keyword
+		  				* Date
+		  				* Integer / Floating
+		  				* Boolean
+		  				* Pv4&IPv6
+		- 复杂类型-对象和嵌套对象
+		  				* 对象类型/嵌套类型
+		- 特殊类型
+		  				* geo_point &  geo_shape/percolator
+	- Dynamic Mapping
+	  collapsed:: true
+		- 在写入文档时候，如果索引不存在，
+		  会自动创建索引
+		- Dynamic Mapping的机制，使得
+		  我们无需手动定义Mappings。
+		  Elasticsearch 会自动根据文档信
+		  息（JSON类型），推算出字段的类型
+	- 能否修改Mapping字段类型(倒排索引有无建立，建立了就只能reindex 才能被索引)
+	  collapsed:: true
+		- 新增加字段
+		  				* Dynamic设为true时，一旦有新增字段的文档写入，Mapping也同时被
+		   更新
+		  				* Dynamic设为false,Mapping不会被更新，新增字段的数据无法被索引，
+		   但是信息会出现在_source中返回到标签页
+		  				* Dynamic设置成Strict,文档写入失败
+		- 对已有字段，一旦已经有数据写入，就不再支持修改字段定义
+		  collapsed:: true
+			- Lucene实现的倒排索引，一旦生成后，就不允许修改
+		- 如果希望改变字段类型，必须ReindexAPI,重建索引
+		  collapsed:: true
+			- 原因
+			  					* 如果修改了字段的数据类型，会导致已被索引的属于无法被搜索
+			  					* 但是如果是增加新的字段，就不会有这样的影响
+	- 当dynamic被设置成false时候，存在新增字段的数据写入，该数据可以被索引，但是新增字段被丢弃
+	- 当设置成 Strict模式时候，数据写入直接出错
+	- **Index** ： 控制当前字段是否被索引。默认为true。如果设置成 false,该字段不可被搜索
+	- Index Options
+	  collapsed:: true
+		- 四种不同级别的Index Options配置，可以控制倒排索引记录的内容
+		  				* docs 记录doc id
+		  				* freqs 记录 doc id 和 term frequencies
+		  				* positions 记录doc id/term frequencies/term position
+		  				* offsets  记录docid/termfrequencies/termposistion/characteroffects
+		- Text类型默认记录**postions**,其他默认为**docs**
+		- 记录内容越多，占用存储空间越大
+	- null_Value : 对空值赋一个空值对应属性，使得可以被搜索
+	- copy_to
+	  collapsed:: true
+		- copy_to将字段的数值拷贝到目标字段，实现类似_all的作用
+		- copy_to的目标字段不出现在_source中
+	- Elasticsearch中不提供专门的数组类型。但是任何字段，都可以包含多个相同类类型的数值
+	- 多字段特性
+	  			* 使用不同的**analyzer**
+	- Excat values V.S Full Text
+	  collapsed:: true
+		- Exact Value:包括数字/日期/具体一个字符串（例如“Apple Stare")
+			- Elasticseach 中的 keyword
+			  					* 不做特殊的分词处理
+			  					* 字段与索引一一对应
+	- 全文本，非结构化的文本数据
+	  			* （Elasticsearch 中的 text）
 	- ### IndexTemplate和DynamicTemplate
+	  collapsed:: true
 		- IndexTemplate
+		  collapsed:: true
 			- Index Templates - 帮助你设定 Mappings 和 Settings,并按照一定的规则，自动匹配到新创建的索引之上
 			  				* 模版仅在一个索引被新创建时，才会产生作用。修改模版不会影响已创建的索引
 			  				* 你可以设定多个索引模版，这些设置会被“merge”在一起
@@ -722,169 +734,171 @@
 				  				  }
 				  ```
 		- DynamicTemplate
+		  collapsed:: true
 			- 根据 Elasticsearch识别的数据类型，结合字段名称，来动态设定字段类型
 			  				* *所有的字符串类型都设定成Keyword,或者关闭keyword字段
 			  				* is开头的字段都设置成 boolean
 			  				* long_开头的都设置成long类型
-		- ```
-		  		  PUT my_index
-		  		  {
-		  		    "mappings": {
-		  		      "dynamic_templates": [
-		  		              {
-		  		          "strings_as_boolean": {
-		  		            "match_mapping_type":   "string",
-		  		            "match":"is*",
-		  		            "mapping": {
-		  		              "type": "boolean"
-		  		            }
-		  		          }
-		  		        },
-		  		        {
-		  		          "strings_as_keywords": {
-		  		            "match_mapping_type":   "string",
-		  		            "mapping": {
-		  		              "type": "keyword"
-		  		            }
-		  		          }
-		  		        }
-		  		      ]
-		  		    }
-		  		  }
-		  ```
-		  			* Dynamic Tempate 是定义在在某个索引的 Mapping 中
-		  			* Template有一个名称
-		  			* 匹配规则是一个数组
-		  			* 为匹配到字段设置 Mapping
-		- **RESTAPI**
-		- ```
-		  		  PUT my_index
-		  		  {
-		  		    "mappings": {
-		  		      "dynamic_templates": [
-		  		        {
-		  		          "full_name": {
-		  		            "path_match":   "name.*",
-		  		            "path_unmatch": "*.middle",
-		  		            "mapping": {
-		  		              "type":       "text",
-		  		              "copy_to":    "full_name"
-		  		            }
-		  		          }
-		  		        }
-		  		      ]
-		  		    }
-		  		  }
-		  		  
-		  		  PUT my_index/_doc/1
-		  		  {
-		  		    "name": {
-		  		      "first":  "John",
-		  		      "middle": "Winston",
-		  		      "last":   "Lennon"
-		  		    }
-		  		  }
-		  		  
-		  		  GET my_index/_search?q=full_name:John
-		  		  get my_index/_settings
-		  		  get my_index/_mapping
-		  ```
-	- **Aggregation**
-		- Elasticsearch除搜索以外，提供的针对ES数据进行统计分析的功能
-		  			* 实时性高
-		  			* 而Hadoop需要 (T+1)
-		- 通过聚合，我们会得到一个数据的概览，是分析和总结全套的数据，而不是寻找单个文档
-		- 高性能，只需要一条语句，就可以从 Elasticsearch得到分析结果，无需在客户端自己去实现分析逻辑
-		- 分类
-			- Bucket Aggregation
-				- 一些列满足特定条件的文档的集合
-			- Metric Aggregation
-				- 一些数学运算，可以对文档字段进行统计分析
-				- Metric 会基于数据集计算结果，除了支持在字段上进行计算，同样也支持在脚本
-				  (painless script)产生的结果之上进行计算
-				- 大多数 Metric 是数学计算，仅输出一个值
-				  					* min/max/sum/avg/cardinality
-				- 部分metric支持输出多个数值
-				  					* stats/percentiles/percentile_ranks
-			- Pipeline Aggregation
-				- 对其他的聚合结果进行二次聚合
-			- Matrix Aggregration
-				- 支持对多个字段的操作并提供一个结果矩阵
-		- **RESTAPI**
 			- ```
-			  			  #按照目的地进行分桶统计
-			  			  GET kibana_sample_data_flights/_search
-			  			  {
-			  			  	"size": 0,
-			  			  	"aggs":{
-			  			  		"flight_dest":{
-			  			  			"terms":{
-			  			  				"field":"DestCountry"
-			  			  			}
-			  			  		}
-			  			  	}
-			  			  }
-			  			  
-			  			  
-			  			  
-			  			  #查看航班目的地的统计信息，增加平均，最高最低价格
-			  			  GET kibana_sample_data_flights/_search
-			  			  {
-			  			  	"size": 0,
-			  			  	"aggs":{
-			  			  		"flight_dest":{
-			  			  			"terms":{
-			  			  				"field":"DestCountry"
-			  			  			},
-			  			  			"aggs":{
-			  			  				"avg_price":{
-			  			  					"avg":{
-			  			  						"field":"AvgTicketPrice"
-			  			  					}
-			  			  				},
-			  			  				"max_price":{
-			  			  					"max":{
-			  			  						"field":"AvgTicketPrice"
-			  			  					}
-			  			  				},
-			  			  				"min_price":{
-			  			  					"min":{
-			  			  						"field":"AvgTicketPrice"
-			  			  					}
-			  			  				}
-			  			  			}
-			  			  		}
-			  			  	}
-			  			  }
-			  			  
-			  			  
-			  			  
-			  			  #价格统计信息+天气信息
-			  			  GET kibana_sample_data_flights/_search
-			  			  {
-			  			  	"size": 0,
-			  			  	"aggs":{
-			  			  		"flight_dest":{
-			  			  			"terms":{
-			  			  				"field":"DestCountry"
-			  			  			},
-			  			  			"aggs":{
-			  			  				"stats_price":{
-			  			  					"stats":{
-			  			  						"field":"AvgTicketPrice"
-			  			  					}
-			  			  				},
-			  			  				"wather":{
-			  			  				  "terms": {
-			  			  				    "field": "DestWeather",
-			  			  				    "size": 5
-			  			  				  }
-			  			  				}
-			  			  
-			  			  			}
-			  			  		}
-			  			  	}
-			  			  }
-			  			  
-			  			  
+			  		  PUT my_index
+			  		  {
+			  		    "mappings": {
+			  		      "dynamic_templates": [
+			  		              {
+			  		          "strings_as_boolean": {
+			  		            "match_mapping_type":   "string",
+			  		            "match":"is*",
+			  		            "mapping": {
+			  		              "type": "boolean"
+			  		            }
+			  		          }
+			  		        },
+			  		        {
+			  		          "strings_as_keywords": {
+			  		            "match_mapping_type":   "string",
+			  		            "mapping": {
+			  		              "type": "keyword"
+			  		            }
+			  		          }
+			  		        }
+			  		      ]
+			  		    }
+			  		  }
 			  ```
+			  			* Dynamic Tempate 是定义在在某个索引的 Mapping 中
+			  			* Template有一个名称
+			  			* 匹配规则是一个数组
+			  			* 为匹配到字段设置 Mapping
+			- **RESTAPI**
+			- ```
+			  		  PUT my_index
+			  		  {
+			  		    "mappings": {
+			  		      "dynamic_templates": [
+			  		        {
+			  		          "full_name": {
+			  		            "path_match":   "name.*",
+			  		            "path_unmatch": "*.middle",
+			  		            "mapping": {
+			  		              "type":       "text",
+			  		              "copy_to":    "full_name"
+			  		            }
+			  		          }
+			  		        }
+			  		      ]
+			  		    }
+			  		  }
+			  		  
+			  		  PUT my_index/_doc/1
+			  		  {
+			  		    "name": {
+			  		      "first":  "John",
+			  		      "middle": "Winston",
+			  		      "last":   "Lennon"
+			  		    }
+			  		  }
+			  		  
+			  		  GET my_index/_search?q=full_name:John
+			  		  get my_index/_settings
+			  		  get my_index/_mapping
+			  ```
+- **Aggregation**
+  collapsed:: true
+	- Elasticsearch除搜索以外，提供的针对ES数据进行统计分析的功能
+	  			* 实时性高
+	  			* 而Hadoop需要 (T+1)
+	- 通过聚合，我们会得到一个数据的概览，是分析和总结全套的数据，而不是寻找单个文档
+	- 高性能，只需要一条语句，就可以从 Elasticsearch得到分析结果，无需在客户端自己去实现分析逻辑
+	- 分类
+		- Bucket Aggregation
+			- 一些列满足特定条件的文档的集合
+		- Metric Aggregation
+			- 一些数学运算，可以对文档字段进行统计分析
+			- Metric 会基于数据集计算结果，除了支持在字段上进行计算，同样也支持在脚本
+			  (painless script)产生的结果之上进行计算
+			- 大多数 Metric 是数学计算，仅输出一个值
+			  					* min/max/sum/avg/cardinality
+			- 部分metric支持输出多个数值
+			  					* stats/percentiles/percentile_ranks
+		- Pipeline Aggregation
+			- 对其他的聚合结果进行二次聚合
+		- Matrix Aggregration
+			- 支持对多个字段的操作并提供一个结果矩阵
+	- **RESTAPI**
+		- ```
+		  			  #按照目的地进行分桶统计
+		  			  GET kibana_sample_data_flights/_search
+		  			  {
+		  			  	"size": 0,
+		  			  	"aggs":{
+		  			  		"flight_dest":{
+		  			  			"terms":{
+		  			  				"field":"DestCountry"
+		  			  			}
+		  			  		}
+		  			  	}
+		  			  }
+		  			  
+		  			  
+		  			  
+		  			  #查看航班目的地的统计信息，增加平均，最高最低价格
+		  			  GET kibana_sample_data_flights/_search
+		  			  {
+		  			  	"size": 0,
+		  			  	"aggs":{
+		  			  		"flight_dest":{
+		  			  			"terms":{
+		  			  				"field":"DestCountry"
+		  			  			},
+		  			  			"aggs":{
+		  			  				"avg_price":{
+		  			  					"avg":{
+		  			  						"field":"AvgTicketPrice"
+		  			  					}
+		  			  				},
+		  			  				"max_price":{
+		  			  					"max":{
+		  			  						"field":"AvgTicketPrice"
+		  			  					}
+		  			  				},
+		  			  				"min_price":{
+		  			  					"min":{
+		  			  						"field":"AvgTicketPrice"
+		  			  					}
+		  			  				}
+		  			  			}
+		  			  		}
+		  			  	}
+		  			  }
+		  			  
+		  			  
+		  			  
+		  			  #价格统计信息+天气信息
+		  			  GET kibana_sample_data_flights/_search
+		  			  {
+		  			  	"size": 0,
+		  			  	"aggs":{
+		  			  		"flight_dest":{
+		  			  			"terms":{
+		  			  				"field":"DestCountry"
+		  			  			},
+		  			  			"aggs":{
+		  			  				"stats_price":{
+		  			  					"stats":{
+		  			  						"field":"AvgTicketPrice"
+		  			  					}
+		  			  				},
+		  			  				"wather":{
+		  			  				  "terms": {
+		  			  				    "field": "DestWeather",
+		  			  				    "size": 5
+		  			  				  }
+		  			  				}
+		  			  
+		  			  			}
+		  			  		}
+		  			  	}
+		  			  }
+		  			  
+		  			  
+		  ```
