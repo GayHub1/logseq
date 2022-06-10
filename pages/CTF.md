@@ -4,11 +4,16 @@
 	- [一个WIKI](https://hackmd.io/@Ov16q5H6T3CZG6TE4dlqrA/BJJk2x3N7#XXE)
 	- [俺自己的 CTF 常用工具使用 & 初学经验整理](https://zhangmaimai.com/2021/10/30/max-ctf-tools-and-exp/)
 	- [2020年收集的渗透测试进阶学习资料](https://www.cnhackteam.org/topic/1001/?btwaf=43553764)
+	- [又一个wiki](https://ctf-wiki.org/)
 - 工具类型的网站
 	- [CTFTools](https://ctftools.com/down/)
 	- [CTF编码](http://www.hiencode.com/)
 	- [Personal CTF Toolkit](https://github.com/Harmoc/CTFTools)
 	- [渗透师导航](https://www.shentoushi.top/knowledge)
+	- Burpsuite Pro 2022.2.2
+		- [Burpsuit](https://portswigger.net/Burp/Releases)
+		- [注册机](https://github.com/h3110w0r1d-y/BurpLoaderKeygen/releases)
+		- [jdk](https://www.oracle.com/java/technologies/downloads/#jdk17-windows)
 - 习题
 	- [Writeups](https://github.com/susers/Writeups)
 	- [全国大学生信息安全竞赛真题（CTF）](https://blog.csdn.net/Toufahaizai/article/details/89002051)
@@ -21,3 +26,4 @@
 - 博客
 	- [BACKUP](https://4hou.win/wordpress/?cat=3388)
 	-
+-
