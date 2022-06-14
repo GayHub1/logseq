@@ -9,4 +9,3 @@
 - distributionUrl 使用本地文件
 	- `distributionUrl=file:///D:/gradle-6.4.1-all.zip`
 	- >>  gradle文件[下载地址](https://gradle.org/releases/)
--

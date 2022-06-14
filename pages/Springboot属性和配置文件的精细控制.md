@@ -1,0 +1,100 @@
+- 原文[[Fine Control Over SpringBoot's Properties And Profiles]]
+- 使用spring.profiles.active进行环境的划分
+  collapsed:: true
+	- ```application.yaml
+	  spring:
+	    profiles:
+	      active: dev
+	  ```
+	- ```application-dev.yaml
+	  property: dev
+	  ```
+- 使用spring.profiles.include 引用部分配置
+  collapsed:: true
+	- ```application.yaml
+	  spring:
+	    profiles:
+	      include: druid
+	  ```
+	- ```application-druid.yaml
+	  # 数据源配置
+	  spring:
+	    datasource:
+	      type: com.alibaba.druid.pool.DruidDataSource
+	      driverClassName: com.mysql.cj.jdbc.Driver
+	      ds:
+	        # 主库数据源，默认 master 不能变
+	        master:
+	          url: jdbc:mysql://127.0.0.1:33065/zhuoke?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
+	          username: root
+	          password: root
+	        # 从库数据源
+	        slave:
+	          url: jdbc:mysql://127.0.0.1:33065/xiaozhuo?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
+	          username: root
+	          password: root
+	      # 初始连接数
+	      initialSize: 5
+	      # 最小连接池数量
+	      minIdle: 10
+	      # 最大连接池数量
+	      maxActive: 20
+	      # 配置获取连接等待超时的时间
+	      maxWait: 60000
+	      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+	      timeBetweenEvictionRunsMillis: 60000
+	      # 配置一个连接在池中最小生存的时间，单位是毫秒
+	      minEvictableIdleTimeMillis: 300000
+	      # 配置一个连接在池中最大生存的时间，单位是毫秒
+	      maxEvictableIdleTimeMillis: 900000
+	      # 配置检测连接是否有效
+	      validationQuery: SELECT 1 FROM DUAL
+	      testWhileIdle: true
+	      testOnBorrow: false
+	      testOnReturn: false
+	      druid:
+	        webStatFilter:
+	          enabled: true
+	        statViewServlet:
+	          enabled: true
+	          # 设置白名单，不填则允许所有访问
+	          allow:
+	          url-pattern: /druid/*
+	          # 控制台管理用户名和密码
+	          login-username: javaboy
+	          login-password: 123456
+	        filter:
+	          stat:
+	            enabled: true
+	            # 慢SQL记录
+	            log-slow-sql: true
+	            slow-sql-millis: 1000
+	            merge-sql: true
+	          wall:
+	            config:
+	              multi-statement-allow: true
+	  ```
+- 使用spring.config.activate.on-profile 完成通用配置
+  collapsed:: true
+	- ```application.yaml
+	  spring:
+	    application:
+	      name: DynamicDataSource
+	    profiles:
+	      active: unique
+	      include: druid
+	  ---
+	  spring:
+	    config:
+	      activate:
+	        on-profile: unique
+	  property: unique
+	  ```
+- 优先级
+  collapsed:: true
+	- spring.profiles.active
+	- spring.profiles.include
+	- spring.config.activate.on-profile
+- 注意点
+	- YAML 用---来分割  properties 使用 \#---
+-
