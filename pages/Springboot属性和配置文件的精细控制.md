@@ -96,5 +96,6 @@
 	- spring.profiles.include
 	- spring.config.activate.on-profile
 - 注意点
+  collapsed:: true
 	- YAML 用---来分割  properties 使用 \#---
 -
