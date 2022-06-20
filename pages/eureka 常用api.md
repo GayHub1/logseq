@@ -1,0 +1,2 @@
+- tags: #[[SpringBoot]] #[[Eureka]]
+- #excerpt [eureka server 常用api说明](https://blog.csdn.net/qq_30062125/article/details/83829357)
