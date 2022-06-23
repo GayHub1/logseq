@@ -1,6 +1,6 @@
 - #.v-eisenhower-matrix
 	- 📅 在做计划事项。
-	  query-table:: false
+	  query-table:: true
 	  #+BEGIN_QUERY
 	  {:query [:find (pull ?b [*])
 	        :where

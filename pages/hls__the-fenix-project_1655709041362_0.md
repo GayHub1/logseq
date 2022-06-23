@@ -14,3 +14,27 @@ title:: hls__the-fenix-project_1655709041362_0
   ls-type:: annotation
   hl-page:: 18
   id:: 62b098a2-b1c5-4472-ad7f-a444cfa3ccff
+- NCA 的远程服务调用规范
+  ls-type:: annotation
+  hl-page:: 70
+  id:: 62b15040-51b4-4d9a-8df8-28caa562e662
+- Kerberos 的服务认证规范
+  ls-type:: annotation
+  hl-page:: 70
+  id:: 62b1510b-19ef-4118-838e-1e4dac4a169c
+- DCE
+  ls-type:: annotation
+  hl-page:: 70
+  id:: 62b15154-fc71-4bea-a0cf-216db6199840
+- 性能上的差异
+  ls-type:: annotation
+  hl-page:: 71
+  id:: 62b1517b-4dea-419b-bdca-102a41836eca
+- 摩尔定律开始稳定发挥作用的黄金时期
+  ls-type:: annotation
+  hl-page:: 72
+  id:: 62b151bc-45af-48a4-bac5-6301a27b7700
+- 如同本地调用一般简单透明的”分布式系统这个目标，是软件开发者对分布式系统最初的美好愿景，
+  ls-type:: annotation
+  hl-page:: 72
+  id:: 62b1523a-c7fa-4847-888b-180505e0e365
