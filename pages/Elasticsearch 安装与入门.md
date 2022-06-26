@@ -1,5 +1,4 @@
 - ### ELK安装
-  collapsed:: true
 	- [[ELK Windows安装]]
 	- [[ELK docker-compose 安装]]
 	- [[报错]]

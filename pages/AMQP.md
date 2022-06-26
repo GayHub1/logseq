@@ -1,0 +1,13 @@
+- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656236821921_0.png)
+- **Broker**: 接收和分发消息的应用，例如：RabbitMQ
+- **Virtual Host**: 虚拟Broker,将多个单元隔离开
+- **Connection**: publisher/consumer和broker之间的TCP连接
+- **Channel**: connection内部建立的逻辑连接，通常每个线程创建单独的channel
+- **Routing Key**: 路由键，用来指示消息的路由转发，相当于快递的地址
+- **Exchange**:交换机，相当于快递的分拨中心
+	- 是整个协议的**核心组件**
+	- 根据** [[Exchange]] **和**路由KEY**为消息提供路由，将消息转发至相应队列
+- **Queue**:消息队列，消息最终被送到这里等待consumer取走
+-
+-
+-
