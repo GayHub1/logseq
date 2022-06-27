@@ -45,3 +45,5 @@
 - ../assets/image_1656236821921_0.png
 - ../assets/image_1656238639121_0.png
 - ../assets/image_1656238759844_0.png
+- ../assets/image_1656334192845_0.png
+- ../assets/image_1656334924326_0.png

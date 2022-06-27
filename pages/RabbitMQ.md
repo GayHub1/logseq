@@ -103,8 +103,7 @@
 			  rabbitmqctl cancel_sync_queue
 			  ```
 - 业务中使用
-  collapsed:: true
-	- spring-rabbit
+	- spring (spring-rabbit)
 	  collapsed:: true
 		- 依赖
 		  collapsed:: true
@@ -162,7 +161,6 @@
 		- 创建队列
 		  collapsed:: true
 			- Direct
-			  collapsed:: true
 				- ```java
 				              channel.exchangeDeclare(
 				                      "exchange.order.restaurant",
@@ -318,7 +316,341 @@
 				  }
 				            
 				  ```
-	- springboot-rabbit
+	- springboot(spring-AMQP)
+		- 优点
+			- 异步消息监听容器
+			- 原生提供 RabbitTemplate,方便收发消息
+			- 原生提供RabbitAdmin,方便队列、交换机声明
+			- Spring Boot Config 原生支持RabbitMQ
+		- 依赖
+		  collapsed:: true
+			- ```yaml
+			  ```
+		- 利用RabbitAdmin快速配置RabbitMQ配置
+			- 手动配置
+			  collapsed:: true
+				- 在Config文件夹下添加RabbitConfig.java
+				  collapsed:: true
+					- ```java
+					  
+					  @Slf4j
+					  @Configuration
+					  public class RabbitConfig {
+					  
+					      @Autowired
+					      OrderMessageService orderMessageService;
+					  
+					      @Autowired
+					      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+					          orderMessageService.handleMessage();
+					      }
+					  
+					      @Autowired
+					      public void initRabbit() {
+					          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+					          connectionFactory.setHost("127.0.0.1");
+					          connectionFactory.setPort(5672);
+					          connectionFactory.setPassword("guest");
+					          connectionFactory.setUsername("guest");
+					  
+					          RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+					  
+					          /*---------------------restaurant---------------------*/
+					          Exchange exchange = new DirectExchange("exchange.order.restaurant");
+					          rabbitAdmin.declareExchange(exchange);
+					  
+					          Queue queue = new Queue("queue.order");
+					          rabbitAdmin.declareQueue(queue);
+					  
+					          Binding binding = new Binding(
+					                  "queue.order",
+					                  Binding.DestinationType.QUEUE,
+					                  "exchange.order.restaurant",
+					                  "key.order",
+					                  null);
+					  
+					          rabbitAdmin.declareBinding(binding);
+					  
+					          /*---------------------deliveryman---------------------*/
+					          exchange = new DirectExchange("exchange.order.deliveryman");
+					          rabbitAdmin.declareExchange(exchange);
+					          binding = new Binding(
+					                  "queue.order",
+					                  Binding.DestinationType.QUEUE,
+					                  "exchange.order.deliveryman",
+					                  "key.order",
+					                  null);
+					          rabbitAdmin.declareBinding(binding);
+					  
+					  
+					          /*---------settlement---------*/
+					          exchange = new FanoutExchange("exchange.order.settlement");
+					          rabbitAdmin.declareExchange(exchange);
+					          exchange = new FanoutExchange("exchange.settlement.order");
+					          rabbitAdmin.declareExchange(exchange);
+					          binding = new Binding(
+					                  "queue.order",
+					                  Binding.DestinationType.QUEUE,
+					                  "exchange.order.settlement",
+					                  "key.order",
+					                  null);
+					          rabbitAdmin.declareBinding(binding);
+					  
+					  
+					          /*--------------reward----------------*/
+					          exchange = new TopicExchange("exchange.order.reward");
+					          rabbitAdmin.declareExchange(exchange);
+					          binding = new Binding(
+					                  "queue.order",
+					                  Binding.DestinationType.QUEUE,
+					                  "exchange.order.reward",
+					                  "key.order",
+					                  null);
+					          rabbitAdmin.declareBinding(binding);
+					      }
+					  }
+					  
+					  ```
+			- 声明式配置
+				- ```java
+				  @Slf4j
+				  @Configuration
+				  public class RabbitConfig {
+				  
+				      @Autowired
+				      OrderMessageService orderMessageService;
+				  
+				      @Autowired
+				      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+				          orderMessageService.handleMessage();
+				      }
+				      /*---------------------restaurant---------------------*/
+				      @Bean
+				      public Exchange exchange1(){
+				          return new DirectExchange("exchange.order.restaurant");
+				      }
+				      @Bean
+				      public Queue queue1(){
+				          return new Queue("queue.order");
+				      }
+				      @Bean
+				      public Binding binding1(){
+				         return new Binding(
+				                  "queue.order",
+				                  Binding.DestinationType.QUEUE,
+				                  "exchange.order.deliveryman",
+				                  "key.order",
+				                  null);
+				      }
+				  
+				      /*---------------------deliveryman---------------------*/
+				      @Bean
+				      public Exchange exchange2(){
+				          return new DirectExchange("exchange.order.deliveryman");
+				      }
+				      @Bean
+				      public Binding binding2(){
+				          return new Binding(
+				                  "queue.order",
+				                  Binding.DestinationType.QUEUE,
+				                  "exchange.order.deliveryman",
+				                  "key.order",
+				                  null);
+				      }
+				  
+				      /*---------settlement---------*/
+				      @Bean
+				      public Exchange exchange3(){
+				          return new FanoutExchange("exchange.order.settlement");
+				      }
+				      @Bean
+				      public Exchange exchange4(){
+				          return new FanoutExchange("exchange.settlement.order");
+				      }
+				      @Bean
+				      public Binding binding3(){
+				          return new Binding(
+				                  "queue.order",
+				                  Binding.DestinationType.QUEUE,
+				                  "exchange.settlement.order",
+				                  "key.order",
+				                  null);
+				      }
+				  
+				      /*--------------reward----------------*/
+				      @Bean
+				      public Exchange exchange5(){
+				          return new TopicExchange("exchange.order.reward");
+				      }
+				      @Bean
+				      public Binding binding4(){
+				          return new Binding(
+				                  "queue.order",
+				                  Binding.DestinationType.QUEUE,
+				                  "exchange.order.reward",
+				                  "key.order",
+				                  null);
+				      }
+				  
+				      @Bean
+				      public ConnectionFactory connectionFactory(){
+				          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+				          connectionFactory.setHost("127.0.0.1");
+				          connectionFactory.setPort(5672);
+				          connectionFactory.setPassword("guest");
+				          connectionFactory.setUsername("guest");
+				          connectionFactory.createConnection(); //使用一下自动创建队列与交换机
+				        
+				          return connectionFactory;
+				      }
+				  
+				      @Bean
+				      public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
+				          RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+				          rabbitAdmin.setAutoStartup(true); //启动时自动创建 以上的队列跟交换机
+				          return rabbitAdmin;
+				      }
+				  
+				  }
+				  ```
+				-
+	- 保证消息可靠性
+	  collapsed:: true
+		- 发送端确认机制 （发送是否成功）
+		  collapsed:: true
+			- > 慎用
+			- 配置channel，确认开启模式
+			  collapsed:: true
+				- ```java
+				  channel.confirmSelect();
+				  ```
+			- 单条同步确认 (推荐)
+				- 每发送一条消息，调用**channel.waitForConfirms()**方法，等待确认
+			- 多条同步确认
+				- 发送多条消息后，调用**channel.waitForConfirms()**方法，等待确认
+			- 异步确认
+				- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334192845_0.png)
+				- 在channel上添加监听：**addConfirmListener**,发送消息后，会回调此方法，通知是否发送成功
+				- > 异步确认有可能是单条，也有可能是多条，取决于MQ
+				- > 异步回调在一个新的线程，所以数据隔离且有并发问题（因为channel不同，所以deliverTag可能重复）。
+		- 消息返回机制 （消息是否被路由）
+			- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334924326_0.png)
+			- 原理：Exchange在没有找到路由时候调用回调机制
+			- 发送消息时候 mandatory设为true
+				- ```java
+				                  channel.basicPublish("exchange.order.restaurant", "key.order",true, null, messageToSend.getBytes());
+				  ```
+			- 设置异步回调
+			  collapsed:: true
+				- ```java
+				                  channel.addReturnListener(new ReturnCallback() {
+				                      @Override
+				                      public void handle(Return returnMessage) {
+				                          log.info("Message Return: returnMessage:{}", returnMessage);
+				                      }
+				                  });
+				  ```
+				-
+		- 消费端确认  ACK
+		  collapsed:: true
+			- 监听消息时关闭自动ACK，使用手动ACK。
+				- 下面第二个参数为false
+				- ```java
+				  this.channel.basicConsume("queue.restaurant", false, deliverCallback, consumerTag -> {});
+				  ```
+			- 监听消费时手动ack
+			  collapsed:: true
+				- ```java
+				  channel.basicAck(message.getEnvelope().getDeliveryTag(),true);}
+				  ```
+			- > NACK慎用
+		- 消费端限流 QoS
+		  collapsed:: true
+			- 前提：不使用自动确认
+			- ```java
+			  channel.basicQos(2)
+			  ```
+			-
+			-
+		- 消息过期机制 ttl
+		  collapsed:: true
+			- > 消息ttl 长于业务高峰期时间 与 服务的平均重启时间
+			- 设置单条消息TTL
+			  collapsed:: true
+				- ```java
+				  AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder().expiration("100000").build();
+				  ```
+				- ```java
+				  channel.basicPublish("exchange.order.deliveryman", "key.deliveryman", properties,
+				                                      messageToSend.getBytes());
+				  ```
+			- 设置队列TTL
+				- ```java
+				  Map<String, Object> args = new HashMap<String, Object>();
+				  args.put("x-message-ttl", 10000);
+				  ```
+				- 创建队列时将参数赋值进去
+					- ```java
+					              channel.exchangeDeclare(
+					                      "exchange.order.restaurant",
+					                      BuiltinExchangeType.DIRECT,
+					                      true,
+					                      false,
+					                      args);
+					  ```
+		- 死信队列
+		  collapsed:: true
+			- ![image.png](../assets/image_1656341513805_0.png)
+			- 一个被配置了**DLX**属性的队列，收集ttl过期消息，以供分析
+			- 怎么变成死信
+			  collapsed:: true
+				- 消息被拒绝
+				- 消息过期
+				- 队列达到最大长度
+			- 设置Exchange
+			  collapsed:: true
+				- 命名规范（非强制的）
+				  collapsed:: true
+					- Exchange：dlx.exchange
+					- Queue:dlx.queue
+					- RoutingKey: #
+				- 队列添加参数
+					- x-dead-letter-exchange = dlx.exchange
+					- ```java
+					  // 声明死信交换机
+					          channel.exchangeDeclare(
+					                  "exchange.dlx",
+					                  BuiltinExchangeType.TOPIC,
+					                  true,
+					                  false,
+					                  null);
+					  // 声明死信队列
+					          channel.queueDeclare(
+					                  "queue.dlx",
+					                  true,
+					                  false,
+					                  false,
+					                  null);
+					  // 声明死信绑定
+					          channel.queueBind(
+					                  "queue.dlx",
+					                  "exchange.dlx",
+					                  "#");
+					  
+					  //声明队列时，携带以下参数：
+					  
+					              Map<String, Object> args = new HashMap<>(16);
+					              args.put("x-dead-letter-exchange", "exchange.dlx");
+					              args.put("x-max-length", 10);
+					  //创建队列时将参数赋值进去
+					              channel.exchangeDeclare(
+					                      "exchange.order.restaurant",
+					                      BuiltinExchangeType.DIRECT,
+					                      true,
+					                      false,
+					                      args);
+					  ```
+			-
 - 业务开发建议
   collapsed:: true
 	- 一个业务对应一个exchange
@@ -328,4 +660,5 @@
 	  置绑定关系
 	- 交换机/队列的参数一定要由双方开发团队确认，否则重复
 	  声明时，若参数不一致，会导致声明失败
+-
 -
