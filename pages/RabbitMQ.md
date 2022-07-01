@@ -103,6 +103,7 @@
 			  rabbitmqctl cancel_sync_queue
 			  ```
 - 集群
+  collapsed:: true
 	- 优势
 	  collapsed:: true
 		- 扩展规模
@@ -683,6 +684,7 @@
 			          //        });
 			  ```
 		- RabbitListener  是一个组合注解，对业务代码无侵入实现监听
+		  collapsed:: true
 			- RabbitListener 组合注解
 			  collapsed:: true
 				- @Exchange:自动声明Exchange

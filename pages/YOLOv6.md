@@ -1,6 +1,5 @@
 - [官网地址](https://github.com/meituan/YOLOv6)
 - 简单使用
-  collapsed:: true
 	- 安装
 	  id:: 62baad58-668b-4608-b579-d4018b451f89
 		- ```sh
