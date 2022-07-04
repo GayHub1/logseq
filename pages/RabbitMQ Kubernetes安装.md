@@ -1,0 +1,114 @@
+- tags:  #[[Kubernetes]] #[[RabbitMQ]] 
+  ---
+- 编排脚本
+	- ```yml
+	  kind: Service
+	  # 相当于负载均衡层
+	  apiVersion: v1
+	  # 元数据
+	  metadata:
+	  # 命名空间
+	    namespace: test-rabbitmq
+	    name: rabbitmq
+	    labels:
+	      app: rabbitmq
+	      type: LoadBalancer  
+	  spec:
+	    type: NodePort
+	    ports:
+	     - name: http
+	       protocol: TCP
+	       port: 15672
+	       targetPort: 15672
+	       nodePort: 31672
+	     - name: amqp
+	       protocol: TCP
+	       port: 5672
+	       targetPort: 5672
+	       nodePort: 30672
+	    selector:
+	      app: rabbitmq
+	  ---
+	  apiVersion: v1
+	  # 用于注入配置文件
+	  kind: ConfigMap
+	  metadata:
+	    name: rabbitmq-config
+	    namespace: test-rabbitmq
+	  data:
+	    enabled_plugins: |
+	        [rabbitmq_management,rabbitmq_peer_discovery_k8s].
+	    rabbitmq.conf: |
+	        cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+	        cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+	        cluster_formation.k8s.address_type = ip
+	        cluster_formation.node_cleanup.interval = 30
+	        cluster_formation.node_cleanup.only_log_warning = true
+	        cluster_partition_handling = autoheal
+	        loopback_users.guest = false
+	     
+	  ---
+	  apiVersion: apps/v1beta1
+	  kind: StatefulSet
+	  metadata:
+	    name: rabbitmq
+	    namespace: test-rabbitmq
+	  spec:
+	    serviceName: rabbitmq
+	    replicas: 3
+	    template:
+	      metadata:
+	        labels:
+	          app: rabbitmq
+	      spec:
+	        serviceAccountName: rabbitmq
+	        terminationGracePeriodSeconds: 10
+	        containers:        
+	        - name: rabbitmq
+	          image: rabbitmq:3-management
+	          volumeMounts:
+	            - name: config-volume
+	              mountPath: /etc/rabbitmq
+	          ports:
+	            - name: http
+	              protocol: TCP
+	              containerPort: 15672
+	            - name: amqp
+	              protocol: TCP
+	              containerPort: 5672
+	          livenessProbe:
+	            exec:
+	              command: ["rabbitmqctl", "status"]
+	            initialDelaySeconds: 60
+	            periodSeconds: 60
+	            timeoutSeconds: 10
+	          readinessProbe:
+	            exec:
+	              command: ["rabbitmqctl", "status"]
+	            initialDelaySeconds: 20
+	            periodSeconds: 60
+	            timeoutSeconds: 10
+	          imagePullPolicy: Always
+	          env:
+	            - name: MY_POD_IP
+	              valueFrom:
+	                fieldRef:
+	                  fieldPath: status.podIP
+	            - name: RABBITMQ_USE_LONGNAME
+	              value: "true"
+	            - name: RABBITMQ_NODENAME
+	              value: "rabbit@$(MY_POD_IP)"
+	            - name: K8S_SERVICE_NAME
+	              value: "rabbitmq"
+	            - name: RABBITMQ_ERLANG_COOKIE
+	              value: "imoocrabbit" 
+	        volumes:
+	          - name: config-volume
+	            configMap:
+	              name: rabbitmq-config
+	              items:
+	              - key: rabbitmq.conf
+	                path: rabbitmq.conf
+	              - key: enabled_plugins
+	                path: enabled_plugins
+	  ```

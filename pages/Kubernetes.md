@@ -1,0 +1,5 @@
+- 什么是**Kubernetes**
+	- **Pod**: K8S中的最小业务单元，内含一个或多个容器
+	- **StatefulSet**: 定义一组有状态Pod,K8S将自动维护
+	- **Deployment**: 定义一组无状态Pod,K8S将自动维护
+	- **Service**: 一组Pod的抽象访问方式，相当于负载均衡器
