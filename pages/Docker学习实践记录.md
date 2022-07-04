@@ -77,48 +77,101 @@ Docker Registry 公开服务是开放给用户使用、允许用户管理镜像�
 
 除了官方的 Docker Registry 外，还有第三方软件实现了 Docker Registry API，甚至提供了用户界面以及一些高级功能。比如，[Harbor](https://github.com/goharbor/harbor) 和 [Sonatype Nexus](https://yeasy.gitbook.io/docker_practice/repository/nexus3_registry)。
 ## CentOS下安装Docker
-### 使用脚本自动安装
-
-在测试或开发环境中 Docker 官方为了简化安装流程，提供了一套便捷的安装脚本，CentOS 系统上可以使用这套脚本安装，另外可以通过 `--mirror` 选项使用国内源进行安装：
-
-
-
-```
-$ curl -fsSL get.docker.com -o get-docker.sh
-$ sudo sh get-docker.sh --mirror Aliyun
-# $ sudo sh get-docker.sh --mirror AzureChinaCloud
-```
-
-执行这个命令后，脚本就会自动的将一切准备工作做好，并且把 Docker CE 的稳定(stable)版本安装在系统中。
-### 启动 Docker CE
-
-
-
-```
-$ sudo systemctl enable docker
-$ sudo systemctl start docker
-```
-### 建立 docker 用户组
-
-默认情况下，`docker` 命令会使用 [Unix socket](https://en.wikipedia.org/wiki/Unix_domain_socket) 与 Docker 引擎通讯。而只有 `root` 用户和 `docker` 组的用户才可以访问 Docker 引擎的 Unix socket。出于安全考虑，一般 Linux 系统上不会直接使用 `root` 用户。因此，更好地做法是将需要使用 `docker` 的用户加入 `docker` 用户组。
-
-建立 `docker` 组：
-
-
-
-```
-$ sudo groupadd docker
-```
-
-将当前用户加入 `docker` 组：
-
-
-
-```
-$ sudo usermod -aG docker $USER
-```
-
-退出当前终端并重新登录，进行如下测试。
+- ### 使用脚本自动安装~~
+  collapsed:: true
+	- 在测试或开发环境中 Docker 官方为了简化安装流程，提供了一套便捷的安装脚本，CentOS 系统上可以使用这套脚本安装，另外可以通过 `--mirror` 选项使用国内源进行安装：
+	  ```
+	  $ curl -fsSL get.docker.com -o get-docker.sh
+	  $ sudo sh get-docker.sh --mirror Aliyun
+	  # $ sudo sh get-docker.sh --mirror AzureChinaCloud
+	  ```
+	  
+	  执行这个命令后，脚本就会自动的将一切准备工作做好，并且把 Docker CE 的稳定(stable)版本安装在系统中。
+	- ### 启动 Docker CE
+	  
+	  
+	  
+	  ```
+	  $ sudo systemctl enable docker
+	  $ sudo systemctl start docker
+	  ```
+	- ### 建立 docker 用户组
+	  
+	  默认情况下，`docker` 命令会使用 [Unix socket](https://en.wikipedia.org/wiki/Unix_domain_socket) 与 Docker 引擎通讯。而只有 `root` 用户和 `docker` 组的用户才可以访问 Docker 引擎的 Unix socket。出于安全考虑，一般 Linux 系统上不会直接使用 `root` 用户。因此，更好地做法是将需要使用 `docker` 的用户加入 `docker` 用户组。
+	  
+	  建立 `docker` 组：
+	  
+	  
+	  
+	  ```
+	  $ sudo groupadd docker
+	  ```
+	  
+	  将当前用户加入 `docker` 组：
+	  
+	  
+	  
+	  ```
+	  $ sudo usermod -aG docker $USER
+	  ```
+	  
+	  退出当前终端并重新登录，进行如下测试。
+- 直接安装
+  collapsed:: true
+	- 安装依赖包
+	  ```sh
+	  sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+	  ```
+	  
+	  配置仓库
+	  ```sh
+	  sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+	  ```
+	  
+	  安装docker
+	  ```sh
+	  sudo yum install docker-ce -y
+	  ```
+	  
+	  设置docker自启动
+	  ```sh
+	  sudo systemctl enable docker
+	  ```
+	  
+	  启动docker服务
+	  ```sh
+	  sudo systemctl start docker
+	  ```
+	  
+	  查看docker版本
+	  ```sh
+	  docker -v
+	  ```
+	  
+	  运行hello-world容器
+	  ```sh
+	  sudo docker run hello-world
+	  ```
+- ## 安装 Docker Compose
+  collapsed:: true
+	- 安装python2-pip
+	  ```sh
+	  dnf install python2-pip
+	  ```
+	  
+	  安装python3-pip
+	  ```sh
+	  dnf install python3-pip
+	  ```
+	  
+	  安装docker-compose
+	  ```sh
+	  pip3 install docker-compose
+	  ```
+	  查看版本
+	  ```sh
+	  docker-compose version
+	  ```
 ### 测试 Docker 是否安装正确
 
 
