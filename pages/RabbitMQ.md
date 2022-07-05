@@ -106,7 +106,6 @@
 			  rabbitmqctl cancel_sync_queue
 			  ```
 - 集群
-  collapsed:: true
 	- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656731662352_0.png)
 	- 优势
 	  collapsed:: true
