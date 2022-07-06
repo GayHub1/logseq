@@ -11,7 +11,7 @@
 			- LATER 多目标检测
 		- 视频流
 			- LATER 目标检测 关联数据库
-			- LATER 人像擦除
+			- ~~LATER 人像擦除~~
 	- 训练
 		- LATER 人脸特征
 		- LATER 电力设备 缺陷检测

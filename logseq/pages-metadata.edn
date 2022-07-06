@@ -19,12 +19,15 @@
  {:block/name "\"mon, 2022/06/06\"",
   :block/created-at 1654610950889,
   :block/updated-at 1654610950889}
- {:block/name "\"thu, 2022",
-  :block/created-at 1655696857079,
-  :block/updated-at 1655696857079}
- {:block/name "\"thu, 2022/05\"",
-  :block/created-at 1655726438335,
-  :block/updated-at 1655726438335}
+ {:block/name "\"tue, 06",
+  :block/created-at 1657008067485,
+  :block/updated-at 1657008067485}
+ {:block/name "\"tue, 06/14",
+  :block/created-at 1657008067486,
+  :block/updated-at 1657008067486}
+ {:block/name "\"tue, 06/14/2022\"",
+  :block/created-at 1657008067484,
+  :block/updated-at 1657008067484}
  {:block/name ".v-eisenhower-matrix",
   :block/created-at 1657008046094,
   :block/updated-at 1657008046094}
@@ -106,6 +109,9 @@
  {:block/name "629ebfde-43e0-44b9-a85a-9ea9e5bc7e14",
   :block/created-at 1654610951324,
   :block/updated-at 1654610951324}
+ {:block/name "62c54417-4f30-4690-aadc-b0642fe72a18",
+  :block/created-at 1657095428520,
+  :block/updated-at 1657095428520}
  {:block/name "8.0.3",
   :block/created-at 1653810521583,
   :block/updated-at 1653810521583}
@@ -123,7 +129,7 @@
   :block/updated-at 1654610951322}
  {:block/name "ai当前目标",
   :block/created-at 1657008046410,
-  :block/updated-at 1657008046410}
+  :block/updated-at 1657081120577}
  {:block/name "amqp",
   :block/created-at 1656691428132,
   :block/updated-at 1656691428132}
@@ -274,6 +280,12 @@
  {:block/name "fri, 01/01",
   :block/created-at 1656691428897,
   :block/updated-at 1656691428897}
+ {:block/name "fri, 01/07",
+  :block/created-at 1657008067942,
+  :block/updated-at 1657008067942}
+ {:block/name "fri, 01/07/2022",
+  :block/created-at 1657008067940,
+  :block/updated-at 1657008067940}
  {:block/name "fri, 05",
   :block/created-at 1656691429446,
   :block/updated-at 1656691429446}
@@ -298,15 +310,6 @@
  {:block/name "fri, 06/24/2022",
   :block/created-at 1656041545160,
   :block/updated-at 1656044632888}
- {:block/name "fri, 07",
-  :block/created-at 1656691428896,
-  :block/updated-at 1656691428896}
- {:block/name "fri, 07/01",
-  :block/created-at 1656290331404,
-  :block/updated-at 1656290331404}
- {:block/name "fri, 07/01/2022",
-  :block/created-at 1656290331396,
-  :block/updated-at 1656644966085}
  {:block/name "fri, 07/10",
   :block/created-at 1655694989828,
   :block/updated-at 1655694989828}
@@ -370,6 +373,9 @@
  {:block/name "jetbrains gateway  远程开发",
   :block/created-at 1653119133783,
   :block/updated-at 1653119133783}
+ {:block/name "k8s",
+  :block/created-at 1657079180601,
+  :block/updated-at 1657079180601}
  {:block/name "keepalived",
   :block/created-at 1657008046849,
   :block/updated-at 1657008046849}
@@ -433,9 +439,6 @@
  {:block/name "mon, 06/27/2022",
   :block/created-at 1656691428912,
   :block/updated-at 1656691428912}
- {:block/name "mon, 07/04",
-  :block/created-at 1656894934540,
-  :block/updated-at 1656894934540}
  {:block/name "mon, 08/01",
   :block/created-at 1657008065915,
   :block/updated-at 1657008065915}
@@ -481,6 +484,9 @@
  {:block/name "new page: tools",
   :block/created-at 1655728884028,
   :block/updated-at 1655728884028}
+ {:block/name "new page: ubuntu 20.04 安装",
+  :block/created-at 1657069072862,
+  :block/updated-at 1657069072862}
  {:block/name "new page: 软",
   :block/created-at 1655728879527,
   :block/updated-at 1655728879527}
@@ -502,6 +508,9 @@
  {:block/name "npm",
   :block/created-at 1655730523449,
   :block/updated-at 1655730523449}
+ {:block/name "pytorch",
+  :block/created-at 1657092290907,
+  :block/updated-at 1657099878113}
  {:block/name "rabbitmq",
   :block/created-at 1654097423945,
   :block/updated-at 1656301382512}
@@ -558,7 +567,7 @@
   :block/updated-at 1656692815045}
  {:block/name "sat, 07/02/2022",
   :block/created-at 1656691427742,
-  :block/updated-at 1656691427742}
+  :block/updated-at 1657079147862}
  {:block/name "sat, 08/15",
   :block/created-at 1655740930886,
   :block/updated-at 1655740930886}
@@ -639,7 +648,7 @@
   :block/updated-at 1656290331468}
  {:block/name "sun, 06/26/2022",
   :block/created-at 1656290331459,
-  :block/updated-at 1656549864702}
+  :block/updated-at 1657081090611}
  {:block/name "sun, 08/29",
   :block/created-at 1655740930886,
   :block/updated-at 1655740930886}
@@ -681,7 +690,7 @@
   :block/updated-at 1656691429465}
  {:block/name "thu, 05/26/2022",
   :block/created-at 1656691429465,
-  :block/updated-at 1656691429465}
+  :block/updated-at 1657008211677}
  {:block/name "thu, 06",
   :block/created-at 1655726442413,
   :block/updated-at 1655726442413}
@@ -708,7 +717,7 @@
   :block/updated-at 1656691429009}
  {:block/name "thu, 06/30/2022",
   :block/created-at 1656691429009,
-  :block/updated-at 1656691429009}
+  :block/updated-at 1657080931055}
  {:block/name "todo",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -765,7 +774,7 @@
   :block/updated-at 1657008045617}
  {:block/name "tue, 07/05/2022",
   :block/created-at 1657008045614,
-  :block/updated-at 1657008045614}
+  :block/updated-at 1657068895956}
  {:block/name "tue, 10/30",
   :block/created-at 1655696847245,
   :block/updated-at 1655696847245}
@@ -775,6 +784,9 @@
  {:block/name "typora",
   :block/created-at 1655728825246,
   :block/updated-at 1655728864840}
+ {:block/name "ubuntu 20.04 live server安装",
+  :block/created-at 1657069081706,
+  :block/updated-at 1657075342605}
  {:block/name
   "uploaded image file record - interactive(created by logseq-plugin-image-uploader)",
   :block/created-at 1653181392723,
@@ -840,15 +852,18 @@
  {:block/name "wed, 06/15/2022",
   :block/created-at 1655694905062,
   :block/updated-at 1655694905062}
- {:block/name "wed, 06/22",
-  :block/created-at 1655976841860,
-  :block/updated-at 1655976841860}
  {:block/name "wed, 06/29",
   :block/created-at 1656691429001,
   :block/updated-at 1656691429001}
  {:block/name "wed, 06/29/2022",
   :block/created-at 1656691429000,
   :block/updated-at 1656691429000}
+ {:block/name "wed, 07/06",
+  :block/created-at 1657099886437,
+  :block/updated-at 1657099886437}
+ {:block/name "wed, 07/06/2022",
+  :block/created-at 1657067662873,
+  :block/updated-at 1657090260382}
  {:block/name "wed, 12/01",
   :block/created-at 1655793478799,
   :block/updated-at 1655793478799}
@@ -894,12 +909,18 @@
  {:block/name "产品设计的十大顶级错误",
   :block/created-at 1654954246763,
   :block/updated-at 1654954246763}
+ {:block/name "人体系统调优不完全指南",
+  :block/created-at 1657013148249,
+  :block/updated-at 1657013151460}
  {:block/name "任意时间延时消息原理讲解",
   :block/created-at 1654610951263,
   :block/updated-at 1654610951263}
+ {:block/name "企业附件存储系统",
+  :block/created-at 1657090260377,
+  :block/updated-at 1657090260377}
  {:block/name "写给程序员的机器学习入门",
   :block/created-at 1657008045821,
-  :block/updated-at 1657008045821}
+  :block/updated-at 1657092290909}
  {:block/name "凤凰架构",
   :block/created-at 1655726438407,
   :block/updated-at 1655788158497}
