@@ -81,9 +81,8 @@ Docker Registry 公开服务是开放给用户使用、允许用户管理镜像�
   collapsed:: true
 	- 在测试或开发环境中 Docker 官方为了简化安装流程，提供了一套便捷的安装脚本，CentOS 系统上可以使用这套脚本安装，另外可以通过 `--mirror` 选项使用国内源进行安装：
 	  ```
-	  $ curl -fsSL get.docker.com -o get-docker.sh
-	  $ sudo sh get-docker.sh --mirror Aliyun
-	  # $ sudo sh get-docker.sh --mirror AzureChinaCloud
+	  curl -fsSL get.docker.com -o get-docker.sh
+	  sudo sh get-docker.sh
 	  ```
 	  
 	  执行这个命令后，脚本就会自动的将一切准备工作做好，并且把 Docker CE 的稳定(stable)版本安装在系统中。
@@ -117,7 +116,7 @@ Docker Registry 公开服务是开放给用户使用、允许用户管理镜像�
 	  
 	  退出当前终端并重新登录，进行如下测试。
 - 直接安装
-  collapsed:: true
+  id:: 62c58c80-6b37-4239-bdc0-10760eef278f
 	- 安装依赖包
 	  ```sh
 	  sudo yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -130,7 +129,7 @@ Docker Registry 公开服务是开放给用户使用、允许用户管理镜像�
 	  
 	  安装docker
 	  ```sh
-	  sudo yum install docker-ce -y
+	  sudo yum install docker-ce -y --allowerasing
 	  ```
 	  
 	  设置docker自启动
@@ -152,6 +151,7 @@ Docker Registry 公开服务是开放给用户使用、允许用户管理镜像�
 	  ```sh
 	  sudo docker run hello-world
 	  ```
+-
 - ## 安装 Docker Compose
   collapsed:: true
 	- 安装python2-pip
@@ -196,8 +196,8 @@ For more examples and ideas, visit: https://docs.docker.com/get-started/
 ```
 {
 "registry-mirrors": [
-  "https://hub-mirror.c.163.com",
-  "https://mirror.baidubce.com"
+"https://hub-mirror.c.163.com",
+"https://mirror.baidubce.com"
 ]
 }
 ```

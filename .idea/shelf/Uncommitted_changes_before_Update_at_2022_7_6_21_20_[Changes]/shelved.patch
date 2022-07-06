@@ -1,0 +1,2620 @@
+Index: logseq/bak/journals/2022-06-30/2022-07-04T16_30_28.616Z.md
+===================================================================
+diff --git a/logseq/bak/journals/2022-06-30/2022-07-04T16_30_28.616Z.md b/logseq/bak/journals/2022-06-30/2022-07-04T16_30_28.616Z.md
+deleted file mode 100644
+--- a/logseq/bak/journals/2022-06-30/2022-07-04T16_30_28.616Z.md	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ /dev/null	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
+@@ -1,3 +0,0 @@
+-- LATER 完成RabbitMQ剩下三章
+-- LATER 融合strongSort与Yolov6
+-- [[公司AI当前目标]] #计算机视觉
+\ No newline at end of file
+Index: logseq/bak/pages/RabbitMQ/2022-07-02T13_46_50.339Z.md
+===================================================================
+diff --git a/logseq/bak/pages/RabbitMQ/2022-07-02T13_46_50.339Z.md b/logseq/bak/pages/RabbitMQ/2022-07-02T13_46_50.339Z.md
+deleted file mode 100644
+--- a/logseq/bak/pages/RabbitMQ/2022-07-02T13_46_50.339Z.md	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ /dev/null	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
+@@ -1,976 +0,0 @@
+-- 基于 [[Erlang]] 的跨平台消息队列，天然具有高性能，使用[[AMQP]]协议提供客户端接口
+-- RabbitMQ安装
+-  collapsed:: true
+-	- [[RabbitMQ Windows 安装]]
+-- 命令行工具使用
+-  collapsed:: true
+-	- 状态
+-	  collapsed:: true
+-		- 查看状态
+-			- ```sh
+-			  rabbitmqctl status
+-			  ```
+-		- 查看绑定
+-			- ```sh
+-			  rabbitmqctl list_bindings
+-			  ```
+-		- 查看channel
+-			- ```sh
+-			  rabbitmqctl list_channels
+-			  ```
+-		- 查看connection
+-			- ```sh
+-			  rabbitmqctl list_connections
+-			  ```
+-		- 查看 消费者
+-			- ```sh
+-			  rabbitmqctl list_consumers
+-			  ```
+-		- 查看交换机
+-			- ```sh
+-			  rabbitmqctl list_exchanges
+-			  ```
+-	- 队列
+-	  collapsed:: true
+-		- 查看队列
+-			- ```sh
+-			  rabbitmqctl list_queues
+-			  ```
+-		- 删除队列
+-			- ```sh
+-			  rabbitmqctl delete_queue
+-			  ```
+-		- 清空队列
+-			- ```sh
+-			  rabbitmqctl purge_queuq
+-			  ```
+-	- 用户
+-	  collapsed:: true
+-		- 新建用户
+-			- ```sh
+-			  rabbitmqctl add_user
+-			  ```
+-		- 修改用户密码
+-		- ```sh
+-		  rabbitmqctl change_password
+-		  ```
+-		- 删除用户
+-			- ```sh
+-			  rabbitmqctl delete_user
+-			  ```
+-		- 查看用户
+-			- ```sh
+-			  rabbitmqctl list_users
+-			  ```
+-		- 设置用户角色
+-			- ```sh
+-			  rabbitmqctl rabbitmqctl set_user_tags
+-			  ```
+-		-
+-	- 应用
+-	  collapsed:: true
+-		- 启动应用
+-			- ```sh
+-			  rabbitmqctl start_app
+-			  ```
+-		- 关闭应用,保留Erlang虚拟机（暂停）
+-			- ```sh
+-			  rabbitmqctl stop_app
+-			  ```
+-		- 关闭应用 并关闭Erlang虚拟机
+-			- ```sh
+-			  rabbitmqctl stop
+-			  ```
+-	- 集群
+-	  collapsed:: true
+-		- 加入集群
+-			- ```sh
+-			  rabbitmqctl join_cluster
+-			  ```
+-		- 离开集群
+-		  collapsed:: true
+-			- ```sh
+-			  rabbitmqctl reset
+-			  ```
+-	- 镜像队列
+-	  collapsed:: true
+-		- 设置镜像队列
+-			- ```sh
+-			  rabbitmqctl sync_queue
+-			  ```
+-		- 取消镜像队列
+-			- ```sh
+-			  rabbitmqctl cancel_sync_queue
+-			  ```
+-- 集群
+-  collapsed:: true
+-	- 优势
+-	  collapsed:: true
+-		- 扩展规模
+-		  collapsed:: true
+-			- RabbitMQ集群可以方便地通过Scale-Out扩展规模
+-		- 数据冗余
+-		  collapsed:: true
+-			- RabbitMQ集群可以通过镜像队列，将数据冗余至多个节点
+-		- 高可用
+-		  collapsed:: true
+-			- RabbitMQ集群可以通过负载均衡，将请求转移至可用节点
+-	-
+-- 业务中使用
+-  collapsed:: true
+-	- spring (spring-rabbit)
+-	  collapsed:: true
+-		- 依赖
+-		  collapsed:: true
+-			- ```gradle
+-			  testImplementation 'org.springframework.amqp:spring-rabbit-test'
+-			  ```
+-		- 配置
+-		  collapsed:: true
+-			- ```yaml
+-			  rabbitmq.host=localhost
+-			  rabbitmq.port=5672
+-			  rabbitmq.username=guest
+-			  rabbitmq.password=guest
+-			  ```
+-		- 配置线程池
+-		  collapsed:: true
+-			- ```java
+-			  @Configuration
+-			  @EnableAsync
+-			  public class AsyncTaskConfig implements AsyncConfigurer {
+-			  
+-			      // ThredPoolTaskExcutor的处理流程
+-			      // 当池子大小小于corePoolSize，就新建线程，并处理请求
+-			      // 当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去workQueue中取任务并处理
+-			      // 当workQueue放不下任务时，就新建线程入池，并处理请求，如果池子大小撑到了maximumPoolSize，就用RejectedExecutionHandler来做拒绝处理
+-			      // 当池子的线程数大于corePoolSize时，多余的线程会等待keepAliveTime长时间，如果无请求可处理就自行销毁
+-			  
+-			      @Override
+-			      @Bean
+-			      public Executor getAsyncExecutor() {
+-			          ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
+-			          //设置核心线程数
+-			          threadPool.setCorePoolSize(10);
+-			          //设置最大线程数
+-			          threadPool.setMaxPoolSize(100);
+-			          //线程池所使用的缓冲队列
+-			          threadPool.setQueueCapacity(10);
+-			          //等待任务在关机时完成--表明等待所有线程执行完
+-			          threadPool.setWaitForTasksToCompleteOnShutdown(true);
+-			          // 等待时间 （默认为0，此时立即停止），并没等待xx秒后强制停止
+-			          threadPool.setAwaitTerminationSeconds(60);
+-			          //  线程名称前缀
+-			          threadPool.setThreadNamePrefix("Rabbit-Async-");
+-			          // 初始化线程
+-			          threadPool.initialize();
+-			          return threadPool;
+-			      }
+-			  
+-			      @Override
+-			      public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+-			          return null;
+-			      }
+-			  }
+-			  ```
+-		- 创建队列
+-		  collapsed:: true
+-			- Direct
+-				- ```java
+-				              channel.exchangeDeclare(
+-				                      "exchange.order.restaurant",
+-				                      BuiltinExchangeType.DIRECT,
+-				                      true,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueDeclare(
+-				                      "queue.order",
+-				                      true,
+-				                      false,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueBind(
+-				                      "queue.order",
+-				                      "exchange.order.restaurant",
+-				                      "key.order");
+-				  ```
+-			- Fanout
+-				- ```java
+-				              channel.exchangeDeclare(
+-				                      "exchange.settlement.order",
+-				                      BuiltinExchangeType.FANOUT,
+-				                      true,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueDeclare(
+-				                      "queue.order",
+-				                      true,
+-				                      false,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueBind(
+-				                      "queue.order",
+-				                      "exchange.settlement.order",
+-				                      "key.order");
+-				  ```
+-			- Topic
+-				- ```java
+-				              channel.exchangeDeclare(
+-				                      "exchange.order.reward",
+-				                      BuiltinExchangeType.TOPIC,
+-				                      true,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueDeclare(
+-				                      "queue.order",
+-				                      true,
+-				                      false,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueBind(
+-				                      "queue.order",
+-				                      "exchange.order.reward",
+-				                      "key.order");
+-				  ```
+-		- 监听队列
+-		  collapsed:: true
+-			- ```java
+-			      ObjectMapper objectMapper = new ObjectMapper();
+-			  
+-			      DeliverCallback deliverCallback = (consumerTag, message) -> {
+-			          String messageBody = new String(message.getBody());
+-			          log.info("deliverCallback:messageBody:{}", messageBody);
+-			          ConnectionFactory connectionFactory = new ConnectionFactory();
+-			          connectionFactory.setHost("localhost");
+-			          try {
+-			              OrderMessageDTO orderMessageDTO = objectMapper.readValue(messageBody,
+-			                      OrderMessageDTO.class);
+-			              List<DeliverymanPO> deliverymanPOS = deliverymanDao.selectAvaliableDeliveryman(DeliverymanStatus.AVALIABIE);
+-			              orderMessageDTO.setDeliverymanId(deliverymanPOS.get(0).getId());
+-			              log.info("onMessage:restaurantOrderMessageDTO:{}", orderMessageDTO);
+-			  
+-			              try (Connection connection = connectionFactory.newConnection();
+-			                   Channel channel = connection.createChannel()) {
+-			                  String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-			                  channel.basicPublish("exchange.order.restaurant", "key.order", null, messageToSend.getBytes());
+-			              }
+-			          } catch (JsonProcessingException | TimeoutException e) {
+-			              e.printStackTrace();
+-			          }
+-			      };
+-			  
+-			  
+-			  
+-			  channel.basicConsume("queue.deliveryman", true, deliverCallback, consumerTag -> {
+-			              });
+-			  ```
+-		- 发送消息
+-		  collapsed:: true
+-			- ```java
+-			  try (Connection connection = connectionFactory.newConnection();
+-			                               Channel channel = connection.createChannel()) {
+-			                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-			                              channel.basicPublish("exchange.order.deliveryman", "key.deliveryman", null,
+-			                                      messageToSend.getBytes());
+-			                          }
+-			  ```
+-		- 启动监听
+-		  collapsed:: true
+-			- ```java
+-			  @Slf4j
+-			  @Configuration
+-			  public class RabbitConfig {
+-			  
+-			      @Autowired
+-			      OrderMessageService orderMessageService;
+-			  
+-			      @Autowired
+-			      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+-			          orderMessageService.handleMessage();
+-			      }
+-			  }
+-			  ```
+-			- orderMessage
+-				- ```java
+-				  @Slf4j
+-				  @Service
+-				  public class OrderMessageService {
+-				  
+-				      @Value("${rabbitmq.exchange}")
+-				      public String exchangeName;
+-				      @Value("${rabbitmq.deliveryman-routing-key}")
+-				      public String deliverymanRoutingKey;
+-				      @Value("${rabbitmq.settlement-routing-key}")
+-				      public String settlementRoutingKey;
+-				      @Value("${rabbitmq.reward-routing-key}")
+-				      public String rewardRoutingKey;
+-				  
+-				  
+-				      @Autowired
+-				      private OrderDetailDao orderDetailDao;
+-				      ObjectMapper objectMapper = new ObjectMapper();
+-				  
+-				  
+-				      @Async
+-				      public void handleMessage() throws IOException, TimeoutException, InterruptedException {
+-				          log.info("start linstening message");
+-				          ConnectionFactory connectionFactory = new ConnectionFactory();
+-				          connectionFactory.setHost("localhost");
+-				          connectionFactory.setHost("localhost");
+-				          try (Connection connection = connectionFactory.newConnection();
+-				               Channel channel = connection.createChannel()) {
+-				  		........
+-				            } 
+-				      }
+-				  }
+-				            
+-				  ```
+-	- springboot(spring-AMQP)
+-	  collapsed:: true
+-		- 优点
+-		  collapsed:: true
+-			- 异步消息监听容器
+-			- 原生提供 RabbitTemplate,方便收发消息
+-			- 原生提供RabbitAdmin,方便队列、交换机声明
+-			- Spring Boot Config 原生支持RabbitMQ
+-		- 依赖
+-		  collapsed:: true
+-			- ```yaml
+-			  ```
+-		- 利用RabbitAdmin快速配置
+-		  collapsed:: true
+-			- 手动配置
+-			  collapsed:: true
+-				- 在Config文件夹下添加RabbitConfig.java
+-				  collapsed:: true
+-					- ```java
+-					  
+-					  @Slf4j
+-					  @Configuration
+-					  public class RabbitConfig {
+-					  
+-					      @Autowired
+-					      OrderMessageService orderMessageService;
+-					  
+-					      @Autowired
+-					      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+-					          orderMessageService.handleMessage();
+-					      }
+-					  
+-					      @Autowired
+-					      public void initRabbit() {
+-					          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+-					          connectionFactory.setHost("127.0.0.1");
+-					          connectionFactory.setPort(5672);
+-					          connectionFactory.setPassword("guest");
+-					          connectionFactory.setUsername("guest");
+-					  
+-					          RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+-					  
+-					          /*---------------------restaurant---------------------*/
+-					          Exchange exchange = new DirectExchange("exchange.order.restaurant");
+-					          rabbitAdmin.declareExchange(exchange);
+-					  
+-					          Queue queue = new Queue("queue.order");
+-					          rabbitAdmin.declareQueue(queue);
+-					  
+-					          Binding binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.restaurant",
+-					                  "key.order",
+-					                  null);
+-					  
+-					          rabbitAdmin.declareBinding(binding);
+-					  
+-					          /*---------------------deliveryman---------------------*/
+-					          exchange = new DirectExchange("exchange.order.deliveryman");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.deliveryman",
+-					                  "key.order",
+-					                  null);
+-					          rabbitAdmin.declareBinding(binding);
+-					  
+-					  
+-					          /*---------settlement---------*/
+-					          exchange = new FanoutExchange("exchange.order.settlement");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          exchange = new FanoutExchange("exchange.settlement.order");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.settlement",
+-					                  "key.order",
+-					                  null);
+-					          rabbitAdmin.declareBinding(binding);
+-					  
+-					  
+-					          /*--------------reward----------------*/
+-					          exchange = new TopicExchange("exchange.order.reward");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.reward",
+-					                  "key.order",
+-					                  null);
+-					          rabbitAdmin.declareBinding(binding);
+-					      }
+-					  }
+-					  
+-					  ```
+-			- 声明式配置
+-			  collapsed:: true
+-				- ```java
+-				  @Slf4j
+-				  @Configuration
+-				  public class RabbitConfig {
+-				  
+-				      @Autowired
+-				      OrderMessageService orderMessageService;
+-				  
+-				      @Autowired
+-				      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+-				          orderMessageService.handleMessage();
+-				      }
+-				  
+-				  
+-				      /*---------------------restaurant---------------------*/
+-				      @Bean
+-				      public Exchange exchange1() {
+-				          return new DirectExchange("exchange.order.restaurant");
+-				      }
+-				  
+-				      @Bean
+-				      public Queue queue1() {
+-				          return new Queue("queue.order");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding1() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.restaurant",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				      /*---------------------deliveryman---------------------*/
+-				      @Bean
+-				      public Exchange exchange2() {
+-				          return new DirectExchange("exchange.order.deliveryman");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding2() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.deliveryman",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				  
+-				      /*---------settlement---------*/
+-				      @Bean
+-				      public Exchange exchange3() {
+-				          return new FanoutExchange("exchange.order.settlement");
+-				      }
+-				  
+-				      @Bean
+-				      public Exchange exchange4() {
+-				          return new FanoutExchange("exchange.settlement.order");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding3() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.settlement",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				      /*--------------reward----------------*/
+-				      @Bean
+-				      public Exchange exchange5() {
+-				          return new TopicExchange("exchange.order.reward");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding4() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.reward",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				      @Bean
+-				      public ConnectionFactory connectionFactory() {
+-				          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+-				          connectionFactory.setHost("127.0.0.1");
+-				          connectionFactory.setPort(5672);
+-				          connectionFactory.setPassword("guest");
+-				          connectionFactory.setUsername("guest");
+-				          connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.SIMPLE);
+-				          connectionFactory.setPublisherReturns(true);
+-				          connectionFactory.createConnection();
+-				          return connectionFactory;
+-				      }
+-				  
+-				      @Bean
+-				      public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+-				          RabbitAdmin admin = new RabbitAdmin(connectionFactory);
+-				          admin.setAutoStartup(true);
+-				          return admin;
+-				      }
+-				  
+-				      @Bean
+-				      RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+-				          RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+-				          rabbitTemplate.setMandatory(true);
+-				  
+-				          rabbitTemplate.setConfirmCallback((correlationData, ack, cause) ->
+-				                  log.info("correlationData:{}, ack:{}, cause{}",
+-				                          correlationData,
+-				                          ack,
+-				                          cause));
+-				          rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) ->
+-				                  log.info(
+-				                          "message:{}, replyCode:{}, replyText:{}, exchange:{}, routingKey{}",
+-				                          message,
+-				                          replyCode,
+-				                          replyText,
+-				                          exchange,
+-				                          routingKey));
+-				          return rabbitTemplate;
+-				      }
+-				    
+-				    	/*
+-				      *SimpleMessageListenerContainer 简单消息监听容器
+-				      */  
+-				    	@Bean
+-				      public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
+-				          SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer(connectionFactory);
+-				          messageListenerContainer.setQueueNames("queue.order");
+-				          messageListenerContainer.setConcurrentConsumers(1);
+-				          messageListenerContainer.setMaxConcurrentConsumers(3);
+-				          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+-				          messageListenerContainer.setMessageListener(new MessageListener() {
+-				              @Override
+-				              public void onMessage(Message message) {
+-				                  log.info("message:{}", message);
+-				              }
+-				          });
+-				          messageListenerContainer.setPrefetchCount(2);
+-				          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+-				          messageListenerContainer.setMessageListener(new ChannelAwareMessageListener() {
+-				              @Override
+-				              public void onMessage(Message message, Channel channel) throws Exception {
+-				                  channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+-				              }
+-				          });
+-				          return messageListenerContainer;
+-				      }
+-				  }
+-				  
+-				  ```
+-				-
+-		- SimpleMessageListenerContainer 简单消息监听容器
+-		  collapsed:: true
+-			- ```java
+-			    	/*
+-			      *SimpleMessageListenerContainer 简单消息监听容器
+-			      */  
+-			    	@Bean
+-			      public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
+-			          SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer(connectionFactory);
+-			          messageListenerContainer.setQueueNames("queue.order");
+-			          messageListenerContainer.setConcurrentConsumers(1);
+-			          messageListenerContainer.setMaxConcurrentConsumers(3);
+-			          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+-			          messageListenerContainer.setMessageListener(new MessageListener() {
+-			              @Override
+-			              public void onMessage(Message message) {
+-			                  log.info("message:{}", message);
+-			              }
+-			          });
+-			          messageListenerContainer.setPrefetchCount(2);
+-			          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+-			          messageListenerContainer.setMessageListener(new ChannelAwareMessageListener() {
+-			              @Override
+-			              public void onMessage(Message message, Channel channel) throws Exception {
+-			                  channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+-			              }
+-			          });
+-			          return messageListenerContainer;
+-			      }
+-			  ```
+-			- MessageListenAdapter 自定义消息监听
+-			  collapsed:: true
+-				- 简单模式：实现handleMessage方法
+-				- 高阶模式：自定义“队列名→方法名”映射关系
+-				- ```java
+-				          MessageListenerAdapter listenerAdapter = new MessageListenerAdapter();
+-				          listenerAdapter.setDelegate(orderMessageService);
+-				  
+-				          Map<String, String> methodMap = new HashMap<>(8);
+-				          methodMap.put("queue.order", "handleMessage1");
+-				          listenerAdapter.setQueueOrTagToMethodName(methodMap);
+-				          messageListenerContainer.setMessageListener(listenerAdapter);
+-				  ```
+-			- MessageConveter 用来在收发消息时自动转换消息
+-			  collapsed:: true
+-				- Byte[]数组作为消息体,转化为Java对象
+-				- Jackson2JsonMessageConverter 转换Json格式
+-					- 配合ClassMapper可以直接转换为POJO对象
+-				- ```java
+-				          MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(orderMessageService);
+-				          Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();
+-				          messageConverter.setClassMapper(new ClassMapper() {
+-				              @Override
+-				              public void fromClass(Class<?> clazz, MessageProperties properties) {
+-				  
+-				              }
+-				  
+-				              @Override
+-				              public Class<?> toClass(MessageProperties properties) {
+-				                  return OrderMessageDTO.class;
+-				              }
+-				          });
+-				  
+-				  //        messageConverter.setJavaTypeMapper(Jackson2JavaTypeMapper);
+-				  
+-				          messageListenerAdapter.setMessageConverter(messageConverter);
+-				  ```
+-		- 利用RabbitTemplate发送消息
+-		  collapsed:: true
+-			- ```java
+-			          String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-			          MessageProperties messageProperties = new MessageProperties();
+-			          messageProperties.setExpiration("15000");
+-			          Message message = new Message(messageToSend.getBytes(), messageProperties);
+-			          CorrelationData correlationData = new CorrelationData();
+-			          correlationData.setId(orderPO.getId().toString());
+-			          rabbitTemplate.send(
+-			                  "exchange.order.restaurant",
+-			                  "key.restaurant",
+-			                  message,correlationData
+-			          );
+-			  
+-			          rabbitTemplate.convertAndSend(
+-			                  "exchange.order.restaurant",
+-			                  "key.restaurant",
+-			                  messageToSend,correlationData);
+-			  
+-			          //        rabbitTemplate.execute(channel -> {
+-			          //            channel.abort();
+-			          //            return null;
+-			          //        });
+-			  ```
+-		- RabbitListener  是一个组合注解，对业务代码无侵入实现监听
+-		  collapsed:: true
+-			- RabbitListener 组合注解
+-			  collapsed:: true
+-				- @Exchange:自动声明Exchange
+-				- @Queue:自动声明队列
+-				- @QueueBinding:自动声明绑定关系
+-			- 使用
+-				- properties配置文件
+-				  collapsed:: true
+-					- ```properties
+-					  spring.rabbitmq.username=guest
+-					  spring.rabbitmq.password=guest
+-					  spring.rabbitmq.addresses=127.0.0.1
+-					  spring.rabbitmq.port=6379
+-					  ```
+-				- 业务代码使用
+-				  collapsed:: true
+-					- ```java
+-					      @RabbitListener(
+-					  //            containerFactory = "rabbitListenerContainerFactory",
+-					  //            queues = "queue.order",
+-					  //            admin = "rabbitAdmin",
+-					              bindings = {
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "${imooc.order-queue}",
+-					                                      arguments = {
+-					                                              //                                            @Argument(name =
+-					                                              //                                            "x-message-ttl", value =
+-					                                              //                                            "1000", type = "java.lang
+-					                                              //                                            .Integer"),
+-					                                              //                                            @Argument(name =
+-					                                              //                                            "x-dead-letter-exchange",
+-					                                              //                                            value = "aaaaa"),
+-					                                              //                                            @Argument(name =
+-					                                              //                                            "x-dead-letter-routing-key", value = "bbbb")
+-					                                      }),
+-					                              exchange = @Exchange(name = "exchange.order.restaurant", type = ExchangeTypes.DIRECT),
+-					                              key = "key.order"
+-					                      ),
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "queue.order"),
+-					                              exchange = @Exchange(name = "exchange.order.deliveryman", type = ExchangeTypes.DIRECT),
+-					                              key = "key.order"
+-					                      ),
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "queue.order"),
+-					                              exchange = @Exchange(name = "exchange.settlement.order", type = ExchangeTypes.FANOUT),
+-					                              key = "key.order"
+-					                      ),
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "queue.order"),
+-					                              exchange = @Exchange(name = "exchange.order.reward", type = ExchangeTypes.TOPIC),
+-					                              key = "key.order"
+-					                      )
+-					              }
+-					      )
+-					      public void handleMessage(@Payload Message message) throws IOException {
+-					          log.info("handleMessage:message:{}", new String(message.getBody()));
+-					          ConnectionFactory connectionFactory = new ConnectionFactory();
+-					          connectionFactory.setHost("localhost");
+-					          try {
+-					              OrderMessageDTO orderMessageDTO = objectMapper.readValue(message.getBody(),
+-					                      OrderMessageDTO.class);
+-					              OrderDetailPO orderPO = orderDetailDao.selectOrder(orderMessageDTO.getOrderId());
+-					  
+-					              switch (orderPO.getStatus()) {
+-					  
+-					                  case ORDER_CREATING:
+-					                      if (orderMessageDTO.getConfirmed() && null != orderMessageDTO.getPrice()) {
+-					                          orderPO.setStatus(OrderStatus.RESTAURANT_CONFIRMED);
+-					                          orderPO.setPrice(orderMessageDTO.getPrice());
+-					                          orderDetailDao.update(orderPO);
+-					                          try (Connection connection = connectionFactory.newConnection();
+-					                               Channel channel = connection.createChannel()) {
+-					                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-					                              channel.basicPublish("exchange.order.deliveryman", "key.deliveryman", null,
+-					                                      messageToSend.getBytes());
+-					                          }
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					                  case RESTAURANT_CONFIRMED:
+-					                      if (null != orderMessageDTO.getDeliverymanId()) {
+-					                          orderPO.setStatus(OrderStatus.DELIVERYMAN_CONFIRMED);
+-					                          orderPO.setDeliverymanId(orderMessageDTO.getDeliverymanId());
+-					                          orderDetailDao.update(orderPO);
+-					                          try (Connection connection = connectionFactory.newConnection();
+-					                               Channel channel = connection.createChannel()) {
+-					                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-					                              channel.basicPublish(
+-					                                      "exchange.order.settlement",
+-					                                      "key.settlement",
+-					                                      null,
+-					                                      messageToSend.getBytes()
+-					                              );
+-					                          }
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					                  case DELIVERYMAN_CONFIRMED:
+-					                      if (null != orderMessageDTO.getSettlementId()) {
+-					                          orderPO.setStatus(OrderStatus.SETTLEMENT_CONFIRMED);
+-					                          orderPO.setSettlementId(orderMessageDTO.getSettlementId());
+-					                          orderDetailDao.update(orderPO);
+-					                          try (Connection connection = connectionFactory.newConnection();
+-					                               Channel channel = connection.createChannel()) {
+-					                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-					                              channel.basicPublish(
+-					                                      "exchange.order.reward",
+-					                                      "key.reward",
+-					                                      null,
+-					                                      messageToSend.getBytes()
+-					                              );
+-					                          }
+-					  
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					                  case SETTLEMENT_CONFIRMED:
+-					                      if (null != orderMessageDTO.getRewardId()) {
+-					                          orderPO.setStatus(OrderStatus.ORDER_CREATED);
+-					                          orderPO.setRewardId(orderMessageDTO.getRewardId());
+-					                          orderDetailDao.update(orderPO);
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					              }
+-					  
+-					          } catch (JsonProcessingException | TimeoutException e) {
+-					              e.printStackTrace();
+-					          }
+-					      }
+-					  ```
+-	- 保证消息可靠性
+-	  collapsed:: true
+-		- 发送端确认机制 （发送是否成功）
+-		  collapsed:: true
+-			- > 慎用
+-			- 配置channel，确认开启模式
+-			  collapsed:: true
+-				- ```java
+-				  channel.confirmSelect();
+-				  ```
+-			- 单条同步确认 (推荐)
+-				- 每发送一条消息，调用**channel.waitForConfirms()**方法，等待确认
+-			- 多条同步确认
+-				- 发送多条消息后，调用**channel.waitForConfirms()**方法，等待确认
+-			- 异步确认
+-				- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334192845_0.png)
+-				- 在channel上添加监听：**addConfirmListener**,发送消息后，会回调此方法，通知是否发送成功
+-				- > 异步确认有可能是单条，也有可能是多条，取决于MQ
+-				- > 异步回调在一个新的线程，所以数据隔离且有并发问题（因为channel不同，所以deliverTag可能重复）。
+-		- 消息返回机制 （消息是否被路由）
+-		  collapsed:: true
+-			- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334924326_0.png)
+-			- 原理：Exchange在没有找到路由时候调用回调机制
+-			- 发送消息时候 mandatory设为true
+-				- ```java
+-				                  channel.basicPublish("exchange.order.restaurant", "key.order",true, null, messageToSend.getBytes());
+-				  ```
+-			- 设置异步回调
+-			  collapsed:: true
+-				- ```java
+-				                  channel.addReturnListener(new ReturnCallback() {
+-				                      @Override
+-				                      public void handle(Return returnMessage) {
+-				                          log.info("Message Return: returnMessage:{}", returnMessage);
+-				                      }
+-				                  });
+-				  ```
+-				-
+-		- 消费端确认  ACK
+-		  collapsed:: true
+-			- 监听消息时关闭自动ACK，使用手动ACK。
+-				- 下面第二个参数为false
+-				- ```java
+-				  this.channel.basicConsume("queue.restaurant", false, deliverCallback, consumerTag -> {});
+-				  ```
+-			- 监听消费时手动ack
+-			  collapsed:: true
+-				- ```java
+-				  channel.basicAck(message.getEnvelope().getDeliveryTag(),true);}
+-				  ```
+-			- > NACK慎用
+-		- 消费端限流 QoS
+-		  collapsed:: true
+-			- 前提：不使用自动确认
+-			- ```java
+-			  channel.basicQos(2)
+-			  ```
+-			-
+-			-
+-		- 消息过期机制 ttl
+-		  collapsed:: true
+-			- > 消息ttl 长于业务高峰期时间 与 服务的平均重启时间
+-			- 设置单条消息TTL
+-			  collapsed:: true
+-				- ```java
+-				  AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder().expiration("100000").build();
+-				  ```
+-				- ```java
+-				  channel.basicPublish("exchange.order.deliveryman", "key.deliveryman", properties,
+-				                                      messageToSend.getBytes());
+-				  ```
+-			- 设置队列TTL
+-				- ```java
+-				  Map<String, Object> args = new HashMap<String, Object>();
+-				  args.put("x-message-ttl", 10000);
+-				  ```
+-				- 创建队列时将参数赋值进去
+-					- ```java
+-					              channel.exchangeDeclare(
+-					                      "exchange.order.restaurant",
+-					                      BuiltinExchangeType.DIRECT,
+-					                      true,
+-					                      false,
+-					                      args);
+-					  ```
+-		- 死信队列
+-		  collapsed:: true
+-			- ![image.png](../assets/image_1656341513805_0.png)
+-			- 一个被配置了**DLX**属性的队列，收集ttl过期消息，以供分析
+-			- 怎么变成死信
+-			  collapsed:: true
+-				- 消息被拒绝
+-				- 消息过期
+-				- 队列达到最大长度
+-			- 设置Exchange
+-			  collapsed:: true
+-				- 命名规范（非强制的）
+-				  collapsed:: true
+-					- Exchange：dlx.exchange
+-					- Queue:dlx.queue
+-					- RoutingKey: #
+-				- 队列添加参数
+-					- x-dead-letter-exchange = dlx.exchange
+-					- ```java
+-					  // 声明死信交换机
+-					          channel.exchangeDeclare(
+-					                  "exchange.dlx",
+-					                  BuiltinExchangeType.TOPIC,
+-					                  true,
+-					                  false,
+-					                  null);
+-					  // 声明死信队列
+-					          channel.queueDeclare(
+-					                  "queue.dlx",
+-					                  true,
+-					                  false,
+-					                  false,
+-					                  null);
+-					  // 声明死信绑定
+-					          channel.queueBind(
+-					                  "queue.dlx",
+-					                  "exchange.dlx",
+-					                  "#");
+-					  
+-					  //声明队列时，携带以下参数：
+-					  
+-					              Map<String, Object> args = new HashMap<>(16);
+-					              args.put("x-dead-letter-exchange", "exchange.dlx");
+-					              args.put("x-max-length", 10);
+-					  //创建队列时将参数赋值进去
+-					              channel.exchangeDeclare(
+-					                      "exchange.order.restaurant",
+-					                      BuiltinExchangeType.DIRECT,
+-					                      true,
+-					                      false,
+-					                      args);
+-					  ```
+-			-
+-- 业务开发建议
+-  collapsed:: true
+-	- 一个业务对应一个exchange
+-	- 将创建交换机/队列的操作固化在应用代码中，免去复杂的
+-	  运维操作，高效且不易出错
+-	- 一般来说，交换机由双方同时声明，队列由接收方声明并配
+-	  置绑定关系
+-	- 交换机/队列的参数一定要由双方开发团队确认，否则重复
+-	  声明时，若参数不一致，会导致声明失败
+--
+--
+\ No newline at end of file
+Index: logseq/bak/journals/2022-05-26/2022-06-29T13_33_36.730Z.md
+===================================================================
+diff --git a/logseq/bak/journals/2022-05-26/2022-06-29T13_33_36.730Z.md b/logseq/bak/journals/2022-05-26/2022-06-29T13_33_36.730Z.md
+deleted file mode 100644
+--- a/logseq/bak/journals/2022-05-26/2022-06-29T13_33_36.730Z.md	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ /dev/null	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
+@@ -1,27 +0,0 @@
+-- LATER OM连接RabbitMQ集群 使用，分割存在问题
+-- DONE ~~~Skywalking 下线重连~~~#logcenter-server
+-  :LOGBOOK:
+-  CLOCK: [2022-06-07 Tue 14:55:20]--[2022-06-07 Tue 14:55:21] =>  00:00:01
+-  :END:
+-- DONE ~~OM直连数据库版~~
+-  :LOGBOOK:
+-  CLOCK: [2022-06-13 Mon 08:44:44]--[2022-06-13 Mon 08:44:45] =>  00:00:01
+-  :END:
+-- DONE Rabbit文档补充 #RabbitMQ
+-  :LOGBOOK:
+-  CLOCK: [2022-05-26 Thu 10:15:30]--[2022-05-26 Thu 10:15:31] =>  00:00:01
+-  :END:
+-- DONE 后台导入权限
+-  :LOGBOOK:
+-  CLOCK: [2022-05-26 Thu 09:40:46]--[2022-05-26 Thu 09:57:03] =>  00:16:17
+-  :END:
+-- DONE 导出后台表结构给一搏
+-  :LOGBOOK:
+-  CLOCK: [2022-05-26 Thu 09:57:00]--[2022-05-26 Thu 09:57:00] =>  00:00:00
+-  :END:
+-- LATER 接入网关 #网关
+-- LATER 接入配置中心阿波罗 #Apollo
+-- DONE 接入日志  #logcenter-server
+-- DONE 接入链路跟踪  #logcenter-server
+--
+--
+\ No newline at end of file
+Index: logseq/bak/journals/2022-05-26/2022-07-01T15_24_48.653Z.md
+===================================================================
+diff --git a/logseq/bak/journals/2022-05-26/2022-07-01T15_24_48.653Z.md b/logseq/bak/journals/2022-05-26/2022-07-01T15_24_48.653Z.md
+deleted file mode 100644
+--- a/logseq/bak/journals/2022-05-26/2022-07-01T15_24_48.653Z.md	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ /dev/null	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
+@@ -1,27 +0,0 @@
+-- LATER OM连接RabbitMQ集群 使用，分割存在问题
+-- DONE ~~~Skywalking 下线重连~~~#logcenter-server
+-  :LOGBOOK:
+-  CLOCK: [2022-06-07 Tue 14:55:20]--[2022-06-07 Tue 14:55:21] =>  00:00:01
+-  :END:
+-- DONE ~~OM直连数据库版~~
+-  :LOGBOOK:
+-  CLOCK: [2022-06-13 Mon 08:44:44]--[2022-06-13 Mon 08:44:45] =>  00:00:01
+-  :END:
+-- DONE Rabbit文档补充 #RabbitMQ
+-  :LOGBOOK:
+-  CLOCK: [2022-05-26 Thu 10:15:30]--[2022-05-26 Thu 10:15:31] =>  00:00:01
+-  :END:
+-- DONE 后台导入权限
+-  :LOGBOOK:
+-  CLOCK: [2022-05-26 Thu 09:40:46]--[2022-05-26 Thu 09:57:03] =>  00:16:17
+-  :END:
+-- DONE 导出后台表结构给一搏
+-  :LOGBOOK:
+-  CLOCK: [2022-05-26 Thu 09:57:00]--[2022-05-26 Thu 09:57:00] =>  00:00:00
+-  :END:
+-- LATER 接入网关 #网关
+-- LATER 接入配置中心阿波罗 #Apollo
+-- DONE 接入日志  #logcenter-server
+-- DONE 接入链路跟踪  #logcenter-server
+--
+--
+\ No newline at end of file
+Index: logseq/bak/journals/2022-06-30/2022-07-03T04_08_50.951Z.md
+===================================================================
+diff --git a/logseq/bak/journals/2022-06-30/2022-07-03T04_08_50.951Z.md b/logseq/bak/journals/2022-06-30/2022-07-03T04_08_50.951Z.md
+deleted file mode 100644
+--- a/logseq/bak/journals/2022-06-30/2022-07-03T04_08_50.951Z.md	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ /dev/null	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
+@@ -1,3 +0,0 @@
+-- LATER 完成RabbitMQ剩下三章
+-- LATER 融合strongSort与Yolov6
+-- [[公司AI当前目标]] #计算机视觉
+\ No newline at end of file
+Index: logseq/bak/pages/RabbitMQ/2022-07-03T04_08_51.125Z.md
+===================================================================
+diff --git a/logseq/bak/pages/RabbitMQ/2022-07-03T04_08_51.125Z.md b/logseq/bak/pages/RabbitMQ/2022-07-03T04_08_51.125Z.md
+deleted file mode 100644
+--- a/logseq/bak/pages/RabbitMQ/2022-07-03T04_08_51.125Z.md	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ /dev/null	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
+@@ -1,976 +0,0 @@
+-- 基于 [[Erlang]] 的跨平台消息队列，天然具有高性能，使用[[AMQP]]协议提供客户端接口
+-- RabbitMQ安装
+-  collapsed:: true
+-	- [[RabbitMQ Windows 安装]]
+-- 命令行工具使用
+-  collapsed:: true
+-	- 状态
+-	  collapsed:: true
+-		- 查看状态
+-			- ```sh
+-			  rabbitmqctl status
+-			  ```
+-		- 查看绑定
+-			- ```sh
+-			  rabbitmqctl list_bindings
+-			  ```
+-		- 查看channel
+-			- ```sh
+-			  rabbitmqctl list_channels
+-			  ```
+-		- 查看connection
+-			- ```sh
+-			  rabbitmqctl list_connections
+-			  ```
+-		- 查看 消费者
+-			- ```sh
+-			  rabbitmqctl list_consumers
+-			  ```
+-		- 查看交换机
+-			- ```sh
+-			  rabbitmqctl list_exchanges
+-			  ```
+-	- 队列
+-	  collapsed:: true
+-		- 查看队列
+-			- ```sh
+-			  rabbitmqctl list_queues
+-			  ```
+-		- 删除队列
+-			- ```sh
+-			  rabbitmqctl delete_queue
+-			  ```
+-		- 清空队列
+-			- ```sh
+-			  rabbitmqctl purge_queuq
+-			  ```
+-	- 用户
+-	  collapsed:: true
+-		- 新建用户
+-			- ```sh
+-			  rabbitmqctl add_user
+-			  ```
+-		- 修改用户密码
+-		- ```sh
+-		  rabbitmqctl change_password
+-		  ```
+-		- 删除用户
+-			- ```sh
+-			  rabbitmqctl delete_user
+-			  ```
+-		- 查看用户
+-			- ```sh
+-			  rabbitmqctl list_users
+-			  ```
+-		- 设置用户角色
+-			- ```sh
+-			  rabbitmqctl rabbitmqctl set_user_tags
+-			  ```
+-		-
+-	- 应用
+-	  collapsed:: true
+-		- 启动应用
+-			- ```sh
+-			  rabbitmqctl start_app
+-			  ```
+-		- 关闭应用,保留Erlang虚拟机（暂停）
+-			- ```sh
+-			  rabbitmqctl stop_app
+-			  ```
+-		- 关闭应用 并关闭Erlang虚拟机
+-			- ```sh
+-			  rabbitmqctl stop
+-			  ```
+-	- 集群
+-	  collapsed:: true
+-		- 加入集群
+-			- ```sh
+-			  rabbitmqctl join_cluster
+-			  ```
+-		- 离开集群
+-		  collapsed:: true
+-			- ```sh
+-			  rabbitmqctl reset
+-			  ```
+-	- 镜像队列
+-	  collapsed:: true
+-		- 设置镜像队列
+-			- ```sh
+-			  rabbitmqctl sync_queue
+-			  ```
+-		- 取消镜像队列
+-			- ```sh
+-			  rabbitmqctl cancel_sync_queue
+-			  ```
+-- 集群
+-  collapsed:: true
+-	- 优势
+-	  collapsed:: true
+-		- 扩展规模
+-		  collapsed:: true
+-			- RabbitMQ集群可以方便地通过Scale-Out扩展规模
+-		- 数据冗余
+-		  collapsed:: true
+-			- RabbitMQ集群可以通过镜像队列，将数据冗余至多个节点
+-		- 高可用
+-		  collapsed:: true
+-			- RabbitMQ集群可以通过负载均衡，将请求转移至可用节点
+-	-
+-- 业务中使用
+-  collapsed:: true
+-	- spring (spring-rabbit)
+-	  collapsed:: true
+-		- 依赖
+-		  collapsed:: true
+-			- ```gradle
+-			  testImplementation 'org.springframework.amqp:spring-rabbit-test'
+-			  ```
+-		- 配置
+-		  collapsed:: true
+-			- ```yaml
+-			  rabbitmq.host=localhost
+-			  rabbitmq.port=5672
+-			  rabbitmq.username=guest
+-			  rabbitmq.password=guest
+-			  ```
+-		- 配置线程池
+-		  collapsed:: true
+-			- ```java
+-			  @Configuration
+-			  @EnableAsync
+-			  public class AsyncTaskConfig implements AsyncConfigurer {
+-			  
+-			      // ThredPoolTaskExcutor的处理流程
+-			      // 当池子大小小于corePoolSize，就新建线程，并处理请求
+-			      // 当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去workQueue中取任务并处理
+-			      // 当workQueue放不下任务时，就新建线程入池，并处理请求，如果池子大小撑到了maximumPoolSize，就用RejectedExecutionHandler来做拒绝处理
+-			      // 当池子的线程数大于corePoolSize时，多余的线程会等待keepAliveTime长时间，如果无请求可处理就自行销毁
+-			  
+-			      @Override
+-			      @Bean
+-			      public Executor getAsyncExecutor() {
+-			          ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
+-			          //设置核心线程数
+-			          threadPool.setCorePoolSize(10);
+-			          //设置最大线程数
+-			          threadPool.setMaxPoolSize(100);
+-			          //线程池所使用的缓冲队列
+-			          threadPool.setQueueCapacity(10);
+-			          //等待任务在关机时完成--表明等待所有线程执行完
+-			          threadPool.setWaitForTasksToCompleteOnShutdown(true);
+-			          // 等待时间 （默认为0，此时立即停止），并没等待xx秒后强制停止
+-			          threadPool.setAwaitTerminationSeconds(60);
+-			          //  线程名称前缀
+-			          threadPool.setThreadNamePrefix("Rabbit-Async-");
+-			          // 初始化线程
+-			          threadPool.initialize();
+-			          return threadPool;
+-			      }
+-			  
+-			      @Override
+-			      public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+-			          return null;
+-			      }
+-			  }
+-			  ```
+-		- 创建队列
+-		  collapsed:: true
+-			- Direct
+-				- ```java
+-				              channel.exchangeDeclare(
+-				                      "exchange.order.restaurant",
+-				                      BuiltinExchangeType.DIRECT,
+-				                      true,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueDeclare(
+-				                      "queue.order",
+-				                      true,
+-				                      false,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueBind(
+-				                      "queue.order",
+-				                      "exchange.order.restaurant",
+-				                      "key.order");
+-				  ```
+-			- Fanout
+-				- ```java
+-				              channel.exchangeDeclare(
+-				                      "exchange.settlement.order",
+-				                      BuiltinExchangeType.FANOUT,
+-				                      true,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueDeclare(
+-				                      "queue.order",
+-				                      true,
+-				                      false,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueBind(
+-				                      "queue.order",
+-				                      "exchange.settlement.order",
+-				                      "key.order");
+-				  ```
+-			- Topic
+-				- ```java
+-				              channel.exchangeDeclare(
+-				                      "exchange.order.reward",
+-				                      BuiltinExchangeType.TOPIC,
+-				                      true,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueDeclare(
+-				                      "queue.order",
+-				                      true,
+-				                      false,
+-				                      false,
+-				                      null);
+-				  
+-				              channel.queueBind(
+-				                      "queue.order",
+-				                      "exchange.order.reward",
+-				                      "key.order");
+-				  ```
+-		- 监听队列
+-		  collapsed:: true
+-			- ```java
+-			      ObjectMapper objectMapper = new ObjectMapper();
+-			  
+-			      DeliverCallback deliverCallback = (consumerTag, message) -> {
+-			          String messageBody = new String(message.getBody());
+-			          log.info("deliverCallback:messageBody:{}", messageBody);
+-			          ConnectionFactory connectionFactory = new ConnectionFactory();
+-			          connectionFactory.setHost("localhost");
+-			          try {
+-			              OrderMessageDTO orderMessageDTO = objectMapper.readValue(messageBody,
+-			                      OrderMessageDTO.class);
+-			              List<DeliverymanPO> deliverymanPOS = deliverymanDao.selectAvaliableDeliveryman(DeliverymanStatus.AVALIABIE);
+-			              orderMessageDTO.setDeliverymanId(deliverymanPOS.get(0).getId());
+-			              log.info("onMessage:restaurantOrderMessageDTO:{}", orderMessageDTO);
+-			  
+-			              try (Connection connection = connectionFactory.newConnection();
+-			                   Channel channel = connection.createChannel()) {
+-			                  String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-			                  channel.basicPublish("exchange.order.restaurant", "key.order", null, messageToSend.getBytes());
+-			              }
+-			          } catch (JsonProcessingException | TimeoutException e) {
+-			              e.printStackTrace();
+-			          }
+-			      };
+-			  
+-			  
+-			  
+-			  channel.basicConsume("queue.deliveryman", true, deliverCallback, consumerTag -> {
+-			              });
+-			  ```
+-		- 发送消息
+-		  collapsed:: true
+-			- ```java
+-			  try (Connection connection = connectionFactory.newConnection();
+-			                               Channel channel = connection.createChannel()) {
+-			                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-			                              channel.basicPublish("exchange.order.deliveryman", "key.deliveryman", null,
+-			                                      messageToSend.getBytes());
+-			                          }
+-			  ```
+-		- 启动监听
+-		  collapsed:: true
+-			- ```java
+-			  @Slf4j
+-			  @Configuration
+-			  public class RabbitConfig {
+-			  
+-			      @Autowired
+-			      OrderMessageService orderMessageService;
+-			  
+-			      @Autowired
+-			      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+-			          orderMessageService.handleMessage();
+-			      }
+-			  }
+-			  ```
+-			- orderMessage
+-				- ```java
+-				  @Slf4j
+-				  @Service
+-				  public class OrderMessageService {
+-				  
+-				      @Value("${rabbitmq.exchange}")
+-				      public String exchangeName;
+-				      @Value("${rabbitmq.deliveryman-routing-key}")
+-				      public String deliverymanRoutingKey;
+-				      @Value("${rabbitmq.settlement-routing-key}")
+-				      public String settlementRoutingKey;
+-				      @Value("${rabbitmq.reward-routing-key}")
+-				      public String rewardRoutingKey;
+-				  
+-				  
+-				      @Autowired
+-				      private OrderDetailDao orderDetailDao;
+-				      ObjectMapper objectMapper = new ObjectMapper();
+-				  
+-				  
+-				      @Async
+-				      public void handleMessage() throws IOException, TimeoutException, InterruptedException {
+-				          log.info("start linstening message");
+-				          ConnectionFactory connectionFactory = new ConnectionFactory();
+-				          connectionFactory.setHost("localhost");
+-				          connectionFactory.setHost("localhost");
+-				          try (Connection connection = connectionFactory.newConnection();
+-				               Channel channel = connection.createChannel()) {
+-				  		........
+-				            } 
+-				      }
+-				  }
+-				            
+-				  ```
+-	- springboot(spring-AMQP)
+-	  collapsed:: true
+-		- 优点
+-		  collapsed:: true
+-			- 异步消息监听容器
+-			- 原生提供 RabbitTemplate,方便收发消息
+-			- 原生提供RabbitAdmin,方便队列、交换机声明
+-			- Spring Boot Config 原生支持RabbitMQ
+-		- 依赖
+-		  collapsed:: true
+-			- ```yaml
+-			  ```
+-		- 利用RabbitAdmin快速配置
+-		  collapsed:: true
+-			- 手动配置
+-			  collapsed:: true
+-				- 在Config文件夹下添加RabbitConfig.java
+-				  collapsed:: true
+-					- ```java
+-					  
+-					  @Slf4j
+-					  @Configuration
+-					  public class RabbitConfig {
+-					  
+-					      @Autowired
+-					      OrderMessageService orderMessageService;
+-					  
+-					      @Autowired
+-					      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+-					          orderMessageService.handleMessage();
+-					      }
+-					  
+-					      @Autowired
+-					      public void initRabbit() {
+-					          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+-					          connectionFactory.setHost("127.0.0.1");
+-					          connectionFactory.setPort(5672);
+-					          connectionFactory.setPassword("guest");
+-					          connectionFactory.setUsername("guest");
+-					  
+-					          RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+-					  
+-					          /*---------------------restaurant---------------------*/
+-					          Exchange exchange = new DirectExchange("exchange.order.restaurant");
+-					          rabbitAdmin.declareExchange(exchange);
+-					  
+-					          Queue queue = new Queue("queue.order");
+-					          rabbitAdmin.declareQueue(queue);
+-					  
+-					          Binding binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.restaurant",
+-					                  "key.order",
+-					                  null);
+-					  
+-					          rabbitAdmin.declareBinding(binding);
+-					  
+-					          /*---------------------deliveryman---------------------*/
+-					          exchange = new DirectExchange("exchange.order.deliveryman");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.deliveryman",
+-					                  "key.order",
+-					                  null);
+-					          rabbitAdmin.declareBinding(binding);
+-					  
+-					  
+-					          /*---------settlement---------*/
+-					          exchange = new FanoutExchange("exchange.order.settlement");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          exchange = new FanoutExchange("exchange.settlement.order");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.settlement",
+-					                  "key.order",
+-					                  null);
+-					          rabbitAdmin.declareBinding(binding);
+-					  
+-					  
+-					          /*--------------reward----------------*/
+-					          exchange = new TopicExchange("exchange.order.reward");
+-					          rabbitAdmin.declareExchange(exchange);
+-					          binding = new Binding(
+-					                  "queue.order",
+-					                  Binding.DestinationType.QUEUE,
+-					                  "exchange.order.reward",
+-					                  "key.order",
+-					                  null);
+-					          rabbitAdmin.declareBinding(binding);
+-					      }
+-					  }
+-					  
+-					  ```
+-			- 声明式配置
+-			  collapsed:: true
+-				- ```java
+-				  @Slf4j
+-				  @Configuration
+-				  public class RabbitConfig {
+-				  
+-				      @Autowired
+-				      OrderMessageService orderMessageService;
+-				  
+-				      @Autowired
+-				      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {
+-				          orderMessageService.handleMessage();
+-				      }
+-				  
+-				  
+-				      /*---------------------restaurant---------------------*/
+-				      @Bean
+-				      public Exchange exchange1() {
+-				          return new DirectExchange("exchange.order.restaurant");
+-				      }
+-				  
+-				      @Bean
+-				      public Queue queue1() {
+-				          return new Queue("queue.order");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding1() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.restaurant",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				      /*---------------------deliveryman---------------------*/
+-				      @Bean
+-				      public Exchange exchange2() {
+-				          return new DirectExchange("exchange.order.deliveryman");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding2() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.deliveryman",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				  
+-				      /*---------settlement---------*/
+-				      @Bean
+-				      public Exchange exchange3() {
+-				          return new FanoutExchange("exchange.order.settlement");
+-				      }
+-				  
+-				      @Bean
+-				      public Exchange exchange4() {
+-				          return new FanoutExchange("exchange.settlement.order");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding3() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.settlement",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				      /*--------------reward----------------*/
+-				      @Bean
+-				      public Exchange exchange5() {
+-				          return new TopicExchange("exchange.order.reward");
+-				      }
+-				  
+-				      @Bean
+-				      public Binding binding4() {
+-				          return new Binding(
+-				                  "queue.order",
+-				                  Binding.DestinationType.QUEUE,
+-				                  "exchange.order.reward",
+-				                  "key.order",
+-				                  null);
+-				      }
+-				  
+-				      @Bean
+-				      public ConnectionFactory connectionFactory() {
+-				          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+-				          connectionFactory.setHost("127.0.0.1");
+-				          connectionFactory.setPort(5672);
+-				          connectionFactory.setPassword("guest");
+-				          connectionFactory.setUsername("guest");
+-				          connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.SIMPLE);
+-				          connectionFactory.setPublisherReturns(true);
+-				          connectionFactory.createConnection();
+-				          return connectionFactory;
+-				      }
+-				  
+-				      @Bean
+-				      public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+-				          RabbitAdmin admin = new RabbitAdmin(connectionFactory);
+-				          admin.setAutoStartup(true);
+-				          return admin;
+-				      }
+-				  
+-				      @Bean
+-				      RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+-				          RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+-				          rabbitTemplate.setMandatory(true);
+-				  
+-				          rabbitTemplate.setConfirmCallback((correlationData, ack, cause) ->
+-				                  log.info("correlationData:{}, ack:{}, cause{}",
+-				                          correlationData,
+-				                          ack,
+-				                          cause));
+-				          rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) ->
+-				                  log.info(
+-				                          "message:{}, replyCode:{}, replyText:{}, exchange:{}, routingKey{}",
+-				                          message,
+-				                          replyCode,
+-				                          replyText,
+-				                          exchange,
+-				                          routingKey));
+-				          return rabbitTemplate;
+-				      }
+-				    
+-				    	/*
+-				      *SimpleMessageListenerContainer 简单消息监听容器
+-				      */  
+-				    	@Bean
+-				      public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
+-				          SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer(connectionFactory);
+-				          messageListenerContainer.setQueueNames("queue.order");
+-				          messageListenerContainer.setConcurrentConsumers(1);
+-				          messageListenerContainer.setMaxConcurrentConsumers(3);
+-				          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+-				          messageListenerContainer.setMessageListener(new MessageListener() {
+-				              @Override
+-				              public void onMessage(Message message) {
+-				                  log.info("message:{}", message);
+-				              }
+-				          });
+-				          messageListenerContainer.setPrefetchCount(2);
+-				          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+-				          messageListenerContainer.setMessageListener(new ChannelAwareMessageListener() {
+-				              @Override
+-				              public void onMessage(Message message, Channel channel) throws Exception {
+-				                  channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+-				              }
+-				          });
+-				          return messageListenerContainer;
+-				      }
+-				  }
+-				  
+-				  ```
+-				-
+-		- SimpleMessageListenerContainer 简单消息监听容器
+-		  collapsed:: true
+-			- ```java
+-			    	/*
+-			      *SimpleMessageListenerContainer 简单消息监听容器
+-			      */  
+-			    	@Bean
+-			      public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
+-			          SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer(connectionFactory);
+-			          messageListenerContainer.setQueueNames("queue.order");
+-			          messageListenerContainer.setConcurrentConsumers(1);
+-			          messageListenerContainer.setMaxConcurrentConsumers(3);
+-			          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+-			          messageListenerContainer.setMessageListener(new MessageListener() {
+-			              @Override
+-			              public void onMessage(Message message) {
+-			                  log.info("message:{}", message);
+-			              }
+-			          });
+-			          messageListenerContainer.setPrefetchCount(2);
+-			          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+-			          messageListenerContainer.setMessageListener(new ChannelAwareMessageListener() {
+-			              @Override
+-			              public void onMessage(Message message, Channel channel) throws Exception {
+-			                  channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+-			              }
+-			          });
+-			          return messageListenerContainer;
+-			      }
+-			  ```
+-			- MessageListenAdapter 自定义消息监听
+-			  collapsed:: true
+-				- 简单模式：实现handleMessage方法
+-				- 高阶模式：自定义“队列名→方法名”映射关系
+-				- ```java
+-				          MessageListenerAdapter listenerAdapter = new MessageListenerAdapter();
+-				          listenerAdapter.setDelegate(orderMessageService);
+-				  
+-				          Map<String, String> methodMap = new HashMap<>(8);
+-				          methodMap.put("queue.order", "handleMessage1");
+-				          listenerAdapter.setQueueOrTagToMethodName(methodMap);
+-				          messageListenerContainer.setMessageListener(listenerAdapter);
+-				  ```
+-			- MessageConveter 用来在收发消息时自动转换消息
+-			  collapsed:: true
+-				- Byte[]数组作为消息体,转化为Java对象
+-				- Jackson2JsonMessageConverter 转换Json格式
+-					- 配合ClassMapper可以直接转换为POJO对象
+-				- ```java
+-				          MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(orderMessageService);
+-				          Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();
+-				          messageConverter.setClassMapper(new ClassMapper() {
+-				              @Override
+-				              public void fromClass(Class<?> clazz, MessageProperties properties) {
+-				  
+-				              }
+-				  
+-				              @Override
+-				              public Class<?> toClass(MessageProperties properties) {
+-				                  return OrderMessageDTO.class;
+-				              }
+-				          });
+-				  
+-				  //        messageConverter.setJavaTypeMapper(Jackson2JavaTypeMapper);
+-				  
+-				          messageListenerAdapter.setMessageConverter(messageConverter);
+-				  ```
+-		- 利用RabbitTemplate发送消息
+-		  collapsed:: true
+-			- ```java
+-			          String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-			          MessageProperties messageProperties = new MessageProperties();
+-			          messageProperties.setExpiration("15000");
+-			          Message message = new Message(messageToSend.getBytes(), messageProperties);
+-			          CorrelationData correlationData = new CorrelationData();
+-			          correlationData.setId(orderPO.getId().toString());
+-			          rabbitTemplate.send(
+-			                  "exchange.order.restaurant",
+-			                  "key.restaurant",
+-			                  message,correlationData
+-			          );
+-			  
+-			          rabbitTemplate.convertAndSend(
+-			                  "exchange.order.restaurant",
+-			                  "key.restaurant",
+-			                  messageToSend,correlationData);
+-			  
+-			          //        rabbitTemplate.execute(channel -> {
+-			          //            channel.abort();
+-			          //            return null;
+-			          //        });
+-			  ```
+-		- RabbitListener  是一个组合注解，对业务代码无侵入实现监听
+-		  collapsed:: true
+-			- RabbitListener 组合注解
+-			  collapsed:: true
+-				- @Exchange:自动声明Exchange
+-				- @Queue:自动声明队列
+-				- @QueueBinding:自动声明绑定关系
+-			- 使用
+-				- properties配置文件
+-				  collapsed:: true
+-					- ```properties
+-					  spring.rabbitmq.username=guest
+-					  spring.rabbitmq.password=guest
+-					  spring.rabbitmq.addresses=127.0.0.1
+-					  spring.rabbitmq.port=6379
+-					  ```
+-				- 业务代码使用
+-				  collapsed:: true
+-					- ```java
+-					      @RabbitListener(
+-					  //            containerFactory = "rabbitListenerContainerFactory",
+-					  //            queues = "queue.order",
+-					  //            admin = "rabbitAdmin",
+-					              bindings = {
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "${imooc.order-queue}",
+-					                                      arguments = {
+-					                                              //                                            @Argument(name =
+-					                                              //                                            "x-message-ttl", value =
+-					                                              //                                            "1000", type = "java.lang
+-					                                              //                                            .Integer"),
+-					                                              //                                            @Argument(name =
+-					                                              //                                            "x-dead-letter-exchange",
+-					                                              //                                            value = "aaaaa"),
+-					                                              //                                            @Argument(name =
+-					                                              //                                            "x-dead-letter-routing-key", value = "bbbb")
+-					                                      }),
+-					                              exchange = @Exchange(name = "exchange.order.restaurant", type = ExchangeTypes.DIRECT),
+-					                              key = "key.order"
+-					                      ),
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "queue.order"),
+-					                              exchange = @Exchange(name = "exchange.order.deliveryman", type = ExchangeTypes.DIRECT),
+-					                              key = "key.order"
+-					                      ),
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "queue.order"),
+-					                              exchange = @Exchange(name = "exchange.settlement.order", type = ExchangeTypes.FANOUT),
+-					                              key = "key.order"
+-					                      ),
+-					                      @QueueBinding(
+-					                              value = @Queue(name = "queue.order"),
+-					                              exchange = @Exchange(name = "exchange.order.reward", type = ExchangeTypes.TOPIC),
+-					                              key = "key.order"
+-					                      )
+-					              }
+-					      )
+-					      public void handleMessage(@Payload Message message) throws IOException {
+-					          log.info("handleMessage:message:{}", new String(message.getBody()));
+-					          ConnectionFactory connectionFactory = new ConnectionFactory();
+-					          connectionFactory.setHost("localhost");
+-					          try {
+-					              OrderMessageDTO orderMessageDTO = objectMapper.readValue(message.getBody(),
+-					                      OrderMessageDTO.class);
+-					              OrderDetailPO orderPO = orderDetailDao.selectOrder(orderMessageDTO.getOrderId());
+-					  
+-					              switch (orderPO.getStatus()) {
+-					  
+-					                  case ORDER_CREATING:
+-					                      if (orderMessageDTO.getConfirmed() && null != orderMessageDTO.getPrice()) {
+-					                          orderPO.setStatus(OrderStatus.RESTAURANT_CONFIRMED);
+-					                          orderPO.setPrice(orderMessageDTO.getPrice());
+-					                          orderDetailDao.update(orderPO);
+-					                          try (Connection connection = connectionFactory.newConnection();
+-					                               Channel channel = connection.createChannel()) {
+-					                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-					                              channel.basicPublish("exchange.order.deliveryman", "key.deliveryman", null,
+-					                                      messageToSend.getBytes());
+-					                          }
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					                  case RESTAURANT_CONFIRMED:
+-					                      if (null != orderMessageDTO.getDeliverymanId()) {
+-					                          orderPO.setStatus(OrderStatus.DELIVERYMAN_CONFIRMED);
+-					                          orderPO.setDeliverymanId(orderMessageDTO.getDeliverymanId());
+-					                          orderDetailDao.update(orderPO);
+-					                          try (Connection connection = connectionFactory.newConnection();
+-					                               Channel channel = connection.createChannel()) {
+-					                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-					                              channel.basicPublish(
+-					                                      "exchange.order.settlement",
+-					                                      "key.settlement",
+-					                                      null,
+-					                                      messageToSend.getBytes()
+-					                              );
+-					                          }
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					                  case DELIVERYMAN_CONFIRMED:
+-					                      if (null != orderMessageDTO.getSettlementId()) {
+-					                          orderPO.setStatus(OrderStatus.SETTLEMENT_CONFIRMED);
+-					                          orderPO.setSettlementId(orderMessageDTO.getSettlementId());
+-					                          orderDetailDao.update(orderPO);
+-					                          try (Connection connection = connectionFactory.newConnection();
+-					                               Channel channel = connection.createChannel()) {
+-					                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);
+-					                              channel.basicPublish(
+-					                                      "exchange.order.reward",
+-					                                      "key.reward",
+-					                                      null,
+-					                                      messageToSend.getBytes()
+-					                              );
+-					                          }
+-					  
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					                  case SETTLEMENT_CONFIRMED:
+-					                      if (null != orderMessageDTO.getRewardId()) {
+-					                          orderPO.setStatus(OrderStatus.ORDER_CREATED);
+-					                          orderPO.setRewardId(orderMessageDTO.getRewardId());
+-					                          orderDetailDao.update(orderPO);
+-					                      } else {
+-					                          orderPO.setStatus(OrderStatus.FAILED);
+-					                          orderDetailDao.update(orderPO);
+-					                      }
+-					                      break;
+-					              }
+-					  
+-					          } catch (JsonProcessingException | TimeoutException e) {
+-					              e.printStackTrace();
+-					          }
+-					      }
+-					  ```
+-	- 保证消息可靠性
+-	  collapsed:: true
+-		- 发送端确认机制 （发送是否成功）
+-		  collapsed:: true
+-			- > 慎用
+-			- 配置channel，确认开启模式
+-			  collapsed:: true
+-				- ```java
+-				  channel.confirmSelect();
+-				  ```
+-			- 单条同步确认 (推荐)
+-				- 每发送一条消息，调用**channel.waitForConfirms()**方法，等待确认
+-			- 多条同步确认
+-				- 发送多条消息后，调用**channel.waitForConfirms()**方法，等待确认
+-			- 异步确认
+-				- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334192845_0.png)
+-				- 在channel上添加监听：**addConfirmListener**,发送消息后，会回调此方法，通知是否发送成功
+-				- > 异步确认有可能是单条，也有可能是多条，取决于MQ
+-				- > 异步回调在一个新的线程，所以数据隔离且有并发问题（因为channel不同，所以deliverTag可能重复）。
+-		- 消息返回机制 （消息是否被路由）
+-		  collapsed:: true
+-			- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334924326_0.png)
+-			- 原理：Exchange在没有找到路由时候调用回调机制
+-			- 发送消息时候 mandatory设为true
+-				- ```java
+-				                  channel.basicPublish("exchange.order.restaurant", "key.order",true, null, messageToSend.getBytes());
+-				  ```
+-			- 设置异步回调
+-			  collapsed:: true
+-				- ```java
+-				                  channel.addReturnListener(new ReturnCallback() {
+-				                      @Override
+-				                      public void handle(Return returnMessage) {
+-				                          log.info("Message Return: returnMessage:{}", returnMessage);
+-				                      }
+-				                  });
+-				  ```
+-				-
+-		- 消费端确认  ACK
+-		  collapsed:: true
+-			- 监听消息时关闭自动ACK，使用手动ACK。
+-				- 下面第二个参数为false
+-				- ```java
+-				  this.channel.basicConsume("queue.restaurant", false, deliverCallback, consumerTag -> {});
+-				  ```
+-			- 监听消费时手动ack
+-			  collapsed:: true
+-				- ```java
+-				  channel.basicAck(message.getEnvelope().getDeliveryTag(),true);}
+-				  ```
+-			- > NACK慎用
+-		- 消费端限流 QoS
+-		  collapsed:: true
+-			- 前提：不使用自动确认
+-			- ```java
+-			  channel.basicQos(2)
+-			  ```
+-			-
+-			-
+-		- 消息过期机制 ttl
+-		  collapsed:: true
+-			- > 消息ttl 长于业务高峰期时间 与 服务的平均重启时间
+-			- 设置单条消息TTL
+-			  collapsed:: true
+-				- ```java
+-				  AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder().expiration("100000").build();
+-				  ```
+-				- ```java
+-				  channel.basicPublish("exchange.order.deliveryman", "key.deliveryman", properties,
+-				                                      messageToSend.getBytes());
+-				  ```
+-			- 设置队列TTL
+-				- ```java
+-				  Map<String, Object> args = new HashMap<String, Object>();
+-				  args.put("x-message-ttl", 10000);
+-				  ```
+-				- 创建队列时将参数赋值进去
+-					- ```java
+-					              channel.exchangeDeclare(
+-					                      "exchange.order.restaurant",
+-					                      BuiltinExchangeType.DIRECT,
+-					                      true,
+-					                      false,
+-					                      args);
+-					  ```
+-		- 死信队列
+-		  collapsed:: true
+-			- ![image.png](../assets/image_1656341513805_0.png)
+-			- 一个被配置了**DLX**属性的队列，收集ttl过期消息，以供分析
+-			- 怎么变成死信
+-			  collapsed:: true
+-				- 消息被拒绝
+-				- 消息过期
+-				- 队列达到最大长度
+-			- 设置Exchange
+-			  collapsed:: true
+-				- 命名规范（非强制的）
+-				  collapsed:: true
+-					- Exchange：dlx.exchange
+-					- Queue:dlx.queue
+-					- RoutingKey: #
+-				- 队列添加参数
+-					- x-dead-letter-exchange = dlx.exchange
+-					- ```java
+-					  // 声明死信交换机
+-					          channel.exchangeDeclare(
+-					                  "exchange.dlx",
+-					                  BuiltinExchangeType.TOPIC,
+-					                  true,
+-					                  false,
+-					                  null);
+-					  // 声明死信队列
+-					          channel.queueDeclare(
+-					                  "queue.dlx",
+-					                  true,
+-					                  false,
+-					                  false,
+-					                  null);
+-					  // 声明死信绑定
+-					          channel.queueBind(
+-					                  "queue.dlx",
+-					                  "exchange.dlx",
+-					                  "#");
+-					  
+-					  //声明队列时，携带以下参数：
+-					  
+-					              Map<String, Object> args = new HashMap<>(16);
+-					              args.put("x-dead-letter-exchange", "exchange.dlx");
+-					              args.put("x-max-length", 10);
+-					  //创建队列时将参数赋值进去
+-					              channel.exchangeDeclare(
+-					                      "exchange.order.restaurant",
+-					                      BuiltinExchangeType.DIRECT,
+-					                      true,
+-					                      false,
+-					                      args);
+-					  ```
+-			-
+-- 业务开发建议
+-  collapsed:: true
+-	- 一个业务对应一个exchange
+-	- 将创建交换机/队列的操作固化在应用代码中，免去复杂的
+-	  运维操作，高效且不易出错
+-	- 一般来说，交换机由双方同时声明，队列由接收方声明并配
+-	  置绑定关系
+-	- 交换机/队列的参数一定要由双方开发团队确认，否则重复
+-	  声明时，若参数不一致，会导致声明失败
+--
+--
+\ No newline at end of file
+Index: pages/RabbitMQ.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>- 基于 [[Erlang]] 的跨平台消息队列，天然具有高性能，使用[[AMQP]]协议提供客户端接口\r\n- RabbitMQ安装\r\n  collapsed:: true\r\n\t- [[RabbitMQ Windows 安装]]\r\n\t- [[RabbitMQ Linux 安装]]\r\n\t- [[RabbitMQ Docker安装]]\r\n\t- [[RabbitMQ Kubernetes安装]]\r\n- 命令行工具使用\r\n  collapsed:: true\r\n\t- 状态\r\n\t  collapsed:: true\r\n\t\t- 查看状态\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl status\r\n\t\t\t  ```\r\n\t\t- 查看绑定\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl list_bindings\r\n\t\t\t  ```\r\n\t\t- 查看channel\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl list_channels\r\n\t\t\t  ```\r\n\t\t- 查看connection\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl list_connections\r\n\t\t\t  ```\r\n\t\t- 查看 消费者\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl list_consumers\r\n\t\t\t  ```\r\n\t\t- 查看交换机\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl list_exchanges\r\n\t\t\t  ```\r\n\t- 队列\r\n\t  collapsed:: true\r\n\t\t- 查看队列\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl list_queues\r\n\t\t\t  ```\r\n\t\t- 删除队列\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl delete_queue\r\n\t\t\t  ```\r\n\t\t- 清空队列\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl purge_queuq\r\n\t\t\t  ```\r\n\t- 用户\r\n\t  collapsed:: true\r\n\t\t- 新建用户\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl add_user\r\n\t\t\t  ```\r\n\t\t- 修改用户密码\r\n\t\t- ```sh\r\n\t\t  rabbitmqctl change_password\r\n\t\t  ```\r\n\t\t- 删除用户\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl delete_user\r\n\t\t\t  ```\r\n\t\t- 查看用户\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl list_users\r\n\t\t\t  ```\r\n\t\t- 设置用户角色\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl rabbitmqctl set_user_tags\r\n\t\t\t  ```\r\n\t\t-\r\n\t- 应用\r\n\t  collapsed:: true\r\n\t\t- 启动应用\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl start_app\r\n\t\t\t  ```\r\n\t\t- 关闭应用,保留Erlang虚拟机（暂停）\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl stop_app\r\n\t\t\t  ```\r\n\t\t- 关闭应用 并关闭Erlang虚拟机\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl stop\r\n\t\t\t  ```\r\n\t- 集群\r\n\t  collapsed:: true\r\n\t\t- 加入集群\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl join_cluster\r\n\t\t\t  ```\r\n\t\t- 离开集群\r\n\t\t  collapsed:: true\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl reset\r\n\t\t\t  ```\r\n\t- 镜像队列\r\n\t  collapsed:: true\r\n\t\t- 设置镜像队列\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl sync_queue\r\n\t\t\t  ```\r\n\t\t- 取消镜像队列\r\n\t\t\t- ```sh\r\n\t\t\t  rabbitmqctl cancel_sync_queue\r\n\t\t\t  ```\r\n- 集群\r\n\t- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656731662352_0.png)\r\n\t- 优势\r\n\t  collapsed:: true\r\n\t\t- 扩展规模\r\n\t\t  collapsed:: true\r\n\t\t\t- RabbitMQ集群可以方便地通过Scale-Out扩展规模\r\n\t\t- 数据冗余\r\n\t\t  collapsed:: true\r\n\t\t\t- RabbitMQ集群可以通过镜像队列，将数据冗余至多个节点\r\n\t\t- 高可用\r\n\t\t  collapsed:: true\r\n\t\t\t- RabbitMQ集群可以通过负载均衡，将请求转移至可用节点\r\n\t- 原理\r\n\t  collapsed:: true\r\n\t\t- 多个RabbitMQ单节点，经过配置组成RabbitMQ集群\r\n\t\t- 集群节点之间共享元数据，不共享队列数据（默认）\r\n\t\t- RabbitMQ节点数据互相转发，客户端通过单一节点可以访问所有数据\r\n\t- 搭建过程\r\n\t  collapsed:: true\r\n\t\t- [[RabbitMQ Linux 安装]]\r\n\t\t- 镜像队列\r\n\t\t  collapsed:: true\r\n\t\t\t- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656782628235_0.png){:height 78, :width 529}\r\n\t\t\t\t- **Definition**:策略定义\r\n\t\t\t\t\t- ha-mode:指明镜像队列的模式\r\n\t\t\t\t\t  collapsed:: true\r\n\t\t\t\t\t\t- **all**:表示在集群中所有的节点上进行镜像\r\n\t\t\t\t\t\t- **exactly**:表示在指定个数的节点上进行镜像，节点的个数由ha-params指定\r\n\t\t\t\t\t\t- **nodes**:表示在指定的节点上进行镜像，节点名称通过ha-params指定\r\n\t\t\t\t\t- ha-params:ha-mode模式需要用到的参数\r\n\t\t\t\t\t- ha-sync-mode:进行队列中消息的同步方式，有效值为automatic和nanual\r\n\t\t\t- 匹配所有队列，并将镜像配置到集群中的所有节点\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```sh\r\n\t\t\t\t  rabbitmqctl set_policy ha-all \"^\" '{\"ha-mode\":\"all\"}'\r\n\t\t\t\t  ```\r\n\t\t\t- 名称以\"two\"开始的队列镜像到群集中的任意两个节点\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```sh\r\n\t\t\t\t  rabbitmqctl set policy ha-two \"Atwo.\" '{\"ha-mode\":\"exactly\",\"ha-params\":2,\"ha-sync-mode\":\"automatic\"}'\r\n\t\t\t\t  ```\r\n\t\t\t- 以\"node\"开头的队列镜像到集群中的特定节点\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```sh\r\n\t\t\t\t  rabbitmqctl set_policy ha-nodes \"^nodes.\" '{\"ha-mode\":\"nodes\",\"ha-params\":[\"rabbit@nodeA\",\"rabbit@nodeeB\"]}'\r\n\t\t\t\t  ```\r\n\t\t- 负载均衡\r\n\t\t\t- 客户端负载均衡\r\n\t\t\t\t- 直接在SpringBoot配置中设置多个地址\r\n\t\t\t\t\t- ```sh\r\n\t\t\t\t\t  spring.rabbitmq.addresses=127.0.0.1,127.0.0.2,127.0.0.3\r\n\t\t\t\t\t  ```\r\n\t\t\t- 服务段负载均衡 HAProxy+Keepalived\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656783407886_0.png){:height 328, :width 654}\r\n\t\t\t- [[HAProxy]]\r\n\t\t\t- [[Keepalived]]\r\n\t- 集群间通信方式\r\n\t  collapsed:: true\r\n\t\t- Federation(联邦）\r\n\t\t\t- 原理：通过AMQP协议，使用一个内部交换机，让原本发送到一个集群的消息转发至另一个集群(交换机->交换机;队列->队列)\r\n\t\t\t- 设置方法\r\n\t\t\t\t- 启用Federation插件\r\n\t\t\t\t  collapsed:: true\r\n\t\t\t\t\t- ```sh\r\n\t\t\t\t\t  rabbitmq-plugins enable rabbitmq_federation_management\r\n\t\t\t\t\t  ```\r\n\t\t\t\t- 使用管控台具体配置Federation\r\n\t\t- Shovel(铲子）\r\n\t\t\t- Shovel可以持续地从一个broker拉取消息转发至另一个broker (交换机->交换机;队列->队列;队列->交换机)\r\n\t\t\t- 设置方法\r\n\t\t\t\t- 启用插件\r\n\t\t\t\t\t- ```sh\r\n\t\t\t\t\t  rabbitmq-plugins enable rabbitmq_shovel_management\r\n\t\t\t\t\t  ```\r\n\t- 网络分区处理方法\r\n\t  collapsed:: true\r\n\t\t- 手动处理\r\n\t\t  collapsed:: true\r\n\t\t\t- 挂起客户端进程\r\n\t\t\t- 删除镜像队列配置\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 如果没有删除镜像队列配置，恢复过程中可能会出现队列\r\n\t\t\t\t  漂移”现象，从被切换成主\r\n\t\t\t- 挑选信任的分区\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 挑选的指标有：是否有disk节点/分区节点数/分区队列数/分区客户端连接数\r\n\t\t\t- 关闭非信任区的节点\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 采用rabbitmqctl stop_app命令，只关闭RabbitMQ应用，不会关闭ErLang虚拟机\r\n\t\t\t- 启动非信任区的节点\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 采用rabbitmqctl start_app命令\r\n\t\t\t- 检查网络分区是否恢复\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 恢复的话不用重启信任分区节点\r\n\t\t\t- 重启信任分区节点\r\n\t\t\t- 添加镜像队列配置\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t-\r\n\t\t\t- 恢复生产者与客户端\r\n\t\t- 自动处理\r\n\t\t\t- 开启自动处理\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 如要开启，配置rabbitmq.config中的**cluster_parititon_handling**参数\r\n\t\t\t- pause-minority\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 发生网络分区时，节点自动检测自己是否处于少数派，若是则关闭自己\r\n\t\t\t\t- 若出现了节点数相同的两个分区，可能会导致两个分区全部关闭\r\n\t\t\t- pause-if-all-down\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 每个节点预先配置一个节点列表，当失去和列表中所有节点的通信时，关闭自己\r\n\t\t\t\t- 此方法考验配置的合理性，配置不合理可能会导致集群节点全部容机\r\n\t\t\t- autoheal\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 发生网络分区时，每个节点使用特定算法自动决定一个“获胜分区”，然后重启不在分区的其他节点\r\n\t\t\t\t- 当节点中有关闭状态时，autoheal不会起作用\r\n\t-\r\n- 状态监控\r\n  collapsed:: true\r\n\t- 通过Java API判断节点是否健康\r\n\t  collapsed:: true\r\n\t\t- 使用Java应用创建connection与channel\r\n\t\t\t- ```JAVA\r\n\t\t\t  Connection connection=connectionFactory.newConnection();\r\n\t\t\t  Channel channel = connection. createChannel();\r\n\t\t\t  ```\r\n\t\t- 若能创建成功，则节点健康，若创建失败（抛异常）则节点挂机或与节点的网络连接异常\r\n\t- 通过HTTP Rest API监控集群状态\r\n\t\t- 使用api/nodes/接口获得节点信息\r\n\t\t- 使用api/exchanges/{vhost}/{name}/接口获得exchange状态信息\r\n\t\t- 使用api/queues/{vhost}/{name}/接口获得queue状态信息\r\n\t- 通过监控中间件监控RabbitMQ\r\n\t  collapsed:: true\r\n\t\t- Zabbix\r\n\t\t- Prometheus\r\n- 业务中使用\r\n  collapsed:: true\r\n\t- spring (spring-rabbit)\r\n\t  collapsed:: true\r\n\t\t- 依赖\r\n\t\t  collapsed:: true\r\n\t\t\t- ```gradle\r\n\t\t\t  testImplementation 'org.springframework.amqp:spring-rabbit-test'\r\n\t\t\t  ```\r\n\t\t- 配置\r\n\t\t  collapsed:: true\r\n\t\t\t- ```yaml\r\n\t\t\t  rabbitmq.host=localhost\r\n\t\t\t  rabbitmq.port=5672\r\n\t\t\t  rabbitmq.username=guest\r\n\t\t\t  rabbitmq.password=guest\r\n\t\t\t  ```\r\n\t\t- 配置线程池\r\n\t\t  collapsed:: true\r\n\t\t\t- ```java\r\n\t\t\t  @Configuration\r\n\t\t\t  @EnableAsync\r\n\t\t\t  public class AsyncTaskConfig implements AsyncConfigurer {\r\n\t\t\t  \r\n\t\t\t      // ThredPoolTaskExcutor的处理流程\r\n\t\t\t      // 当池子大小小于corePoolSize，就新建线程，并处理请求\r\n\t\t\t      // 当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去workQueue中取任务并处理\r\n\t\t\t      // 当workQueue放不下任务时，就新建线程入池，并处理请求，如果池子大小撑到了maximumPoolSize，就用RejectedExecutionHandler来做拒绝处理\r\n\t\t\t      // 当池子的线程数大于corePoolSize时，多余的线程会等待keepAliveTime长时间，如果无请求可处理就自行销毁\r\n\t\t\t  \r\n\t\t\t      @Override\r\n\t\t\t      @Bean\r\n\t\t\t      public Executor getAsyncExecutor() {\r\n\t\t\t          ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();\r\n\t\t\t          //设置核心线程数\r\n\t\t\t          threadPool.setCorePoolSize(10);\r\n\t\t\t          //设置最大线程数\r\n\t\t\t          threadPool.setMaxPoolSize(100);\r\n\t\t\t          //线程池所使用的缓冲队列\r\n\t\t\t          threadPool.setQueueCapacity(10);\r\n\t\t\t          //等待任务在关机时完成--表明等待所有线程执行完\r\n\t\t\t          threadPool.setWaitForTasksToCompleteOnShutdown(true);\r\n\t\t\t          // 等待时间 （默认为0，此时立即停止），并没等待xx秒后强制停止\r\n\t\t\t          threadPool.setAwaitTerminationSeconds(60);\r\n\t\t\t          //  线程名称前缀\r\n\t\t\t          threadPool.setThreadNamePrefix(\"Rabbit-Async-\");\r\n\t\t\t          // 初始化线程\r\n\t\t\t          threadPool.initialize();\r\n\t\t\t          return threadPool;\r\n\t\t\t      }\r\n\t\t\t  \r\n\t\t\t      @Override\r\n\t\t\t      public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {\r\n\t\t\t          return null;\r\n\t\t\t      }\r\n\t\t\t  }\r\n\t\t\t  ```\r\n\t\t- 创建队列\r\n\t\t  collapsed:: true\r\n\t\t\t- Direct\r\n\t\t\t\t- ```java\r\n\t\t\t\t              channel.exchangeDeclare(\r\n\t\t\t\t                      \"exchange.order.restaurant\",\r\n\t\t\t\t                      BuiltinExchangeType.DIRECT,\r\n\t\t\t\t                      true,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      null);\r\n\t\t\t\t  \r\n\t\t\t\t              channel.queueDeclare(\r\n\t\t\t\t                      \"queue.order\",\r\n\t\t\t\t                      true,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      null);\r\n\t\t\t\t  \r\n\t\t\t\t              channel.queueBind(\r\n\t\t\t\t                      \"queue.order\",\r\n\t\t\t\t                      \"exchange.order.restaurant\",\r\n\t\t\t\t                      \"key.order\");\r\n\t\t\t\t  ```\r\n\t\t\t- Fanout\r\n\t\t\t\t- ```java\r\n\t\t\t\t              channel.exchangeDeclare(\r\n\t\t\t\t                      \"exchange.settlement.order\",\r\n\t\t\t\t                      BuiltinExchangeType.FANOUT,\r\n\t\t\t\t                      true,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      null);\r\n\t\t\t\t  \r\n\t\t\t\t              channel.queueDeclare(\r\n\t\t\t\t                      \"queue.order\",\r\n\t\t\t\t                      true,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      null);\r\n\t\t\t\t  \r\n\t\t\t\t              channel.queueBind(\r\n\t\t\t\t                      \"queue.order\",\r\n\t\t\t\t                      \"exchange.settlement.order\",\r\n\t\t\t\t                      \"key.order\");\r\n\t\t\t\t  ```\r\n\t\t\t- Topic\r\n\t\t\t\t- ```java\r\n\t\t\t\t              channel.exchangeDeclare(\r\n\t\t\t\t                      \"exchange.order.reward\",\r\n\t\t\t\t                      BuiltinExchangeType.TOPIC,\r\n\t\t\t\t                      true,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      null);\r\n\t\t\t\t  \r\n\t\t\t\t              channel.queueDeclare(\r\n\t\t\t\t                      \"queue.order\",\r\n\t\t\t\t                      true,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      false,\r\n\t\t\t\t                      null);\r\n\t\t\t\t  \r\n\t\t\t\t              channel.queueBind(\r\n\t\t\t\t                      \"queue.order\",\r\n\t\t\t\t                      \"exchange.order.reward\",\r\n\t\t\t\t                      \"key.order\");\r\n\t\t\t\t  ```\r\n\t\t- 监听队列\r\n\t\t  collapsed:: true\r\n\t\t\t- ```java\r\n\t\t\t      ObjectMapper objectMapper = new ObjectMapper();\r\n\t\t\t  \r\n\t\t\t      DeliverCallback deliverCallback = (consumerTag, message) -> {\r\n\t\t\t          String messageBody = new String(message.getBody());\r\n\t\t\t          log.info(\"deliverCallback:messageBody:{}\", messageBody);\r\n\t\t\t          ConnectionFactory connectionFactory = new ConnectionFactory();\r\n\t\t\t          connectionFactory.setHost(\"localhost\");\r\n\t\t\t          try {\r\n\t\t\t              OrderMessageDTO orderMessageDTO = objectMapper.readValue(messageBody,\r\n\t\t\t                      OrderMessageDTO.class);\r\n\t\t\t              List<DeliverymanPO> deliverymanPOS = deliverymanDao.selectAvaliableDeliveryman(DeliverymanStatus.AVALIABIE);\r\n\t\t\t              orderMessageDTO.setDeliverymanId(deliverymanPOS.get(0).getId());\r\n\t\t\t              log.info(\"onMessage:restaurantOrderMessageDTO:{}\", orderMessageDTO);\r\n\t\t\t  \r\n\t\t\t              try (Connection connection = connectionFactory.newConnection();\r\n\t\t\t                   Channel channel = connection.createChannel()) {\r\n\t\t\t                  String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);\r\n\t\t\t                  channel.basicPublish(\"exchange.order.restaurant\", \"key.order\", null, messageToSend.getBytes());\r\n\t\t\t              }\r\n\t\t\t          } catch (JsonProcessingException | TimeoutException e) {\r\n\t\t\t              e.printStackTrace();\r\n\t\t\t          }\r\n\t\t\t      };\r\n\t\t\t  \r\n\t\t\t  \r\n\t\t\t  \r\n\t\t\t  channel.basicConsume(\"queue.deliveryman\", true, deliverCallback, consumerTag -> {\r\n\t\t\t              });\r\n\t\t\t  ```\r\n\t\t- 发送消息\r\n\t\t  collapsed:: true\r\n\t\t\t- ```java\r\n\t\t\t  try (Connection connection = connectionFactory.newConnection();\r\n\t\t\t                               Channel channel = connection.createChannel()) {\r\n\t\t\t                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);\r\n\t\t\t                              channel.basicPublish(\"exchange.order.deliveryman\", \"key.deliveryman\", null,\r\n\t\t\t                                      messageToSend.getBytes());\r\n\t\t\t                          }\r\n\t\t\t  ```\r\n\t\t- 启动监听\r\n\t\t  collapsed:: true\r\n\t\t\t- ```java\r\n\t\t\t  @Slf4j\r\n\t\t\t  @Configuration\r\n\t\t\t  public class RabbitConfig {\r\n\t\t\t  \r\n\t\t\t      @Autowired\r\n\t\t\t      OrderMessageService orderMessageService;\r\n\t\t\t  \r\n\t\t\t      @Autowired\r\n\t\t\t      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {\r\n\t\t\t          orderMessageService.handleMessage();\r\n\t\t\t      }\r\n\t\t\t  }\r\n\t\t\t  ```\r\n\t\t\t- orderMessage\r\n\t\t\t\t- ```java\r\n\t\t\t\t  @Slf4j\r\n\t\t\t\t  @Service\r\n\t\t\t\t  public class OrderMessageService {\r\n\t\t\t\t  \r\n\t\t\t\t      @Value(\"${rabbitmq.exchange}\")\r\n\t\t\t\t      public String exchangeName;\r\n\t\t\t\t      @Value(\"${rabbitmq.deliveryman-routing-key}\")\r\n\t\t\t\t      public String deliverymanRoutingKey;\r\n\t\t\t\t      @Value(\"${rabbitmq.settlement-routing-key}\")\r\n\t\t\t\t      public String settlementRoutingKey;\r\n\t\t\t\t      @Value(\"${rabbitmq.reward-routing-key}\")\r\n\t\t\t\t      public String rewardRoutingKey;\r\n\t\t\t\t  \r\n\t\t\t\t  \r\n\t\t\t\t      @Autowired\r\n\t\t\t\t      private OrderDetailDao orderDetailDao;\r\n\t\t\t\t      ObjectMapper objectMapper = new ObjectMapper();\r\n\t\t\t\t  \r\n\t\t\t\t  \r\n\t\t\t\t      @Async\r\n\t\t\t\t      public void handleMessage() throws IOException, TimeoutException, InterruptedException {\r\n\t\t\t\t          log.info(\"start linstening message\");\r\n\t\t\t\t          ConnectionFactory connectionFactory = new ConnectionFactory();\r\n\t\t\t\t          connectionFactory.setHost(\"localhost\");\r\n\t\t\t\t          connectionFactory.setHost(\"localhost\");\r\n\t\t\t\t          try (Connection connection = connectionFactory.newConnection();\r\n\t\t\t\t               Channel channel = connection.createChannel()) {\r\n\t\t\t\t  \t\t........\r\n\t\t\t\t            } \r\n\t\t\t\t      }\r\n\t\t\t\t  }\r\n\t\t\t\t            \r\n\t\t\t\t  ```\r\n\t- springboot(spring-AMQP)\r\n\t  collapsed:: true\r\n\t\t- 优点\r\n\t\t  collapsed:: true\r\n\t\t\t- 异步消息监听容器\r\n\t\t\t- 原生提供 RabbitTemplate,方便收发消息\r\n\t\t\t- 原生提供RabbitAdmin,方便队列、交换机声明\r\n\t\t\t- Spring Boot Config 原生支持RabbitMQ\r\n\t\t- 依赖\r\n\t\t  collapsed:: true\r\n\t\t\t- ```yaml\r\n\t\t\t  ```\r\n\t\t- 利用RabbitAdmin快速配置\r\n\t\t  collapsed:: true\r\n\t\t\t- 手动配置\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 在Config文件夹下添加RabbitConfig.java\r\n\t\t\t\t  collapsed:: true\r\n\t\t\t\t\t- ```java\r\n\t\t\t\t\t  \r\n\t\t\t\t\t  @Slf4j\r\n\t\t\t\t\t  @Configuration\r\n\t\t\t\t\t  public class RabbitConfig {\r\n\t\t\t\t\t  \r\n\t\t\t\t\t      @Autowired\r\n\t\t\t\t\t      OrderMessageService orderMessageService;\r\n\t\t\t\t\t  \r\n\t\t\t\t\t      @Autowired\r\n\t\t\t\t\t      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {\r\n\t\t\t\t\t          orderMessageService.handleMessage();\r\n\t\t\t\t\t      }\r\n\t\t\t\t\t  \r\n\t\t\t\t\t      @Autowired\r\n\t\t\t\t\t      public void initRabbit() {\r\n\t\t\t\t\t          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();\r\n\t\t\t\t\t          connectionFactory.setHost(\"127.0.0.1\");\r\n\t\t\t\t\t          connectionFactory.setPort(5672);\r\n\t\t\t\t\t          connectionFactory.setPassword(\"guest\");\r\n\t\t\t\t\t          connectionFactory.setUsername(\"guest\");\r\n\t\t\t\t\t  \r\n\t\t\t\t\t          RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);\r\n\t\t\t\t\t  \r\n\t\t\t\t\t          /*---------------------restaurant---------------------*/\r\n\t\t\t\t\t          Exchange exchange = new DirectExchange(\"exchange.order.restaurant\");\r\n\t\t\t\t\t          rabbitAdmin.declareExchange(exchange);\r\n\t\t\t\t\t  \r\n\t\t\t\t\t          Queue queue = new Queue(\"queue.order\");\r\n\t\t\t\t\t          rabbitAdmin.declareQueue(queue);\r\n\t\t\t\t\t  \r\n\t\t\t\t\t          Binding binding = new Binding(\r\n\t\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t\t                  \"exchange.order.restaurant\",\r\n\t\t\t\t\t                  \"key.order\",\r\n\t\t\t\t\t                  null);\r\n\t\t\t\t\t  \r\n\t\t\t\t\t          rabbitAdmin.declareBinding(binding);\r\n\t\t\t\t\t  \r\n\t\t\t\t\t          /*---------------------deliveryman---------------------*/\r\n\t\t\t\t\t          exchange = new DirectExchange(\"exchange.order.deliveryman\");\r\n\t\t\t\t\t          rabbitAdmin.declareExchange(exchange);\r\n\t\t\t\t\t          binding = new Binding(\r\n\t\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t\t                  \"exchange.order.deliveryman\",\r\n\t\t\t\t\t                  \"key.order\",\r\n\t\t\t\t\t                  null);\r\n\t\t\t\t\t          rabbitAdmin.declareBinding(binding);\r\n\t\t\t\t\t  \r\n\t\t\t\t\t  \r\n\t\t\t\t\t          /*---------settlement---------*/\r\n\t\t\t\t\t          exchange = new FanoutExchange(\"exchange.order.settlement\");\r\n\t\t\t\t\t          rabbitAdmin.declareExchange(exchange);\r\n\t\t\t\t\t          exchange = new FanoutExchange(\"exchange.settlement.order\");\r\n\t\t\t\t\t          rabbitAdmin.declareExchange(exchange);\r\n\t\t\t\t\t          binding = new Binding(\r\n\t\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t\t                  \"exchange.order.settlement\",\r\n\t\t\t\t\t                  \"key.order\",\r\n\t\t\t\t\t                  null);\r\n\t\t\t\t\t          rabbitAdmin.declareBinding(binding);\r\n\t\t\t\t\t  \r\n\t\t\t\t\t  \r\n\t\t\t\t\t          /*--------------reward----------------*/\r\n\t\t\t\t\t          exchange = new TopicExchange(\"exchange.order.reward\");\r\n\t\t\t\t\t          rabbitAdmin.declareExchange(exchange);\r\n\t\t\t\t\t          binding = new Binding(\r\n\t\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t\t                  \"exchange.order.reward\",\r\n\t\t\t\t\t                  \"key.order\",\r\n\t\t\t\t\t                  null);\r\n\t\t\t\t\t          rabbitAdmin.declareBinding(binding);\r\n\t\t\t\t\t      }\r\n\t\t\t\t\t  }\r\n\t\t\t\t\t  \r\n\t\t\t\t\t  ```\r\n\t\t\t- 声明式配置\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```java\r\n\t\t\t\t  @Slf4j\r\n\t\t\t\t  @Configuration\r\n\t\t\t\t  public class RabbitConfig {\r\n\t\t\t\t  \r\n\t\t\t\t      @Autowired\r\n\t\t\t\t      OrderMessageService orderMessageService;\r\n\t\t\t\t  \r\n\t\t\t\t      @Autowired\r\n\t\t\t\t      public void startListenMessage() throws IOException, TimeoutException, InterruptedException {\r\n\t\t\t\t          orderMessageService.handleMessage();\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t  \r\n\t\t\t\t      /*---------------------restaurant---------------------*/\r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Exchange exchange1() {\r\n\t\t\t\t          return new DirectExchange(\"exchange.order.restaurant\");\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Queue queue1() {\r\n\t\t\t\t          return new Queue(\"queue.order\");\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Binding binding1() {\r\n\t\t\t\t          return new Binding(\r\n\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t                  \"exchange.order.restaurant\",\r\n\t\t\t\t                  \"key.order\",\r\n\t\t\t\t                  null);\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      /*---------------------deliveryman---------------------*/\r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Exchange exchange2() {\r\n\t\t\t\t          return new DirectExchange(\"exchange.order.deliveryman\");\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Binding binding2() {\r\n\t\t\t\t          return new Binding(\r\n\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t                  \"exchange.order.deliveryman\",\r\n\t\t\t\t                  \"key.order\",\r\n\t\t\t\t                  null);\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t  \r\n\t\t\t\t      /*---------settlement---------*/\r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Exchange exchange3() {\r\n\t\t\t\t          return new FanoutExchange(\"exchange.order.settlement\");\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Exchange exchange4() {\r\n\t\t\t\t          return new FanoutExchange(\"exchange.settlement.order\");\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Binding binding3() {\r\n\t\t\t\t          return new Binding(\r\n\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t                  \"exchange.order.settlement\",\r\n\t\t\t\t                  \"key.order\",\r\n\t\t\t\t                  null);\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      /*--------------reward----------------*/\r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Exchange exchange5() {\r\n\t\t\t\t          return new TopicExchange(\"exchange.order.reward\");\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public Binding binding4() {\r\n\t\t\t\t          return new Binding(\r\n\t\t\t\t                  \"queue.order\",\r\n\t\t\t\t                  Binding.DestinationType.QUEUE,\r\n\t\t\t\t                  \"exchange.order.reward\",\r\n\t\t\t\t                  \"key.order\",\r\n\t\t\t\t                  null);\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public ConnectionFactory connectionFactory() {\r\n\t\t\t\t          CachingConnectionFactory connectionFactory = new CachingConnectionFactory();\r\n\t\t\t\t          connectionFactory.setHost(\"127.0.0.1\");\r\n\t\t\t\t          connectionFactory.setPort(5672);\r\n\t\t\t\t          connectionFactory.setPassword(\"guest\");\r\n\t\t\t\t          connectionFactory.setUsername(\"guest\");\r\n\t\t\t\t          connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.SIMPLE);\r\n\t\t\t\t          connectionFactory.setPublisherReturns(true);\r\n\t\t\t\t          connectionFactory.createConnection();\r\n\t\t\t\t          return connectionFactory;\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {\r\n\t\t\t\t          RabbitAdmin admin = new RabbitAdmin(connectionFactory);\r\n\t\t\t\t          admin.setAutoStartup(true);\r\n\t\t\t\t          return admin;\r\n\t\t\t\t      }\r\n\t\t\t\t  \r\n\t\t\t\t      @Bean\r\n\t\t\t\t      RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {\r\n\t\t\t\t          RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);\r\n\t\t\t\t          rabbitTemplate.setMandatory(true);\r\n\t\t\t\t  \r\n\t\t\t\t          rabbitTemplate.setConfirmCallback((correlationData, ack, cause) ->\r\n\t\t\t\t                  log.info(\"correlationData:{}, ack:{}, cause{}\",\r\n\t\t\t\t                          correlationData,\r\n\t\t\t\t                          ack,\r\n\t\t\t\t                          cause));\r\n\t\t\t\t          rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) ->\r\n\t\t\t\t                  log.info(\r\n\t\t\t\t                          \"message:{}, replyCode:{}, replyText:{}, exchange:{}, routingKey{}\",\r\n\t\t\t\t                          message,\r\n\t\t\t\t                          replyCode,\r\n\t\t\t\t                          replyText,\r\n\t\t\t\t                          exchange,\r\n\t\t\t\t                          routingKey));\r\n\t\t\t\t          return rabbitTemplate;\r\n\t\t\t\t      }\r\n\t\t\t\t    \r\n\t\t\t\t    \t/*\r\n\t\t\t\t      *SimpleMessageListenerContainer 简单消息监听容器\r\n\t\t\t\t      */  \r\n\t\t\t\t    \t@Bean\r\n\t\t\t\t      public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){\r\n\t\t\t\t          SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer(connectionFactory);\r\n\t\t\t\t          messageListenerContainer.setQueueNames(\"queue.order\");\r\n\t\t\t\t          messageListenerContainer.setConcurrentConsumers(1);\r\n\t\t\t\t          messageListenerContainer.setMaxConcurrentConsumers(3);\r\n\t\t\t\t          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);\r\n\t\t\t\t          messageListenerContainer.setMessageListener(new MessageListener() {\r\n\t\t\t\t              @Override\r\n\t\t\t\t              public void onMessage(Message message) {\r\n\t\t\t\t                  log.info(\"message:{}\", message);\r\n\t\t\t\t              }\r\n\t\t\t\t          });\r\n\t\t\t\t          messageListenerContainer.setPrefetchCount(2);\r\n\t\t\t\t          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);\r\n\t\t\t\t          messageListenerContainer.setMessageListener(new ChannelAwareMessageListener() {\r\n\t\t\t\t              @Override\r\n\t\t\t\t              public void onMessage(Message message, Channel channel) throws Exception {\r\n\t\t\t\t                  channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);\r\n\t\t\t\t              }\r\n\t\t\t\t          });\r\n\t\t\t\t          return messageListenerContainer;\r\n\t\t\t\t      }\r\n\t\t\t\t  }\r\n\t\t\t\t  \r\n\t\t\t\t  ```\r\n\t\t\t\t-\r\n\t\t- SimpleMessageListenerContainer 简单消息监听容器\r\n\t\t  collapsed:: true\r\n\t\t\t- ```java\r\n\t\t\t    \t/*\r\n\t\t\t      *SimpleMessageListenerContainer 简单消息监听容器\r\n\t\t\t      */  \r\n\t\t\t    \t@Bean\r\n\t\t\t      public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){\r\n\t\t\t          SimpleMessageListenerContainer messageListenerContainer = new SimpleMessageListenerContainer(connectionFactory);\r\n\t\t\t          messageListenerContainer.setQueueNames(\"queue.order\");\r\n\t\t\t          messageListenerContainer.setConcurrentConsumers(1);\r\n\t\t\t          messageListenerContainer.setMaxConcurrentConsumers(3);\r\n\t\t\t          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);\r\n\t\t\t          messageListenerContainer.setMessageListener(new MessageListener() {\r\n\t\t\t              @Override\r\n\t\t\t              public void onMessage(Message message) {\r\n\t\t\t                  log.info(\"message:{}\", message);\r\n\t\t\t              }\r\n\t\t\t          });\r\n\t\t\t          messageListenerContainer.setPrefetchCount(2);\r\n\t\t\t          messageListenerContainer.setAcknowledgeMode(AcknowledgeMode.MANUAL);\r\n\t\t\t          messageListenerContainer.setMessageListener(new ChannelAwareMessageListener() {\r\n\t\t\t              @Override\r\n\t\t\t              public void onMessage(Message message, Channel channel) throws Exception {\r\n\t\t\t                  channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);\r\n\t\t\t              }\r\n\t\t\t          });\r\n\t\t\t          return messageListenerContainer;\r\n\t\t\t      }\r\n\t\t\t  ```\r\n\t\t\t- MessageListenAdapter 自定义消息监听\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 简单模式：实现handleMessage方法\r\n\t\t\t\t- 高阶模式：自定义“队列名→方法名”映射关系\r\n\t\t\t\t- ```java\r\n\t\t\t\t          MessageListenerAdapter listenerAdapter = new MessageListenerAdapter();\r\n\t\t\t\t          listenerAdapter.setDelegate(orderMessageService);\r\n\t\t\t\t  \r\n\t\t\t\t          Map<String, String> methodMap = new HashMap<>(8);\r\n\t\t\t\t          methodMap.put(\"queue.order\", \"handleMessage1\");\r\n\t\t\t\t          listenerAdapter.setQueueOrTagToMethodName(methodMap);\r\n\t\t\t\t          messageListenerContainer.setMessageListener(listenerAdapter);\r\n\t\t\t\t  ```\r\n\t\t\t- MessageConveter 用来在收发消息时自动转换消息\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- Byte[]数组作为消息体,转化为Java对象\r\n\t\t\t\t- Jackson2JsonMessageConverter 转换Json格式\r\n\t\t\t\t\t- 配合ClassMapper可以直接转换为POJO对象\r\n\t\t\t\t- ```java\r\n\t\t\t\t          MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(orderMessageService);\r\n\t\t\t\t          Jackson2JsonMessageConverter messageConverter = new Jackson2JsonMessageConverter();\r\n\t\t\t\t          messageConverter.setClassMapper(new ClassMapper() {\r\n\t\t\t\t              @Override\r\n\t\t\t\t              public void fromClass(Class<?> clazz, MessageProperties properties) {\r\n\t\t\t\t  \r\n\t\t\t\t              }\r\n\t\t\t\t  \r\n\t\t\t\t              @Override\r\n\t\t\t\t              public Class<?> toClass(MessageProperties properties) {\r\n\t\t\t\t                  return OrderMessageDTO.class;\r\n\t\t\t\t              }\r\n\t\t\t\t          });\r\n\t\t\t\t  \r\n\t\t\t\t  //        messageConverter.setJavaTypeMapper(Jackson2JavaTypeMapper);\r\n\t\t\t\t  \r\n\t\t\t\t          messageListenerAdapter.setMessageConverter(messageConverter);\r\n\t\t\t\t  ```\r\n\t\t- 利用RabbitTemplate发送消息\r\n\t\t  collapsed:: true\r\n\t\t\t- ```java\r\n\t\t\t          String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);\r\n\t\t\t          MessageProperties messageProperties = new MessageProperties();\r\n\t\t\t          messageProperties.setExpiration(\"15000\");\r\n\t\t\t          Message message = new Message(messageToSend.getBytes(), messageProperties);\r\n\t\t\t          CorrelationData correlationData = new CorrelationData();\r\n\t\t\t          correlationData.setId(orderPO.getId().toString());\r\n\t\t\t          rabbitTemplate.send(\r\n\t\t\t                  \"exchange.order.restaurant\",\r\n\t\t\t                  \"key.restaurant\",\r\n\t\t\t                  message,correlationData\r\n\t\t\t          );\r\n\t\t\t  \r\n\t\t\t          rabbitTemplate.convertAndSend(\r\n\t\t\t                  \"exchange.order.restaurant\",\r\n\t\t\t                  \"key.restaurant\",\r\n\t\t\t                  messageToSend,correlationData);\r\n\t\t\t  \r\n\t\t\t          //        rabbitTemplate.execute(channel -> {\r\n\t\t\t          //            channel.abort();\r\n\t\t\t          //            return null;\r\n\t\t\t          //        });\r\n\t\t\t  ```\r\n\t\t- RabbitListener  是一个组合注解，对业务代码无侵入实现监听\r\n\t\t  collapsed:: true\r\n\t\t\t- RabbitListener 组合注解\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- @Exchange:自动声明Exchange\r\n\t\t\t\t- @Queue:自动声明队列\r\n\t\t\t\t- @QueueBinding:自动声明绑定关系\r\n\t\t\t- 使用\r\n\t\t\t\t- properties配置文件\r\n\t\t\t\t  collapsed:: true\r\n\t\t\t\t\t- ```properties\r\n\t\t\t\t\t  spring.rabbitmq.username=guest\r\n\t\t\t\t\t  spring.rabbitmq.password=guest\r\n\t\t\t\t\t  spring.rabbitmq.addresses=127.0.0.1\r\n\t\t\t\t\t  spring.rabbitmq.port=6379\r\n\t\t\t\t\t  ```\r\n\t\t\t\t- 业务代码使用\r\n\t\t\t\t  collapsed:: true\r\n\t\t\t\t\t- ```java\r\n\t\t\t\t\t      @RabbitListener(\r\n\t\t\t\t\t  //            containerFactory = \"rabbitListenerContainerFactory\",\r\n\t\t\t\t\t  //            queues = \"queue.order\",\r\n\t\t\t\t\t  //            admin = \"rabbitAdmin\",\r\n\t\t\t\t\t              bindings = {\r\n\t\t\t\t\t                      @QueueBinding(\r\n\t\t\t\t\t                              value = @Queue(name = \"${imooc.order-queue}\",\r\n\t\t\t\t\t                                      arguments = {\r\n\t\t\t\t\t                                              //                                            @Argument(name =\r\n\t\t\t\t\t                                              //                                            \"x-message-ttl\", value =\r\n\t\t\t\t\t                                              //                                            \"1000\", type = \"java.lang\r\n\t\t\t\t\t                                              //                                            .Integer\"),\r\n\t\t\t\t\t                                              //                                            @Argument(name =\r\n\t\t\t\t\t                                              //                                            \"x-dead-letter-exchange\",\r\n\t\t\t\t\t                                              //                                            value = \"aaaaa\"),\r\n\t\t\t\t\t                                              //                                            @Argument(name =\r\n\t\t\t\t\t                                              //                                            \"x-dead-letter-routing-key\", value = \"bbbb\")\r\n\t\t\t\t\t                                      }),\r\n\t\t\t\t\t                              exchange = @Exchange(name = \"exchange.order.restaurant\", type = ExchangeTypes.DIRECT),\r\n\t\t\t\t\t                              key = \"key.order\"\r\n\t\t\t\t\t                      ),\r\n\t\t\t\t\t                      @QueueBinding(\r\n\t\t\t\t\t                              value = @Queue(name = \"queue.order\"),\r\n\t\t\t\t\t                              exchange = @Exchange(name = \"exchange.order.deliveryman\", type = ExchangeTypes.DIRECT),\r\n\t\t\t\t\t                              key = \"key.order\"\r\n\t\t\t\t\t                      ),\r\n\t\t\t\t\t                      @QueueBinding(\r\n\t\t\t\t\t                              value = @Queue(name = \"queue.order\"),\r\n\t\t\t\t\t                              exchange = @Exchange(name = \"exchange.settlement.order\", type = ExchangeTypes.FANOUT),\r\n\t\t\t\t\t                              key = \"key.order\"\r\n\t\t\t\t\t                      ),\r\n\t\t\t\t\t                      @QueueBinding(\r\n\t\t\t\t\t                              value = @Queue(name = \"queue.order\"),\r\n\t\t\t\t\t                              exchange = @Exchange(name = \"exchange.order.reward\", type = ExchangeTypes.TOPIC),\r\n\t\t\t\t\t                              key = \"key.order\"\r\n\t\t\t\t\t                      )\r\n\t\t\t\t\t              }\r\n\t\t\t\t\t      )\r\n\t\t\t\t\t      public void handleMessage(@Payload Message message) throws IOException {\r\n\t\t\t\t\t          log.info(\"handleMessage:message:{}\", new String(message.getBody()));\r\n\t\t\t\t\t          ConnectionFactory connectionFactory = new ConnectionFactory();\r\n\t\t\t\t\t          connectionFactory.setHost(\"localhost\");\r\n\t\t\t\t\t          try {\r\n\t\t\t\t\t              OrderMessageDTO orderMessageDTO = objectMapper.readValue(message.getBody(),\r\n\t\t\t\t\t                      OrderMessageDTO.class);\r\n\t\t\t\t\t              OrderDetailPO orderPO = orderDetailDao.selectOrder(orderMessageDTO.getOrderId());\r\n\t\t\t\t\t  \r\n\t\t\t\t\t              switch (orderPO.getStatus()) {\r\n\t\t\t\t\t  \r\n\t\t\t\t\t                  case ORDER_CREATING:\r\n\t\t\t\t\t                      if (orderMessageDTO.getConfirmed() && null != orderMessageDTO.getPrice()) {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.RESTAURANT_CONFIRMED);\r\n\t\t\t\t\t                          orderPO.setPrice(orderMessageDTO.getPrice());\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                          try (Connection connection = connectionFactory.newConnection();\r\n\t\t\t\t\t                               Channel channel = connection.createChannel()) {\r\n\t\t\t\t\t                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);\r\n\t\t\t\t\t                              channel.basicPublish(\"exchange.order.deliveryman\", \"key.deliveryman\", null,\r\n\t\t\t\t\t                                      messageToSend.getBytes());\r\n\t\t\t\t\t                          }\r\n\t\t\t\t\t                      } else {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.FAILED);\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                      }\r\n\t\t\t\t\t                      break;\r\n\t\t\t\t\t                  case RESTAURANT_CONFIRMED:\r\n\t\t\t\t\t                      if (null != orderMessageDTO.getDeliverymanId()) {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.DELIVERYMAN_CONFIRMED);\r\n\t\t\t\t\t                          orderPO.setDeliverymanId(orderMessageDTO.getDeliverymanId());\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                          try (Connection connection = connectionFactory.newConnection();\r\n\t\t\t\t\t                               Channel channel = connection.createChannel()) {\r\n\t\t\t\t\t                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);\r\n\t\t\t\t\t                              channel.basicPublish(\r\n\t\t\t\t\t                                      \"exchange.order.settlement\",\r\n\t\t\t\t\t                                      \"key.settlement\",\r\n\t\t\t\t\t                                      null,\r\n\t\t\t\t\t                                      messageToSend.getBytes()\r\n\t\t\t\t\t                              );\r\n\t\t\t\t\t                          }\r\n\t\t\t\t\t                      } else {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.FAILED);\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                      }\r\n\t\t\t\t\t                      break;\r\n\t\t\t\t\t                  case DELIVERYMAN_CONFIRMED:\r\n\t\t\t\t\t                      if (null != orderMessageDTO.getSettlementId()) {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.SETTLEMENT_CONFIRMED);\r\n\t\t\t\t\t                          orderPO.setSettlementId(orderMessageDTO.getSettlementId());\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                          try (Connection connection = connectionFactory.newConnection();\r\n\t\t\t\t\t                               Channel channel = connection.createChannel()) {\r\n\t\t\t\t\t                              String messageToSend = objectMapper.writeValueAsString(orderMessageDTO);\r\n\t\t\t\t\t                              channel.basicPublish(\r\n\t\t\t\t\t                                      \"exchange.order.reward\",\r\n\t\t\t\t\t                                      \"key.reward\",\r\n\t\t\t\t\t                                      null,\r\n\t\t\t\t\t                                      messageToSend.getBytes()\r\n\t\t\t\t\t                              );\r\n\t\t\t\t\t                          }\r\n\t\t\t\t\t  \r\n\t\t\t\t\t                      } else {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.FAILED);\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                      }\r\n\t\t\t\t\t                      break;\r\n\t\t\t\t\t                  case SETTLEMENT_CONFIRMED:\r\n\t\t\t\t\t                      if (null != orderMessageDTO.getRewardId()) {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.ORDER_CREATED);\r\n\t\t\t\t\t                          orderPO.setRewardId(orderMessageDTO.getRewardId());\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                      } else {\r\n\t\t\t\t\t                          orderPO.setStatus(OrderStatus.FAILED);\r\n\t\t\t\t\t                          orderDetailDao.update(orderPO);\r\n\t\t\t\t\t                      }\r\n\t\t\t\t\t                      break;\r\n\t\t\t\t\t              }\r\n\t\t\t\t\t  \r\n\t\t\t\t\t          } catch (JsonProcessingException | TimeoutException e) {\r\n\t\t\t\t\t              e.printStackTrace();\r\n\t\t\t\t\t          }\r\n\t\t\t\t\t      }\r\n\t\t\t\t\t  ```\r\n\t- 保证消息可靠性\r\n\t  collapsed:: true\r\n\t\t- 发送端确认机制 （发送是否成功）\r\n\t\t  collapsed:: true\r\n\t\t\t- > 慎用\r\n\t\t\t- 配置channel，确认开启模式\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```java\r\n\t\t\t\t  channel.confirmSelect();\r\n\t\t\t\t  ```\r\n\t\t\t- 单条同步确认 (推荐)\r\n\t\t\t\t- 每发送一条消息，调用**channel.waitForConfirms()**方法，等待确认\r\n\t\t\t- 多条同步确认\r\n\t\t\t\t- 发送多条消息后，调用**channel.waitForConfirms()**方法，等待确认\r\n\t\t\t- 异步确认\r\n\t\t\t\t- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334192845_0.png)\r\n\t\t\t\t- 在channel上添加监听：**addConfirmListener**,发送消息后，会回调此方法，通知是否发送成功\r\n\t\t\t\t- > 异步确认有可能是单条，也有可能是多条，取决于MQ\r\n\t\t\t\t- > 异步回调在一个新的线程，所以数据隔离且有并发问题（因为channel不同，所以deliverTag可能重复）。\r\n\t\t- 消息返回机制 （消息是否被路由）\r\n\t\t  collapsed:: true\r\n\t\t\t- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656334924326_0.png)\r\n\t\t\t- 原理：Exchange在没有找到路由时候调用回调机制\r\n\t\t\t- 发送消息时候 mandatory设为true\r\n\t\t\t\t- ```java\r\n\t\t\t\t                  channel.basicPublish(\"exchange.order.restaurant\", \"key.order\",true, null, messageToSend.getBytes());\r\n\t\t\t\t  ```\r\n\t\t\t- 设置异步回调\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```java\r\n\t\t\t\t                  channel.addReturnListener(new ReturnCallback() {\r\n\t\t\t\t                      @Override\r\n\t\t\t\t                      public void handle(Return returnMessage) {\r\n\t\t\t\t                          log.info(\"Message Return: returnMessage:{}\", returnMessage);\r\n\t\t\t\t                      }\r\n\t\t\t\t                  });\r\n\t\t\t\t  ```\r\n\t\t\t\t-\r\n\t\t- 消费端确认  ACK\r\n\t\t  collapsed:: true\r\n\t\t\t- 监听消息时关闭自动ACK，使用手动ACK。\r\n\t\t\t\t- 下面第二个参数为false\r\n\t\t\t\t- ```java\r\n\t\t\t\t  this.channel.basicConsume(\"queue.restaurant\", false, deliverCallback, consumerTag -> {});\r\n\t\t\t\t  ```\r\n\t\t\t- 监听消费时手动ack\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```java\r\n\t\t\t\t  channel.basicAck(message.getEnvelope().getDeliveryTag(),true);}\r\n\t\t\t\t  ```\r\n\t\t\t- > NACK慎用\r\n\t\t- 消费端限流 QoS\r\n\t\t  collapsed:: true\r\n\t\t\t- 前提：不使用自动确认\r\n\t\t\t- ```java\r\n\t\t\t  channel.basicQos(2)\r\n\t\t\t  ```\r\n\t\t\t-\r\n\t\t\t-\r\n\t\t- 消息过期机制 ttl\r\n\t\t  collapsed:: true\r\n\t\t\t- > 消息ttl 长于业务高峰期时间 与 服务的平均重启时间\r\n\t\t\t- 设置单条消息TTL\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- ```java\r\n\t\t\t\t  AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder().expiration(\"100000\").build();\r\n\t\t\t\t  ```\r\n\t\t\t\t- ```java\r\n\t\t\t\t  channel.basicPublish(\"exchange.order.deliveryman\", \"key.deliveryman\", properties,\r\n\t\t\t\t                                      messageToSend.getBytes());\r\n\t\t\t\t  ```\r\n\t\t\t- 设置队列TTL\r\n\t\t\t\t- ```java\r\n\t\t\t\t  Map<String, Object> args = new HashMap<String, Object>();\r\n\t\t\t\t  args.put(\"x-message-ttl\", 10000);\r\n\t\t\t\t  ```\r\n\t\t\t\t- 创建队列时将参数赋值进去\r\n\t\t\t\t\t- ```java\r\n\t\t\t\t\t              channel.exchangeDeclare(\r\n\t\t\t\t\t                      \"exchange.order.restaurant\",\r\n\t\t\t\t\t                      BuiltinExchangeType.DIRECT,\r\n\t\t\t\t\t                      true,\r\n\t\t\t\t\t                      false,\r\n\t\t\t\t\t                      args);\r\n\t\t\t\t\t  ```\r\n\t\t- 死信队列\r\n\t\t  collapsed:: true\r\n\t\t\t- ![image.png](../assets/image_1656341513805_0.png)\r\n\t\t\t- 一个被配置了**DLX**属性的队列，收集ttl过期消息，以供分析\r\n\t\t\t- 怎么变成死信\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 消息被拒绝\r\n\t\t\t\t- 消息过期\r\n\t\t\t\t- 队列达到最大长度\r\n\t\t\t- 设置Exchange\r\n\t\t\t  collapsed:: true\r\n\t\t\t\t- 命名规范（非强制的）\r\n\t\t\t\t  collapsed:: true\r\n\t\t\t\t\t- Exchange：dlx.exchange\r\n\t\t\t\t\t- Queue:dlx.queue\r\n\t\t\t\t\t- RoutingKey: #\r\n\t\t\t\t- 队列添加参数\r\n\t\t\t\t\t- x-dead-letter-exchange = dlx.exchange\r\n\t\t\t\t\t- ```java\r\n\t\t\t\t\t  // 声明死信交换机\r\n\t\t\t\t\t          channel.exchangeDeclare(\r\n\t\t\t\t\t                  \"exchange.dlx\",\r\n\t\t\t\t\t                  BuiltinExchangeType.TOPIC,\r\n\t\t\t\t\t                  true,\r\n\t\t\t\t\t                  false,\r\n\t\t\t\t\t                  null);\r\n\t\t\t\t\t  // 声明死信队列\r\n\t\t\t\t\t          channel.queueDeclare(\r\n\t\t\t\t\t                  \"queue.dlx\",\r\n\t\t\t\t\t                  true,\r\n\t\t\t\t\t                  false,\r\n\t\t\t\t\t                  false,\r\n\t\t\t\t\t                  null);\r\n\t\t\t\t\t  // 声明死信绑定\r\n\t\t\t\t\t          channel.queueBind(\r\n\t\t\t\t\t                  \"queue.dlx\",\r\n\t\t\t\t\t                  \"exchange.dlx\",\r\n\t\t\t\t\t                  \"#\");\r\n\t\t\t\t\t  \r\n\t\t\t\t\t  //声明队列时，携带以下参数：\r\n\t\t\t\t\t  \r\n\t\t\t\t\t              Map<String, Object> args = new HashMap<>(16);\r\n\t\t\t\t\t              args.put(\"x-dead-letter-exchange\", \"exchange.dlx\");\r\n\t\t\t\t\t              args.put(\"x-max-length\", 10);\r\n\t\t\t\t\t  //创建队列时将参数赋值进去\r\n\t\t\t\t\t              channel.exchangeDeclare(\r\n\t\t\t\t\t                      \"exchange.order.restaurant\",\r\n\t\t\t\t\t                      BuiltinExchangeType.DIRECT,\r\n\t\t\t\t\t                      true,\r\n\t\t\t\t\t                      false,\r\n\t\t\t\t\t                      args);\r\n\t\t\t\t\t  ```\r\n\t\t\t-\r\n- 业务开发建议\r\n  collapsed:: true\r\n\t- 一个业务对应一个exchange\r\n\t- 将创建交换机/队列的操作固化在应用代码中，免去复杂的\r\n\t  运维操作，高效且不易出错\r\n\t- 一般来说，交换机由双方同时声明，队列由接收方声明并配\r\n\t  置绑定关系\r\n\t- 交换机/队列的参数一定要由双方开发团队确认，否则重复\r\n\t  声明时，若参数不一致，会导致声明失败\r\n-\r\n-
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pages/RabbitMQ.md b/pages/RabbitMQ.md
+--- a/pages/RabbitMQ.md	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ b/pages/RabbitMQ.md	(date 1657032766720)
+@@ -1,14 +1,11 @@
+ - 基于 [[Erlang]] 的跨平台消息队列，天然具有高性能，使用[[AMQP]]协议提供客户端接口
+ - RabbitMQ安装
+-  collapsed:: true
+ 	- [[RabbitMQ Windows 安装]]
+ 	- [[RabbitMQ Linux 安装]]
+ 	- [[RabbitMQ Docker安装]]
+ 	- [[RabbitMQ Kubernetes安装]]
+ - 命令行工具使用
+-  collapsed:: true
+ 	- 状态
+-	  collapsed:: true
+ 		- 查看状态
+ 			- ```sh
+ 			  rabbitmqctl status
+@@ -34,7 +31,6 @@
+ 			  rabbitmqctl list_exchanges
+ 			  ```
+ 	- 队列
+-	  collapsed:: true
+ 		- 查看队列
+ 			- ```sh
+ 			  rabbitmqctl list_queues
+@@ -48,7 +44,6 @@
+ 			  rabbitmqctl purge_queuq
+ 			  ```
+ 	- 用户
+-	  collapsed:: true
+ 		- 新建用户
+ 			- ```sh
+ 			  rabbitmqctl add_user
+@@ -71,7 +66,6 @@
+ 			  ```
+ 		-
+ 	- 应用
+-	  collapsed:: true
+ 		- 启动应用
+ 			- ```sh
+ 			  rabbitmqctl start_app
+@@ -85,18 +79,15 @@
+ 			  rabbitmqctl stop
+ 			  ```
+ 	- 集群
+-	  collapsed:: true
+ 		- 加入集群
+ 			- ```sh
+ 			  rabbitmqctl join_cluster
+ 			  ```
+ 		- 离开集群
+-		  collapsed:: true
+ 			- ```sh
+ 			  rabbitmqctl reset
+ 			  ```
+ 	- 镜像队列
+-	  collapsed:: true
+ 		- 设置镜像队列
+ 			- ```sh
+ 			  rabbitmqctl sync_queue
+@@ -106,6 +97,7 @@
+ 			  rabbitmqctl cancel_sync_queue
+ 			  ```
+ - 集群
++  collapsed:: true
+ 	- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656731662352_0.png)
+ 	- 优势
+ 	  collapsed:: true
+Index: logseq/pages-metadata.edn
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[{:block/name \"\\\"\\\"thu, 2022\\\"\",\r\n  :block/created-at 1655460339689,\r\n  :block/updated-at 1655460339689}\r\n {:block/name \"\\\"fri, 2022\",\r\n  :block/created-at 1654954245970,\r\n  :block/updated-at 1654954245970}\r\n {:block/name \"\\\"fri, 2022/06\",\r\n  :block/created-at 1654954245982,\r\n  :block/updated-at 1654954245982}\r\n {:block/name \"\\\"fri, 2022/06/10\\\"\",\r\n  :block/created-at 1654954245957,\r\n  :block/updated-at 1654954245957}\r\n {:block/name \"\\\"mon, 2022\",\r\n  :block/created-at 1654610950889,\r\n  :block/updated-at 1654610950889}\r\n {:block/name \"\\\"mon, 2022/06\",\r\n  :block/created-at 1654610950890,\r\n  :block/updated-at 1654610950890}\r\n {:block/name \"\\\"mon, 2022/06/06\\\"\",\r\n  :block/created-at 1654610950889,\r\n  :block/updated-at 1654610950889}\r\n {:block/name \"\\\"thu, 2022\",\r\n  :block/created-at 1655696857079,\r\n  :block/updated-at 1655696857079}\r\n {:block/name \"\\\"thu, 2022/05\\\"\",\r\n  :block/created-at 1655726438335,\r\n  :block/updated-at 1655726438335}\r\n {:block/name \".v-eisenhower-matrix\",\r\n  :block/created-at 1657008046094,\r\n  :block/updated-at 1657008046094}\r\n {:block/name \"2022\",\r\n  :block/created-at 1653813725226,\r\n  :block/updated-at 1653813725226}\r\n {:block/name \"2022-okr-01-kr-4\",\r\n  :block/created-at 1654092802401,\r\n  :block/updated-at 1654092802401}\r\n {:block/name \"2022-okr-03-kr-3\",\r\n  :block/created-at 1653814395093,\r\n  :block/updated-at 1653814395093}\r\n {:block/name \"2022-okr-o1-kr-1\",\r\n  :block/created-at 1653813725033,\r\n  :block/updated-at 1653813725033}\r\n {:block/name \"2022-okr-o1-kr-2\",\r\n  :block/created-at 1653813725034,\r\n  :block/updated-at 1653813725034}\r\n {:block/name \"2022-okr-o1-kr-3\",\r\n  :block/created-at 1653813725035,\r\n  :block/updated-at 1653813725035}\r\n {:block/name \"2022-okr-o1-krs\",\r\n  :block/created-at 1653813725036,\r\n  :block/updated-at 1654092802402}\r\n {:block/name \"2022-okr-o2-kr-1\",\r\n  :block/created-at 1652882695042,\r\n  :block/updated-at 1652882695042}\r\n {:block/name \"2022-okr-o2-kr-2\",\r\n  :block/created-at 1653813725000,\r\n  :block/updated-at 1653813725000}\r\n {:block/name \"2022-okr-o2-kr-3\",\r\n  :block/created-at 1653813725002,\r\n  :block/updated-at 1653813725002}\r\n {:block/name \"2022-okr-o2-kr-4\",\r\n  :block/created-at 1653813725003,\r\n  :block/updated-at 1653813725003}\r\n {:block/name \"2022-okr-o2-krs\",\r\n  :block/created-at 1653813725004,\r\n  :block/updated-at 1653813725004}\r\n {:block/name \"2022-okr-o3-kr-1\",\r\n  :block/created-at 1653813725138,\r\n  :block/updated-at 1653813725138}\r\n {:block/name \"2022-okr-o3-kr-2\",\r\n  :block/created-at 1653813725139,\r\n  :block/updated-at 1653813725139}\r\n {:block/name \"2022-okr-o3-krs\",\r\n  :block/created-at 1653813725139,\r\n  :block/updated-at 1653814395094}\r\n {:block/name \"2022-okr-o4-kr-1\",\r\n  :block/created-at 1653813725159,\r\n  :block/updated-at 1653813725159}\r\n {:block/name \"2022-okr-o4-krs\",\r\n  :block/created-at 1653813725160,\r\n  :block/updated-at 1653813725160}\r\n {:block/name \"2022邑网杯\",\r\n  :block/created-at 1655460339532,\r\n  :block/updated-at 1655688178829}\r\n {:block/name \"235cc110-e11d-43f9-a70f-9c0b046d35da\",\r\n  :block/created-at 1654610951313,\r\n  :block/updated-at 1654610951313}\r\n {:block/name \"403d12f1-af06-4b0c-ad60-ab2bc63bbbab\",\r\n  :block/created-at 1654610951317,\r\n  :block/updated-at 1654610951317}\r\n {:block/name \"4cecb7da-45d3-467b-99b4-d8fc26f97e12\",\r\n  :block/created-at 1654610951320,\r\n  :block/updated-at 1654610951320}\r\n {:block/name \"50044c01-fafd-43c0-b022-674ab4f0fb6a\",\r\n  :block/created-at 1654610951318,\r\n  :block/updated-at 1654610951318}\r\n {:block/name \"5afde44b-7e2e-456e-b23c-574cd0623862\",\r\n  :block/created-at 1654610951308,\r\n  :block/updated-at 1654610951308}\r\n {:block/name \"6.4.0版本\",\r\n  :block/created-at 1653810521453,\r\n  :block/updated-at 1653810521453}\r\n {:block/name \"629ebf96-ee20-4650-be2c-de0df99011e9\",\r\n  :block/created-at 1654610951327,\r\n  :block/updated-at 1654610951327}\r\n {:block/name \"629ebfde-43e0-44b9-a85a-9ea9e5bc7e14\",\r\n  :block/created-at 1654610951324,\r\n  :block/updated-at 1654610951324}\r\n {:block/name \"8.0.3\",\r\n  :block/created-at 1653810521583,\r\n  :block/updated-at 1653810521583}\r\n {:block/name \"9833e0dc-26f0-4e6a-89ff-3ab5fd4bdba7\",\r\n  :block/created-at 1654610951315,\r\n  :block/updated-at 1654610951315}\r\n {:block/name \"9e421dbe-120e-4316-89c2-f212102e720d\",\r\n  :block/created-at 1654610951326,\r\n  :block/updated-at 1654610951326}\r\n {:block/name \"a\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"a9d7f098-e7e1-4186-9faa-87816c19e449\",\r\n  :block/created-at 1654610951322,\r\n  :block/updated-at 1654610951322}\r\n {:block/name \"ai当前目标\",\r\n  :block/created-at 1657008046410,\r\n  :block/updated-at 1657008046410}\r\n {:block/name \"amqp\",\r\n  :block/created-at 1656691428132,\r\n  :block/updated-at 1656691428132}\r\n {:block/name \"android\",\r\n  :block/created-at 1655726438995,\r\n  :block/updated-at 1655726438995}\r\n {:block/name \"android数据持久化\",\r\n  :block/created-at 1655726439006,\r\n  :block/updated-at 1655726439006}\r\n {:block/name \"apkstudio\",\r\n  :block/created-at 1657008045828,\r\n  :block/updated-at 1657008045828}\r\n {:block/name \"apollo\",\r\n  :block/created-at 1654098323063,\r\n  :block/updated-at 1654098323063}\r\n {:block/name \"b\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"b660m装机\",\r\n  :block/created-at 1656691428160,\r\n  :block/updated-at 1656691428160}\r\n {:block/name \"bps\",\r\n  :block/created-at 1653453230606,\r\n  :block/updated-at 1653453230606}\r\n {:block/name \"burpsuite pro 2022.2.2\",\r\n  :block/created-at 1655460339914,\r\n  :block/updated-at 1655460339914}\r\n {:block/name \"butterfly主题记录过程\",\r\n  :block/created-at 1655730387088,\r\n  :block/updated-at 1655730421518}\r\n {:block/name \"c\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"canceled\",\r\n  :block/created-at 1656691428911,\r\n  :block/updated-at 1656691428911}\r\n {:block/name \"card\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"centos\",\r\n  :block/created-at 1655730514081,\r\n  :block/updated-at 1655730514081}\r\n {:block/name \"centos安装npm\",\r\n  :block/created-at 1655730474416,\r\n  :block/updated-at 1655730529372}\r\n {:block/name \"centos配置java环境\",\r\n  :block/created-at 1655730584447,\r\n  :block/updated-at 1655730606279}\r\n {:block/name \"cmd\",\r\n  :block/created-at 1655726440494,\r\n  :block/updated-at 1655726440494}\r\n {:block/name \"contents\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652968907873}\r\n {:block/name \"cpu占用过高\",\r\n  :block/created-at 1655049814804,\r\n  :block/updated-at 1655050528516}\r\n {:block/name \"ctf\",\r\n  :block/created-at 1654701516335,\r\n  :block/updated-at 1655474381583}\r\n {:block/name \"ctf-冲突-酌客_win10\",\r\n  :block/created-at 1655726439343,\r\n  :block/updated-at 1655726439343}\r\n {:block/name \"de8f36e3-3138-4590-b6c5-bc83a58b9735\",\r\n  :block/created-at 1654610951306,\r\n  :block/updated-at 1654610951306}\r\n {:block/name \"dm\",\r\n  :block/created-at 1656691428910,\r\n  :block/updated-at 1656691428910}\r\n {:block/name \"dm替换license\",\r\n  :block/created-at 1656691428224,\r\n  :block/updated-at 1656691428224}\r\n {:block/name \"docker\",\r\n  :block/created-at 1655730304276,\r\n  :block/updated-at 1655730304276}\r\n {:block/name \"docker学习实践记录\",\r\n  :block/created-at 1655730201443,\r\n  :block/updated-at 1655730314766}\r\n {:block/name \"docker网络与firewalk\",\r\n  :block/created-at 1656691428879,\r\n  :block/updated-at 1656691428879}\r\n {:block/name \"doing\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"done\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"easypoi\",\r\n  :block/created-at 1655726439419,\r\n  :block/updated-at 1655726439419}\r\n {:block/name \"easypoi导出word\",\r\n  :block/created-at 1655726439456,\r\n  :block/updated-at 1655726439456}\r\n {:block/name \"ea账号密码\",\r\n  :block/created-at 1657008046578,\r\n  :block/updated-at 1657008046578}\r\n {:block/name \"elasticsearch windows 安装\",\r\n  :block/created-at 1653810521619,\r\n  :block/updated-at 1653810521619}\r\n {:block/name \"elasticsearch 安装与入门\",\r\n  :block/created-at 1654523802587,\r\n  :block/updated-at 1654523806591}\r\n {:block/name \"elasticsearch 核心技术与实战\",\r\n  :block/created-at 1653810521905,\r\n  :block/updated-at 1654523863642}\r\n {:block/name \"elasticsearch 深入搜索\",\r\n  :block/created-at 1654523863641,\r\n  :block/updated-at 1654525628640}\r\n {:block/name \"elk\",\r\n  :block/created-at 1653214201294,\r\n  :block/updated-at 1654096517535}\r\n {:block/name \"elk docker-compose 安装\",\r\n  :block/created-at 1653810521875,\r\n  :block/updated-at 1653810521875}\r\n {:block/name \"elk windows安装\",\r\n  :block/created-at 1653810521874,\r\n  :block/updated-at 1653810521874}\r\n {:block/name \"elk安装\",\r\n  :block/created-at 1653810522413,\r\n  :block/updated-at 1653810522413}\r\n {:block/name \"erlang\",\r\n  :block/created-at 1656691428245,\r\n  :block/updated-at 1656691428245}\r\n {:block/name \"eureka\",\r\n  :block/created-at 1655726439748,\r\n  :block/updated-at 1655726439748}\r\n {:block/name \"eureka 常用api\",\r\n  :block/created-at 1655726438398,\r\n  :block/updated-at 1655726438398}\r\n {:block/name \"excerpt\",\r\n  :block/created-at 1654610951057,\r\n  :block/updated-at 1654610951057}\r\n {:block/name \"exchange\",\r\n  :block/created-at 1656691428130,\r\n  :block/updated-at 1656691428130}\r\n {:block/name \"face_recognition\",\r\n  :block/created-at 1657008046621,\r\n  :block/updated-at 1657008046621}\r\n {:block/name \"favorites\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"fine control over springboot's properties and profiles\",\r\n  :block/created-at 1655460340015,\r\n  :block/updated-at 1655460340015}\r\n {:block/name \"fri, 01\",\r\n  :block/created-at 1656691428848,\r\n  :block/updated-at 1656691428848}\r\n {:block/name \"fri, 01/01\",\r\n  :block/created-at 1656691428897,\r\n  :block/updated-at 1656691428897}\r\n {:block/name \"fri, 05\",\r\n  :block/created-at 1656691429446,\r\n  :block/updated-at 1656691429446}\r\n {:block/name \"fri, 05/20\",\r\n  :block/created-at 1656691429447,\r\n  :block/updated-at 1656691429447}\r\n {:block/name \"fri, 05/20/2022\",\r\n  :block/created-at 1656691429446,\r\n  :block/updated-at 1656691429446}\r\n {:block/name \"fri, 06\",\r\n  :block/created-at 1656691428880,\r\n  :block/updated-at 1656691428880}\r\n {:block/name \"fri, 06/10\",\r\n  :block/created-at 1655694905165,\r\n  :block/updated-at 1655694905165}\r\n {:block/name \"fri, 06/10/2022\",\r\n  :block/created-at 1655694905163,\r\n  :block/updated-at 1655694905163}\r\n {:block/name \"fri, 06/24\",\r\n  :block/created-at 1656409290892,\r\n  :block/updated-at 1656409290892}\r\n {:block/name \"fri, 06/24/2022\",\r\n  :block/created-at 1656041545160,\r\n  :block/updated-at 1656044632888}\r\n {:block/name \"fri, 07\",\r\n  :block/created-at 1656691428896,\r\n  :block/updated-at 1656691428896}\r\n {:block/name \"fri, 07/01\",\r\n  :block/created-at 1656290331404,\r\n  :block/updated-at 1656290331404}\r\n {:block/name \"fri, 07/01/2022\",\r\n  :block/created-at 1656290331396,\r\n  :block/updated-at 1656644966085}\r\n {:block/name \"fri, 07/10\",\r\n  :block/created-at 1655694989828,\r\n  :block/updated-at 1655694989828}\r\n {:block/name \"fri, 07/10/2020\",\r\n  :block/created-at 1655694907074,\r\n  :block/updated-at 1655694907074}\r\n {:block/name \"fri, 08\",\r\n  :block/created-at 1657008047795,\r\n  :block/updated-at 1657008047795}\r\n {:block/name \"fri, 08/01\",\r\n  :block/created-at 1657008047796,\r\n  :block/updated-at 1657008047796}\r\n {:block/name \"fri, 2022\",\r\n  :block/created-at 1653214206764,\r\n  :block/updated-at 1653214206764}\r\n {:block/name \"fri, 2022/06\",\r\n  :block/created-at 1655048002813,\r\n  :block/updated-at 1655048002814}\r\n {:block/name \"fri, 2022/06/17\",\r\n  :block/created-at 1655460339570,\r\n  :block/updated-at 1655460339570}\r\n {:block/name \"godeng\",\r\n  :block/created-at 1657008045833,\r\n  :block/updated-at 1657008045833}\r\n {:block/name \"gradle项目连接本地nexus\",\r\n  :block/created-at 1654610951624,\r\n  :block/updated-at 1654610951624}\r\n {:block/name \"haproxy\",\r\n  :block/created-at 1657008046769,\r\n  :block/updated-at 1657008046769}\r\n {:block/name \"hexo\",\r\n  :block/created-at 1655726441376,\r\n  :block/updated-at 1655726441376}\r\n {:block/name \"hls__the-fenix-project_1655709041362_0\",\r\n  :block/created-at 1655726439811,\r\n  :block/updated-at 1655726439811}\r\n {:block/name \"hls__初识elasticsearch_1654096100122_0\",\r\n  :block/created-at 1654096261576,\r\n  :block/updated-at 1654096261576}\r\n {:block/name \"home\",\r\n  :block/created-at 1652894301337,\r\n  :block/updated-at 1652894301337}\r\n {:block/name \"https://www.bilibili.com/video/bv1144y14764?t=20.1\",\r\n  :block/created-at 1654095588099,\r\n  :block/updated-at 1654095588099}\r\n {:block/name \"in-progress\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"java\",\r\n  :block/created-at 1655730748186,\r\n  :block/updated-at 1655730748186}\r\n {:block/name \"java编程的逻辑\",\r\n  :block/created-at 1655730656504,\r\n  :block/updated-at 1655730780741}\r\n {:block/name \"jenkins\",\r\n  :block/created-at 1655730866034,\r\n  :block/updated-at 1655730866034}\r\n {:block/name \"jenkins安装\",\r\n  :block/created-at 1655730811530,\r\n  :block/updated-at 1655730866037}\r\n {:block/name \"jetbrains gateway  远程开发\",\r\n  :block/created-at 1653119133783,\r\n  :block/updated-at 1653119133783}\r\n {:block/name \"keepalived\",\r\n  :block/created-at 1657008046849,\r\n  :block/updated-at 1657008046849}\r\n {:block/name \"kibana windows安装\",\r\n  :block/created-at 1653810522371,\r\n  :block/updated-at 1653810522371}\r\n {:block/name \"kubernetes\",\r\n  :block/created-at 1657008046929,\r\n  :block/updated-at 1657008046929}\r\n {:block/name \"later\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"learn python in y minutes\",\r\n  :block/created-at 1657008045817,\r\n  :block/updated-at 1657008045817}\r\n {:block/name \"logcenter-server\",\r\n  :block/created-at 1653453230610,\r\n  :block/updated-at 1653453230610}\r\n {:block/name \"medis\",\r\n  :block/created-at 1657008045837,\r\n  :block/updated-at 1657008045837}\r\n {:block/name \"minio\",\r\n  :block/created-at 1655209126467,\r\n  :block/updated-at 1655209126467}\r\n {:block/name \"mon, 02/03\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"mon, 02/03/2020\",\r\n  :block/created-at 1655730411297,\r\n  :block/updated-at 1655730411297}\r\n {:block/name \"mon, 05/31\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"mon, 05/31/2021\",\r\n  :block/created-at 1655738450741,\r\n  :block/updated-at 1655738450741}\r\n {:block/name \"mon, 06\",\r\n  :block/created-at 1656691428912,\r\n  :block/updated-at 1656691428912}\r\n {:block/name \"mon, 06/06\",\r\n  :block/created-at 1655694989828,\r\n  :block/updated-at 1655694989828}\r\n {:block/name \"mon, 06/06/2022\",\r\n  :block/created-at 1655694908248,\r\n  :block/updated-at 1655694908248}\r\n {:block/name \"mon, 06/13\",\r\n  :block/created-at 1655694905131,\r\n  :block/updated-at 1655694905131}\r\n {:block/name \"mon, 06/13/2022\",\r\n  :block/created-at 1655694905129,\r\n  :block/updated-at 1655694905129}\r\n {:block/name \"mon, 06/20\",\r\n  :block/created-at 1656691429499,\r\n  :block/updated-at 1656691429499}\r\n {:block/name \"mon, 06/20/2022\",\r\n  :block/created-at 1656691429499,\r\n  :block/updated-at 1656691429499}\r\n {:block/name \"mon, 06/27\",\r\n  :block/created-at 1656691428913,\r\n  :block/updated-at 1656691428913}\r\n {:block/name \"mon, 06/27/2022\",\r\n  :block/created-at 1656691428912,\r\n  :block/updated-at 1656691428912}\r\n {:block/name \"mon, 07/04\",\r\n  :block/created-at 1656894934540,\r\n  :block/updated-at 1656894934540}\r\n {:block/name \"mon, 08/01\",\r\n  :block/created-at 1657008065915,\r\n  :block/updated-at 1657008065915}\r\n {:block/name \"mon, 08/01/2022\",\r\n  :block/created-at 1657008047794,\r\n  :block/updated-at 1657008047794}\r\n {:block/name \"mon, 2022\",\r\n  :block/created-at 1655209126194,\r\n  :block/updated-at 1655209126194}\r\n {:block/name \"mon, 2022/06\",\r\n  :block/created-at 1654704713779,\r\n  :block/updated-at 1654704713779}\r\n {:block/name \"mon, 2022/06/20\",\r\n  :block/created-at 1655460341395,\r\n  :block/updated-at 1655736570910}\r\n {:block/name \"mq\",\r\n  :block/created-at 1654610950676,\r\n  :block/updated-at 1654610950676}\r\n {:block/name \"mq 延时队列\",\r\n  :block/created-at 1654610950682,\r\n  :block/updated-at 1654610950682}\r\n {:block/name \"my-bot\",\r\n  :block/created-at 1656691428388,\r\n  :block/updated-at 1656691428388}\r\n {:block/name \"mybatis-plus 日志控制\",\r\n  :block/created-at 1655726439853,\r\n  :block/updated-at 1655726439853}\r\n {:block/name \"mybatisplus\",\r\n  :block/created-at 1655726440177,\r\n  :block/updated-at 1655726440177}\r\n {:block/name \"mysql\",\r\n  :block/created-at 1654788370727,\r\n  :block/updated-at 1654788370727}\r\n {:block/name \"mysql docker-compose 安装\",\r\n  :block/created-at 1656691428403,\r\n  :block/updated-at 1656691428403}\r\n {:block/name \"mysql搭建双master数据库\",\r\n  :block/created-at 1654788370741,\r\n  :block/updated-at 1654788370741}\r\n {:block/name \"new page: tool\",\r\n  :block/created-at 1655728881705,\r\n  :block/updated-at 1655728881705}\r\n {:block/name \"new page: tools\",\r\n  :block/created-at 1655728884028,\r\n  :block/updated-at 1655728884028}\r\n {:block/name \"new page: 软\",\r\n  :block/created-at 1655728879527,\r\n  :block/updated-at 1655728879527}\r\n {:block/name \"new page: 软件\",\r\n  :block/created-at 1655728878690,\r\n  :block/updated-at 1655728878690}\r\n {:block/name \"nexus部署\",\r\n  :block/created-at 1654610951414,\r\n  :block/updated-at 1654610951414}\r\n {:block/name \"nginx\",\r\n  :block/created-at 1655730913904,\r\n  :block/updated-at 1655730913904}\r\n {:block/name \"nginx反向代理\",\r\n  :block/created-at 1655730892333,\r\n  :block/updated-at 1655730921766}\r\n {:block/name \"now\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"npm\",\r\n  :block/created-at 1655730523449,\r\n  :block/updated-at 1655730523449}\r\n {:block/name \"rabbitmq\",\r\n  :block/created-at 1654097423945,\r\n  :block/updated-at 1656301382512}\r\n {:block/name \"rabbitmq docker安装\",\r\n  :block/created-at 1657008047003,\r\n  :block/updated-at 1657008047003}\r\n {:block/name \"rabbitmq kubernetes安装\",\r\n  :block/created-at 1657008047159,\r\n  :block/updated-at 1657008047159}\r\n {:block/name \"rabbitmq linux 安装\",\r\n  :block/created-at 1657008047214,\r\n  :block/updated-at 1657008047214}\r\n {:block/name \"rabbitmq windows 安装\",\r\n  :block/created-at 1656691428425,\r\n  :block/updated-at 1656691428425}\r\n {:block/name \"redis\",\r\n  :block/created-at 1655730945997,\r\n  :block/updated-at 1655864871224}\r\n {:block/name \"redis安装\",\r\n  :block/created-at 1655733648883,\r\n  :block/updated-at 1655734015202}\r\n {:block/name \"redis常用命令\",\r\n  :block/created-at 1655734243709,\r\n  :block/updated-at 1655734256616}\r\n {:block/name \"redis数据结构\",\r\n  :block/created-at 1655734293392,\r\n  :block/updated-at 1655735157740}\r\n {:block/name \"sat, 06\",\r\n  :block/created-at 1656691428888,\r\n  :block/updated-at 1656691428888}\r\n {:block/name \"sat, 06/18\",\r\n  :block/created-at 1655771774262,\r\n  :block/updated-at 1655771774262}\r\n {:block/name \"sat, 06/18/2022\",\r\n  :block/created-at 1655771774259,\r\n  :block/updated-at 1655771774259}\r\n {:block/name \"sat, 06/25\",\r\n  :block/created-at 1656290331619,\r\n  :block/updated-at 1656290331619}\r\n {:block/name \"sat, 06/25/2022\",\r\n  :block/created-at 1656290331597,\r\n  :block/updated-at 1656290331597}\r\n {:block/name \"sat, 06/27\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"sat, 06/27/2020\",\r\n  :block/created-at 1655738678776,\r\n  :block/updated-at 1655738678776}\r\n {:block/name \"sat, 07\",\r\n  :block/created-at 1657008045844,\r\n  :block/updated-at 1657008045844}\r\n {:block/name \"sat, 07/02\",\r\n  :block/created-at 1656692815045,\r\n  :block/updated-at 1656692815045}\r\n {:block/name \"sat, 07/02/2022\",\r\n  :block/created-at 1656691427742,\r\n  :block/updated-at 1656691427742}\r\n {:block/name \"sat, 08/15\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"sat, 08/15/2020\",\r\n  :block/created-at 1655730290414,\r\n  :block/updated-at 1655730290414}\r\n {:block/name \"screw 生成数据库文档\",\r\n  :block/created-at 1655726440449,\r\n  :block/updated-at 1655726440449}\r\n {:block/name \"shardingshpere\",\r\n  :block/created-at 1655738419646,\r\n  :block/updated-at 1655738553261}\r\n {:block/name \"simpread\",\r\n  :block/created-at 1654610951063,\r\n  :block/updated-at 1654610951063}\r\n {:block/name \"spring boot调用 cmd 命令\",\r\n  :block/created-at 1655726440506,\r\n  :block/updated-at 1655726440506}\r\n {:block/name \"spring-data-elasticsearch 使用记录\",\r\n  :block/created-at 1653810522393,\r\n  :block/updated-at 1653810522393}\r\n {:block/name \"spring-data-elasticsearch 使用记录/md\",\r\n  :block/created-at 1653810522820,\r\n  :block/updated-at 1653810522820}\r\n {:block/name \"springboot\",\r\n  :block/created-at 1655460340300,\r\n  :block/updated-at 1655460340300}\r\n {:block/name \"springboot属性和配置文件的精细控制\",\r\n  :block/created-at 1655460339489,\r\n  :block/updated-at 1655460339489}\r\n {:block/name \"springboot集成redis过期回调\",\r\n  :block/created-at 1654610951474,\r\n  :block/updated-at 1654610951474}\r\n {:block/name \"sql\",\r\n  :block/created-at 1655726440447,\r\n  :block/updated-at 1655726440447}\r\n {:block/name \"sql优化\",\r\n  :block/created-at 1655738657961,\r\n  :block/updated-at 1655738702275}\r\n {:block/name \"stream\",\r\n  :block/created-at 1655209126555,\r\n  :block/updated-at 1655209126555}\r\n {:block/name \"sun, 01/01\",\r\n  :block/created-at 1656692815044,\r\n  :block/updated-at 1656692815044}\r\n {:block/name \"sun, 01/01/2023\",\r\n  :block/created-at 1656691428897,\r\n  :block/updated-at 1656691428897}\r\n {:block/name \"sun, 02\",\r\n  :block/created-at 1655739037964,\r\n  :block/updated-at 1655739037964}\r\n {:block/name \"sun, 02/13\",\r\n  :block/created-at 1655739037965,\r\n  :block/updated-at 1655739037965}\r\n {:block/name \"sun, 02/13/2022\",\r\n  :block/created-at 1655739037963,\r\n  :block/updated-at 1655739037963}\r\n {:block/name \"sun, 05\",\r\n  :block/created-at 1655694905381,\r\n  :block/updated-at 1655694905381}\r\n {:block/name \"sun, 05/29\",\r\n  :block/created-at 1655694905383,\r\n  :block/updated-at 1655694905383}\r\n {:block/name \"sun, 05/29/2022\",\r\n  :block/created-at 1655694905380,\r\n  :block/updated-at 1655694905380}\r\n {:block/name \"sun, 06\",\r\n  :block/created-at 1656691428900,\r\n  :block/updated-at 1656691428900}\r\n {:block/name \"sun, 06/05\",\r\n  :block/created-at 1655694905298,\r\n  :block/updated-at 1655694905298}\r\n {:block/name \"sun, 06/05/2022\",\r\n  :block/created-at 1655694905296,\r\n  :block/updated-at 1655694905296}\r\n {:block/name \"sun, 06/26\",\r\n  :block/created-at 1656290331468,\r\n  :block/updated-at 1656290331468}\r\n {:block/name \"sun, 06/26/2022\",\r\n  :block/created-at 1656290331459,\r\n  :block/updated-at 1656549864702}\r\n {:block/name \"sun, 08/29\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"sun, 08/29/2021\",\r\n  :block/created-at 1655730840920,\r\n  :block/updated-at 1655730840920}\r\n {:block/name \"sun, 10/21\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"sun, 10/21/2018\",\r\n  :block/created-at 1655738951155,\r\n  :block/updated-at 1655738951155}\r\n {:block/name \"sun, 11/18\",\r\n  :block/created-at 1655696847245,\r\n  :block/updated-at 1655696847245}\r\n {:block/name \"sun, 11/18/2018\",\r\n  :block/created-at 1655695431641,\r\n  :block/updated-at 1655695431641}\r\n {:block/name \"test\",\r\n  :block/created-at 1653119134940,\r\n  :block/updated-at 1653119134940}\r\n {:block/name \"this.key\",\r\n  :block/created-at 1653119134936,\r\n  :block/updated-at 1653119134936}\r\n {:block/name \"this>4]”\",\r\n  :block/created-at 1653119134930,\r\n  :block/updated-at 1653119134930}\r\n {:block/name \"thu, 05\",\r\n  :block/created-at 1656691429465,\r\n  :block/updated-at 1656691429465}\r\n {:block/name \"thu, 05/19\",\r\n  :block/created-at 1655694904960,\r\n  :block/updated-at 1655694904960}\r\n {:block/name \"thu, 05/19/2022\",\r\n  :block/created-at 1655694904958,\r\n  :block/updated-at 1655694904958}\r\n {:block/name \"thu, 05/26\",\r\n  :block/created-at 1656691429465,\r\n  :block/updated-at 1656691429465}\r\n {:block/name \"thu, 05/26/2022\",\r\n  :block/created-at 1656691429465,\r\n  :block/updated-at 1656691429465}\r\n {:block/name \"thu, 06\",\r\n  :block/created-at 1655726442413,\r\n  :block/updated-at 1655726442413}\r\n {:block/name \"thu, 06/09\",\r\n  :block/created-at 1655726442416,\r\n  :block/updated-at 1655726442416}\r\n {:block/name \"thu, 06/09/2022\",\r\n  :block/created-at 1655726442412,\r\n  :block/updated-at 1655880406300}\r\n {:block/name \"thu, 06/17\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"thu, 06/17/2021\",\r\n  :block/created-at 1655730780740,\r\n  :block/updated-at 1655730780740}\r\n {:block/name \"thu, 06/23\",\r\n  :block/created-at 1656691428871,\r\n  :block/updated-at 1656691428871}\r\n {:block/name \"thu, 06/23/2022\",\r\n  :block/created-at 1656691428870,\r\n  :block/updated-at 1656691428870}\r\n {:block/name \"thu, 06/30\",\r\n  :block/created-at 1656691429009,\r\n  :block/updated-at 1656691429009}\r\n {:block/name \"thu, 06/30/2022\",\r\n  :block/created-at 1656691429009,\r\n  :block/updated-at 1656691429009}\r\n {:block/name \"todo\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"tools\",\r\n  :block/created-at 1655771776969,\r\n  :block/updated-at 1655771776969}\r\n {:block/name \"tue, 05\",\r\n  :block/created-at 1655694905519,\r\n  :block/updated-at 1655694905519}\r\n {:block/name \"tue, 05/12\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"tue, 05/12/2020\",\r\n  :block/created-at 1655730493257,\r\n  :block/updated-at 1655730493257}\r\n {:block/name \"tue, 05/24\",\r\n  :block/created-at 1655694905520,\r\n  :block/updated-at 1655694905520}\r\n {:block/name \"tue, 05/24/2022\",\r\n  :block/created-at 1655694905518,\r\n  :block/updated-at 1655694905518}\r\n {:block/name \"tue, 06\",\r\n  :block/created-at 1655726442208,\r\n  :block/updated-at 1655726442208}\r\n {:block/name \"tue, 06/07\",\r\n  :block/created-at 1655694905239,\r\n  :block/updated-at 1655694905239}\r\n {:block/name \"tue, 06/07/2022\",\r\n  :block/created-at 1655694905237,\r\n  :block/updated-at 1655694905237}\r\n {:block/name \"tue, 06/14\",\r\n  :block/created-at 1655726442211,\r\n  :block/updated-at 1655726442211}\r\n {:block/name \"tue, 06/14/2022\",\r\n  :block/created-at 1655726442206,\r\n  :block/updated-at 1655726442206}\r\n {:block/name \"tue, 06/21\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"tue, 06/21/2022\",\r\n  :block/created-at 1655773780985,\r\n  :block/updated-at 1655858065322}\r\n {:block/name \"tue, 06/28\",\r\n  :block/created-at 1656691428920,\r\n  :block/updated-at 1656691428920}\r\n {:block/name \"tue, 06/28/2022\",\r\n  :block/created-at 1656691428919,\r\n  :block/updated-at 1656691428919}\r\n {:block/name \"tue, 07\",\r\n  :block/created-at 1657008045616,\r\n  :block/updated-at 1657008045616}\r\n {:block/name \"tue, 07/05\",\r\n  :block/created-at 1657008045617,\r\n  :block/updated-at 1657008045617}\r\n {:block/name \"tue, 07/05/2022\",\r\n  :block/created-at 1657008045614,\r\n  :block/updated-at 1657008045614}\r\n {:block/name \"tue, 10/30\",\r\n  :block/created-at 1655696847245,\r\n  :block/updated-at 1655696847245}\r\n {:block/name \"tue, 10/30/2018\",\r\n  :block/created-at 1655695540696,\r\n  :block/updated-at 1655695540696}\r\n {:block/name \"typora\",\r\n  :block/created-at 1655728825246,\r\n  :block/updated-at 1655728864840}\r\n {:block/name\r\n  \"uploaded image file record - interactive(created by logseq-plugin-image-uploader)\",\r\n  :block/created-at 1653181392723,\r\n  :block/updated-at 1653181392960}\r\n {:block/name\r\n  \"uploaded image file record(created by logseq-plugin-image-uploader)\",\r\n  :block/created-at 1653181392305,\r\n  :block/updated-at 1653181392629}\r\n {:block/name \"vmware\",\r\n  :block/created-at 1655460340483,\r\n  :block/updated-at 1655460340483}\r\n {:block/name \"wait\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"waiting\",\r\n  :block/created-at 1652802656183,\r\n  :block/updated-at 1652802656183}\r\n {:block/name \"wed, 03/25\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"wed, 03/25/2020\",\r\n  :block/created-at 1655730905972,\r\n  :block/updated-at 1655730905972}\r\n {:block/name \"wed, 05\",\r\n  :block/created-at 1655694905478,\r\n  :block/updated-at 1655694905478}\r\n {:block/name \"wed, 05/13\",\r\n  :block/created-at 1655696847246,\r\n  :block/updated-at 1655696847246}\r\n {:block/name \"wed, 05/13/2020\",\r\n  :block/created-at 1655695697698,\r\n  :block/updated-at 1655695697698}\r\n {:block/name \"wed, 05/25\",\r\n  :block/created-at 1655694905479,\r\n  :block/updated-at 1655694905479}\r\n {:block/name \"wed, 05/25/2022\",\r\n  :block/created-at 1655694905477,\r\n  :block/updated-at 1655694905477}\r\n {:block/name \"wed, 05/27\",\r\n  :block/created-at 1655740930886,\r\n  :block/updated-at 1655740930886}\r\n {:block/name \"wed, 05/27/2020\",\r\n  :block/created-at 1655738794686,\r\n  :block/updated-at 1655738794686}\r\n {:block/name \"wed, 06\",\r\n  :block/created-at 1656691429000,\r\n  :block/updated-at 1656691429000}\r\n {:block/name \"wed, 06/01\",\r\n  :block/created-at 1655694905339,\r\n  :block/updated-at 1655694905339}\r\n {:block/name \"wed, 06/01/2022\",\r\n  :block/created-at 1655694905335,\r\n  :block/updated-at 1655694905335}\r\n {:block/name \"wed, 06/08\",\r\n  :block/created-at 1656691429483,\r\n  :block/updated-at 1656691429483}\r\n {:block/name \"wed, 06/08/2022\",\r\n  :block/created-at 1656691429482,\r\n  :block/updated-at 1656691429482}\r\n {:block/name \"wed, 06/15\",\r\n  :block/created-at 1655694905064,\r\n  :block/updated-at 1655694905064}\r\n {:block/name \"wed, 06/15/2022\",\r\n  :block/created-at 1655694905062,\r\n  :block/updated-at 1655694905062}\r\n {:block/name \"wed, 06/22\",\r\n  :block/created-at 1655976841860,\r\n  :block/updated-at 1655976841860}\r\n {:block/name \"wed, 06/29\",\r\n  :block/created-at 1656691429001,\r\n  :block/updated-at 1656691429001}\r\n {:block/name \"wed, 06/29/2022\",\r\n  :block/created-at 1656691429000,\r\n  :block/updated-at 1656691429000}\r\n {:block/name \"wed, 12/01\",\r\n  :block/created-at 1655793478799,\r\n  :block/updated-at 1655793478799}\r\n {:block/name \"wed, 12/01/2021\",\r\n  :block/created-at 1655771777573,\r\n  :block/updated-at 1655771777573}\r\n {:block/name \"werf\",\r\n  :block/created-at 1657008045824,\r\n  :block/updated-at 1657008045824}\r\n {:block/name \"win11重装\",\r\n  :block/created-at 1655053358189,\r\n  :block/updated-at 1655053569714}\r\n {:block/name \"yolo\",\r\n  :block/created-at 1656691428667,\r\n  :block/updated-at 1656691428667}\r\n {:block/name \"yolov5\",\r\n  :block/created-at 1656691428666,\r\n  :block/updated-at 1656691428666}\r\n {:block/name \"yolov5_deepsort_tensorrt_cpp\",\r\n  :block/created-at 1656691428691,\r\n  :block/updated-at 1656691428691}\r\n {:block/name \"yolov6\",\r\n  :block/created-at 1656691428667,\r\n  :block/updated-at 1656691428667}\r\n {:block/name \"zabbix \",\r\n  :block/created-at 1655738808625,\r\n  :block/updated-at 1655738808625}\r\n {:block/name \"zabbix安装\",\r\n  :block/created-at 1655738766264,\r\n  :block/updated-at 1655738897854}\r\n {:block/name \"个人技术栈\",\r\n  :block/created-at 1656691428712,\r\n  :block/updated-at 1656691428712}\r\n {:block/name \"个人简历\",\r\n  :block/created-at 1653813725265,\r\n  :block/updated-at 1653813725265}\r\n {:block/name \"个人评价\",\r\n  :block/created-at 1653813725128,\r\n  :block/updated-at 1653813725128}\r\n {:block/name \"个人资料\",\r\n  :block/created-at 1653813725061,\r\n  :block/updated-at 1653813725061}\r\n {:block/name \"产品设计的十大顶级错误\",\r\n  :block/created-at 1654954246763,\r\n  :block/updated-at 1654954246763}\r\n {:block/name \"任意时间延时消息原理讲解\",\r\n  :block/created-at 1654610951263,\r\n  :block/updated-at 1654610951263}\r\n {:block/name \"写给程序员的机器学习入门\",\r\n  :block/created-at 1657008045821,\r\n  :block/updated-at 1657008045821}\r\n {:block/name \"凤凰架构\",\r\n  :block/created-at 1655726438407,\r\n  :block/updated-at 1655788158497}\r\n {:block/name \"前端\",\r\n  :block/created-at 1656691428711,\r\n  :block/updated-at 1656691428711}\r\n {:block/name \"动态数据源\",\r\n  :block/created-at 1654788370510,\r\n  :block/updated-at 1654788370510}\r\n {:block/name \"动态规划\",\r\n  :block/created-at 1655738935119,\r\n  :block/updated-at 1655738982589}\r\n {:block/name \"区块链\",\r\n  :block/created-at 1653814788239,\r\n  :block/updated-at 1653828795402}\r\n {:block/name \"同步直接调用的问题\",\r\n  :block/created-at 1656691428355,\r\n  :block/updated-at 1656691428355}\r\n {:block/name \"后端\",\r\n  :block/created-at 1656691428710,\r\n  :block/updated-at 1656691428710}\r\n {:block/name \"四维提升\",\r\n  :block/created-at 1653813725226,\r\n  :block/updated-at 1653813725226}\r\n {:block/name \"基于注解@scheduled的定时任务配置\",\r\n  :block/created-at 1655726440926,\r\n  :block/updated-at 1655726440926}\r\n {:block/name \"如何运行python项目\",\r\n  :block/created-at 1655460339533,\r\n  :block/updated-at 1655460339533}\r\n {:block/name \"学历信息\",\r\n  :block/created-at 1653813725116,\r\n  :block/updated-at 1653813725116}\r\n {:block/name \"宝塔\",\r\n  :block/created-at 1655726441378,\r\n  :block/updated-at 1655726441378}\r\n {:block/name \"小爱同学控制电脑开关机\",\r\n  :block/created-at 1656691428825,\r\n  :block/updated-at 1656691428825}\r\n {:block/name \"工作\",\r\n  :block/created-at 1653119134045,\r\n  :block/updated-at 1653119134045}\r\n {:block/name \"工作经历\",\r\n  :block/created-at 1653813725243,\r\n  :block/updated-at 1653813725243}\r\n {:block/name \"工程\",\r\n  :block/created-at 1654850862846,\r\n  :block/updated-at 1654850862846}\r\n {:block/name \"常见web系统默认口令总结\",\r\n  :block/created-at 1655460340693,\r\n  :block/updated-at 1655460340693}\r\n {:block/name \"延迟消息\",\r\n  :block/created-at 1654610951468,\r\n  :block/updated-at 1654610951468}\r\n {:block/name \"延迟消息如何实现\",\r\n  :block/created-at 1654610951328,\r\n  :block/updated-at 1654610951328}\r\n {:block/name \"报错\",\r\n  :block/created-at 1653810521876,\r\n  :block/updated-at 1653810521876}\r\n {:block/name \"数据类型\",\r\n  :block/created-at 1655736481994,\r\n  :block/updated-at 1655736484484}\r\n {:block/name \"正则表达式\",\r\n  :block/created-at 1652968895848,\r\n  :block/updated-at 1652968895848}\r\n {:block/name \"深入理解rocketmq延迟消息\",\r\n  :block/created-at 1654610951101,\r\n  :block/updated-at 1654610951101}\r\n {:block/name \"狂野架构师\",\r\n  :block/created-at 1657008047404,\r\n  :block/updated-at 1657008047404}\r\n {:block/name \"电脑配置单\",\r\n  :block/created-at 1655726438405,\r\n  :block/updated-at 1655726438405}\r\n {:block/name \"疑似23.88tb的上海政府国家警察数据库泄露\",\r\n  :block/created-at 1657008045613,\r\n  :block/updated-at 1657008045613}\r\n {:block/name \"算法\",\r\n  :block/created-at 1655738982587,\r\n  :block/updated-at 1655738982587}\r\n {:block/name \"网关\",\r\n  :block/created-at 1653119133796,\r\n  :block/updated-at 1653119133796}\r\n {:block/name \"网络技术\",\r\n  :block/created-at 1655726441052,\r\n  :block/updated-at 1655726441052}\r\n {:block/name \"计算机视觉\",\r\n  :block/created-at 1656691428710,\r\n  :block/updated-at 1656691428710}\r\n {:block/name \"读书笔记\",\r\n  :block/created-at 1655730748188,\r\n  :block/updated-at 1655730748188}\r\n {:block/name \"迁移旧笔记\",\r\n  :block/created-at 1655726438402,\r\n  :block/updated-at 1655739123854}\r\n {:block/name \"部分回调事件消息无法进入消息队列\",\r\n  :block/created-at 1654097298022,\r\n  :block/updated-at 1654097312482}\r\n {:block/name \"配置单\",\r\n  :block/created-at 1653810521081,\r\n  :block/updated-at 1654098506644}\r\n {:block/name \"阿里云使用宝塔面板部署hexo\",\r\n  :block/created-at 1655726441251,\r\n  :block/updated-at 1655726441251}\r\n {:block/name \"附件\",\r\n  :block/created-at 1652968895843,\r\n  :block/updated-at 1652968895843}\r\n {:block/name \"项目登录账号密码错误\",\r\n  :block/created-at 1654098125675,\r\n  :block/updated-at 1654098176147}\r\n {:block/name \"项目经历\",\r\n  :block/created-at 1653813724960,\r\n  :block/updated-at 1654323764481}\r\n {:block/name \"高可用，可靠\",\r\n  :block/created-at 1655736550462,\r\n  :block/updated-at 1655736552929}\r\n {:block/name \"黑群晖 折腾笔记\",\r\n  :block/created-at 1655739011473, \r\n  :block/updated-at 1655739047028}]\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/logseq/pages-metadata.edn b/logseq/pages-metadata.edn
+--- a/logseq/pages-metadata.edn	(revision 117a42f0ad04f0010c5b385a23ca302f3476e81d)
++++ b/logseq/pages-metadata.edn	(date 1657113515159)
+@@ -10,6 +10,9 @@
+  {:block/name "\"fri, 2022/06/10\"",
+   :block/created-at 1654954245957,
+   :block/updated-at 1654954245957}
++ {:block/name "\"fri, 2022/06/17\"",
++  :block/created-at 1655694905034,
++  :block/updated-at 1655694905034}
+  {:block/name "\"mon, 2022",
+   :block/created-at 1654610950889,
+   :block/updated-at 1654610950889}
+@@ -25,6 +28,15 @@
+  {:block/name "\"thu, 2022/05\"",
+   :block/created-at 1655726438335,
+   :block/updated-at 1655726438335}
++ {:block/name "\"tue, 06",
++  :block/created-at 1656691428855,
++  :block/updated-at 1656691428855}
++ {:block/name "\"tue, 06/14",
++  :block/created-at 1656691428855,
++  :block/updated-at 1656691428855}
++ {:block/name "\"tue, 06/14/2022\"",
++  :block/created-at 1656691428854,
++  :block/updated-at 1656691428854}
+  {:block/name ".v-eisenhower-matrix",
+   :block/created-at 1657008046094,
+   :block/updated-at 1657008046094}
+@@ -247,6 +259,9 @@
+  {:block/name "erlang",
+   :block/created-at 1656691428245,
+   :block/updated-at 1656691428245}
++ {:block/name "es聚合统计",
++  :block/created-at 1655482962599,
++  :block/updated-at 1655482962599}
+  {:block/name "eureka",
+   :block/created-at 1655726439748,
+   :block/updated-at 1655726439748}
+@@ -274,6 +289,12 @@
+  {:block/name "fri, 01/01",
+   :block/created-at 1656691428897,
+   :block/updated-at 1656691428897}
++ {:block/name "fri, 01/07",
++  :block/created-at 1656691428849,
++  :block/updated-at 1656691428849}
++ {:block/name "fri, 01/07/2022",
++  :block/created-at 1656691428848,
++  :block/updated-at 1656691428848}
+  {:block/name "fri, 05",
+   :block/created-at 1656691429446,
+   :block/updated-at 1656691429446}
+@@ -286,12 +307,6 @@
+  {:block/name "fri, 06",
+   :block/created-at 1656691428880,
+   :block/updated-at 1656691428880}
+- {:block/name "fri, 06/10",
+-  :block/created-at 1655694905165,
+-  :block/updated-at 1655694905165}
+- {:block/name "fri, 06/10/2022",
+-  :block/created-at 1655694905163,
+-  :block/updated-at 1655694905163}
+  {:block/name "fri, 06/24",
+   :block/created-at 1656409290892,
+   :block/updated-at 1656409290892}
+@@ -301,33 +316,36 @@
+  {:block/name "fri, 07",
+   :block/created-at 1656691428896,
+   :block/updated-at 1656691428896}
+- {:block/name "fri, 07/01",
+-  :block/created-at 1656290331404,
+-  :block/updated-at 1656290331404}
+- {:block/name "fri, 07/01/2022",
+-  :block/created-at 1656290331396,
+-  :block/updated-at 1656644966085}
+- {:block/name "fri, 07/10",
+-  :block/created-at 1655694989828,
+-  :block/updated-at 1655694989828}
+- {:block/name "fri, 07/10/2020",
+-  :block/created-at 1655694907074,
+-  :block/updated-at 1655694907074}
++ {:block/name "fri, 07/02",
++  :block/created-at 1656691428896,
++  :block/updated-at 1656691428896}
+  {:block/name "fri, 08",
+   :block/created-at 1657008047795,
+   :block/updated-at 1657008047795}
+  {:block/name "fri, 08/01",
+   :block/created-at 1657008047796,
+   :block/updated-at 1657008047796}
++ {:block/name "fri, 2020/07",
++  :block/created-at 1655740930886,
++  :block/updated-at 1655740930886}
++ {:block/name "fri, 2020/07/10",
++  :block/created-at 1655726440499,
++  :block/updated-at 1655726440499}
+  {:block/name "fri, 2022",
+   :block/created-at 1653214206764,
+   :block/updated-at 1653214206764}
++ {:block/name "fri, 2022/05",
++  :block/created-at 1653580855701,
++  :block/updated-at 1653580855701}
++ {:block/name "fri, 2022/05/20",
++  :block/created-at 1653214206762,
++  :block/updated-at 1653814455409}
+  {:block/name "fri, 2022/06",
+   :block/created-at 1655048002813,
+   :block/updated-at 1655048002814}
+- {:block/name "fri, 2022/06/17",
+-  :block/created-at 1655460339570,
+-  :block/updated-at 1655460339570}
++ {:block/name "fri, 2022/06/10",
++  :block/created-at 1654954246676,
++  :block/updated-at 1654954246676}
+  {:block/name "godeng",
+   :block/created-at 1657008045833,
+   :block/updated-at 1657008045833}
+@@ -409,18 +427,6 @@
+  {:block/name "mon, 06",
+   :block/created-at 1656691428912,
+   :block/updated-at 1656691428912}
+- {:block/name "mon, 06/06",
+-  :block/created-at 1655694989828,
+-  :block/updated-at 1655694989828}
+- {:block/name "mon, 06/06/2022",
+-  :block/created-at 1655694908248,
+-  :block/updated-at 1655694908248}
+- {:block/name "mon, 06/13",
+-  :block/created-at 1655694905131,
+-  :block/updated-at 1655694905131}
+- {:block/name "mon, 06/13/2022",
+-  :block/created-at 1655694905129,
+-  :block/updated-at 1655694905129}
+  {:block/name "mon, 06/20",
+   :block/created-at 1656691429499,
+   :block/updated-at 1656691429499}
+@@ -433,9 +439,6 @@
+  {:block/name "mon, 06/27/2022",
+   :block/created-at 1656691428912,
+   :block/updated-at 1656691428912}
+- {:block/name "mon, 07/04",
+-  :block/created-at 1656894934540,
+-  :block/updated-at 1656894934540}
+  {:block/name "mon, 08/01",
+   :block/created-at 1657008065915,
+   :block/updated-at 1657008065915}
+@@ -448,6 +451,12 @@
+  {:block/name "mon, 2022/06",
+   :block/created-at 1654704713779,
+   :block/updated-at 1654704713779}
++ {:block/name "mon, 2022/06/06",
++  :block/created-at 1654450916471,
++  :block/updated-at 1654522083325}
++ {:block/name "mon, 2022/06/13",
++  :block/created-at 1655049790322,
++  :block/updated-at 1655053358190}
+  {:block/name "mon, 2022/06/20",
+   :block/created-at 1655460341395,
+   :block/updated-at 1655736570910}
+@@ -532,12 +541,6 @@
+  {:block/name "sat, 06",
+   :block/created-at 1656691428888,
+   :block/updated-at 1656691428888}
+- {:block/name "sat, 06/18",
+-  :block/created-at 1655771774262,
+-  :block/updated-at 1655771774262}
+- {:block/name "sat, 06/18/2022",
+-  :block/created-at 1655771774259,
+-  :block/updated-at 1655771774259}
+  {:block/name "sat, 06/25",
+   :block/created-at 1656290331619,
+   :block/updated-at 1656290331619}
+@@ -565,6 +568,15 @@
+  {:block/name "sat, 08/15/2020",
+   :block/created-at 1655730290414,
+   :block/updated-at 1655730290414}
++ {:block/name "sat, 2022",
++  :block/created-at 1655483078937,
++  :block/updated-at 1655483078937}
++ {:block/name "sat, 2022/06",
++  :block/created-at 1655048002814,
++  :block/updated-at 1655048002814}
++ {:block/name "sat, 2022/06/18",
++  :block/created-at 1655483078933,
++  :block/updated-at 1655483078933}
+  {:block/name "screw 生成数据库文档",
+   :block/created-at 1655726440449,
+   :block/updated-at 1655726440449}
+@@ -616,24 +628,9 @@
+  {:block/name "sun, 02/13/2022",
+   :block/created-at 1655739037963,
+   :block/updated-at 1655739037963}
+- {:block/name "sun, 05",
+-  :block/created-at 1655694905381,
+-  :block/updated-at 1655694905381}
+- {:block/name "sun, 05/29",
+-  :block/created-at 1655694905383,
+-  :block/updated-at 1655694905383}
+- {:block/name "sun, 05/29/2022",
+-  :block/created-at 1655694905380,
+-  :block/updated-at 1655694905380}
+  {:block/name "sun, 06",
+   :block/created-at 1656691428900,
+   :block/updated-at 1656691428900}
+- {:block/name "sun, 06/05",
+-  :block/created-at 1655694905298,
+-  :block/updated-at 1655694905298}
+- {:block/name "sun, 06/05/2022",
+-  :block/created-at 1655694905296,
+-  :block/updated-at 1655694905296}
+  {:block/name "sun, 06/26",
+   :block/created-at 1656290331468,
+   :block/updated-at 1656290331468}
+@@ -652,12 +649,27 @@
+  {:block/name "sun, 10/21/2018",
+   :block/created-at 1655738951155,
+   :block/updated-at 1655738951155}
+- {:block/name "sun, 11/18",
+-  :block/created-at 1655696847245,
+-  :block/updated-at 1655696847245}
+- {:block/name "sun, 11/18/2018",
+-  :block/created-at 1655695431641,
+-  :block/updated-at 1655695431641}
++ {:block/name "sun, 2018/11",
++  :block/created-at 1655740930886,
++  :block/updated-at 1655740930886}
++ {:block/name "sun, 2018/11/18",
++  :block/created-at 1655726441049,
++  :block/updated-at 1655726441049}
++ {:block/name "sun, 2022",
++  :block/created-at 1653214206698,
++  :block/updated-at 1653214206698}
++ {:block/name "sun, 2022/05",
++  :block/created-at 1653214206699,
++  :block/updated-at 1653214206699}
++ {:block/name "sun, 2022/05/29",
++  :block/created-at 1653810520371,
++  :block/updated-at 1654522103828}
++ {:block/name "sun, 2022/06",
++  :block/created-at 1654704713779,
++  :block/updated-at 1654704713779}
++ {:block/name "sun, 2022/06/05",
++  :block/created-at 1654363870375,
++  :block/updated-at 1654789351450}
+  {:block/name "test",
+   :block/created-at 1653119134940,
+   :block/updated-at 1653119134940}
+@@ -670,12 +682,6 @@
+  {:block/name "thu, 05",
+   :block/created-at 1656691429465,
+   :block/updated-at 1656691429465}
+- {:block/name "thu, 05/19",
+-  :block/created-at 1655694904960,
+-  :block/updated-at 1655694904960}
+- {:block/name "thu, 05/19/2022",
+-  :block/created-at 1655694904958,
+-  :block/updated-at 1655694904958}
+  {:block/name "thu, 05/26",
+   :block/created-at 1656691429465,
+   :block/updated-at 1656691429465}
+@@ -709,36 +715,36 @@
+  {:block/name "thu, 06/30/2022",
+   :block/created-at 1656691429009,
+   :block/updated-at 1656691429009}
++ {:block/name "thu, 2022",
++  :block/created-at 1653453231287,
++  :block/updated-at 1653453231287}
++ {:block/name "thu, 2022/05",
++  :block/created-at 1654705912886,
++  :block/updated-at 1654705912886}
++ {:block/name "thu, 2022/05/19",
++  :block/created-at 1653453231286,
++  :block/updated-at 1654523007917}
++ {:block/name "thu, 2022/05/26",
++  :block/created-at 1653528948801,
++  :block/updated-at 1654611797362}
++ {:block/name "thu, 2022/06",
++  :block/created-at 1654705912764,
++  :block/updated-at 1654705912764}
+  {:block/name "todo",
+   :block/created-at 1652802656183,
+   :block/updated-at 1652802656183}
+  {:block/name "tools",
+   :block/created-at 1655771776969,
+   :block/updated-at 1655771776969}
+- {:block/name "tue, 05",
+-  :block/created-at 1655694905519,
+-  :block/updated-at 1655694905519}
+  {:block/name "tue, 05/12",
+   :block/created-at 1655740930886,
+   :block/updated-at 1655740930886}
+  {:block/name "tue, 05/12/2020",
+   :block/created-at 1655730493257,
+   :block/updated-at 1655730493257}
+- {:block/name "tue, 05/24",
+-  :block/created-at 1655694905520,
+-  :block/updated-at 1655694905520}
+- {:block/name "tue, 05/24/2022",
+-  :block/created-at 1655694905518,
+-  :block/updated-at 1655694905518}
+  {:block/name "tue, 06",
+   :block/created-at 1655726442208,
+   :block/updated-at 1655726442208}
+- {:block/name "tue, 06/07",
+-  :block/created-at 1655694905239,
+-  :block/updated-at 1655694905239}
+- {:block/name "tue, 06/07/2022",
+-  :block/created-at 1655694905237,
+-  :block/updated-at 1655694905237}
+  {:block/name "tue, 06/14",
+   :block/created-at 1655726442211,
+   :block/updated-at 1655726442211}
+@@ -758,20 +764,35 @@
+   :block/created-at 1656691428919,
+   :block/updated-at 1656691428919}
+  {:block/name "tue, 07",
+-  :block/created-at 1657008045616,
+-  :block/updated-at 1657008045616}
++  :block/created-at 1657032638091,
++  :block/updated-at 1657032638091}
+  {:block/name "tue, 07/05",
+   :block/created-at 1657008045617,
+   :block/updated-at 1657008045617}
+  {:block/name "tue, 07/05/2022",
+   :block/created-at 1657008045614,
+   :block/updated-at 1657008045614}
+- {:block/name "tue, 10/30",
+-  :block/created-at 1655696847245,
+-  :block/updated-at 1655696847245}
+- {:block/name "tue, 10/30/2018",
+-  :block/created-at 1655695540696,
+-  :block/updated-at 1655695540696}
++ {:block/name "tue, 2018/10",
++  :block/created-at 1655740930886,
++  :block/updated-at 1655740930886}
++ {:block/name "tue, 2018/10/30",
++  :block/created-at 1655726438993,
++  :block/updated-at 1655726438993}
++ {:block/name "tue, 2022",
++  :block/created-at 1653453230624,
++  :block/updated-at 1653453230624}
++ {:block/name "tue, 2022/05",
++  :block/created-at 1653453230626,
++  :block/updated-at 1653453230626}
++ {:block/name "tue, 2022/05/24",
++  :block/created-at 1653453230622,
++  :block/updated-at 1653549135852}
++ {:block/name "tue, 2022/06",
++  :block/created-at 1654704713779,
++  :block/updated-at 1654704713779}
++ {:block/name "tue, 2022/06/07",
++  :block/created-at 1654531229461,
++  :block/updated-at 1654758965872}
+  {:block/name "typora",
+   :block/created-at 1655728825246,
+   :block/updated-at 1655728864840}
+@@ -798,21 +819,6 @@
+  {:block/name "wed, 03/25/2020",
+   :block/created-at 1655730905972,
+   :block/updated-at 1655730905972}
+- {:block/name "wed, 05",
+-  :block/created-at 1655694905478,
+-  :block/updated-at 1655694905478}
+- {:block/name "wed, 05/13",
+-  :block/created-at 1655696847246,
+-  :block/updated-at 1655696847246}
+- {:block/name "wed, 05/13/2020",
+-  :block/created-at 1655695697698,
+-  :block/updated-at 1655695697698}
+- {:block/name "wed, 05/25",
+-  :block/created-at 1655694905479,
+-  :block/updated-at 1655694905479}
+- {:block/name "wed, 05/25/2022",
+-  :block/created-at 1655694905477,
+-  :block/updated-at 1655694905477}
+  {:block/name "wed, 05/27",
+   :block/created-at 1655740930886,
+   :block/updated-at 1655740930886}
+@@ -822,39 +828,57 @@
+  {:block/name "wed, 06",
+   :block/created-at 1656691429000,
+   :block/updated-at 1656691429000}
+- {:block/name "wed, 06/01",
+-  :block/created-at 1655694905339,
+-  :block/updated-at 1655694905339}
+- {:block/name "wed, 06/01/2022",
+-  :block/created-at 1655694905335,
+-  :block/updated-at 1655694905335}
+  {:block/name "wed, 06/08",
+   :block/created-at 1656691429483,
+   :block/updated-at 1656691429483}
+  {:block/name "wed, 06/08/2022",
+   :block/created-at 1656691429482,
+   :block/updated-at 1656691429482}
+- {:block/name "wed, 06/15",
+-  :block/created-at 1655694905064,
+-  :block/updated-at 1655694905064}
+- {:block/name "wed, 06/15/2022",
+-  :block/created-at 1655694905062,
+-  :block/updated-at 1655694905062}
+- {:block/name "wed, 06/22",
+-  :block/created-at 1655976841860,
+-  :block/updated-at 1655976841860}
+  {:block/name "wed, 06/29",
+   :block/created-at 1656691429001,
+   :block/updated-at 1656691429001}
+  {:block/name "wed, 06/29/2022",
+   :block/created-at 1656691429000,
+   :block/updated-at 1656691429000}
++ {:block/name "wed, 07/06",
++  :block/created-at 1657037579489,
++  :block/updated-at 1657037579489}
++ {:block/name "wed, 07/06/2022",
++  :block/created-at 1657036822329,
++  :block/updated-at 1657036822329}
+  {:block/name "wed, 12/01",
+   :block/created-at 1655793478799,
+   :block/updated-at 1655793478799}
+  {:block/name "wed, 12/01/2021",
+   :block/created-at 1655771777573,
+   :block/updated-at 1655771777573}
++ {:block/name "wed, 2020/05",
++  :block/created-at 1655740930886,
++  :block/updated-at 1655740930886}
++ {:block/name "wed, 2020/05/13",
++  :block/created-at 1655726439418,
++  :block/updated-at 1655726439418}
++ {:block/name "wed, 2022",
++  :block/created-at 1653453230770,
++  :block/updated-at 1653453230770}
++ {:block/name "wed, 2022/05",
++  :block/created-at 1653453230771,
++  :block/updated-at 1653453230771}
++ {:block/name "wed, 2022/05/25",
++  :block/created-at 1653453230769,
++  :block/updated-at 1654098421311}
++ {:block/name "wed, 2022/06",
++  :block/created-at 1654094428058,
++  :block/updated-at 1654094428058}
++ {:block/name "wed, 2022/06/01",
++  :block/created-at 1654092401880,
++  :block/updated-at 1654522105655}
++ {:block/name "wed, 2022/06/08",
++  :block/created-at 1654788370751,
++  :block/updated-at 1654788370751}
++ {:block/name "wed, 2022/06/15",
++  :block/created-at 1655383551466,
++  :block/updated-at 1655383551466}
+  {:block/name "werf",
+   :block/created-at 1657008045824,
+   :block/updated-at 1657008045824}
+@@ -894,6 +918,9 @@
+  {:block/name "产品设计的十大顶级错误",
+   :block/created-at 1654954246763,
+   :block/updated-at 1654954246763}
++ {:block/name "人体系统调优不完全指南",
++  :block/created-at 1657032637842,
++  :block/updated-at 1657032637842}
+  {:block/name "任意时间延时消息原理讲解",
+   :block/created-at 1654610951263,
+   :block/updated-at 1654610951263}
+@@ -960,6 +987,15 @@
+  {:block/name "报错",
+   :block/created-at 1653810521876,
+   :block/updated-at 1653810521876}
++ {:block/name "授权所有主机访问数据库实例zabbix，用户名",
++  :block/created-at 1655738767658,
++  :block/updated-at 1655738767658}
++ {:block/name "授权所有主机访问数据库实例zabbix，用户名/密码：zabbix",
++  :block/created-at 1655738767660,
++  :block/updated-at 1655738767660}
++ {:block/name "授权所有主机访问数据库实例zabbix，用户名/密码：zabbix/zabbix",
++  :block/created-at 1655738767655,
++  :block/updated-at 1655738767655}
+  {:block/name "数据类型",
+   :block/created-at 1655736481994,
+   :block/updated-at 1655736484484}
