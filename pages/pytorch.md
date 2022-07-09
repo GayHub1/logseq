@@ -591,6 +591,7 @@
 		  ```
 	- [其他损失计算器](https://pytorch.org/docs/stable/nn.html#loss-functions)
 - 参数调整器封装
+  collapsed:: true
 	- (随机初始化参数值，然后根据导函数值 * 学习比率调整参数减少损失) 又称随机梯度下降法
 	- ```python
 	  # 定义参数
@@ -650,3 +651,6 @@
 	  >>> b.grad
 	  tensor(0.)
 	  ```
+	- SGD 参数调整器的学习比率是固定的，如果我们想在学习过程中自动调整学习比率，可以使用其他参数调整器，例如 [Adam 调整器](https://mlfromscratch.com/optimizers-explained) 。此外，你还可以开启冲量 (momentum) 选项改进学习速度，该选项开启后可以在参数调整时参考前一次调整的方向 (正负)，如果相同则调整更多，而不同则调整更少。
+-
+-
