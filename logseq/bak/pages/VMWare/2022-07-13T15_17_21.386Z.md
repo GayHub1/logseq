@@ -1,0 +1,12 @@
+- [官网](https://www.vmware.com/)
+  title:: VMWare
+- [果核](https://www.ghxi.com/vmware15.html)
+	- [16版本网盘](https://www.123pan.com/s/HQeA-aX1Sh)
+	- 激活码
+		- 16版本
+			- ZF3R0-FHED2-M80TY-8QYGC-NPKYF
+		- 15版本
+			- 可以使用网盘附带的注册机算key激活，或者直接使用下面的一组激活即可
+			- FG78K-0UZ15-085TQ-TZQXV-XV0CD
+			- ZA11U-DVY97-M81LP-4MNEZ-X3AW0
+			- YU102-44D86-48D2Z-Z4Q5C-MFAWD
