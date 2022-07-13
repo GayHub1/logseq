@@ -154,7 +154,7 @@
  :feature/enable-journals? true
  ;;:default-home {:page "Contents"}
  :ui/show-brackets? true
- :journal/page-title-format "E, MM/dd/yyyy"
+ :journal/page-title-format "EEE, yyyy/MM/dd"
  :journal/file-name-format "yyyy-MM-dd"
  :favorites ["rabbitmq" "HOME" "react hot module reloading" "jsplay"]
  :graph/settings {:builtin-pages? true, :journal? false, :orphan-pages? true}}
