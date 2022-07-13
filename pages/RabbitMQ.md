@@ -1,4 +1,6 @@
-- 基于 [[Erlang]] 的跨平台消息队列，天然具有高性能，使用[[AMQP]]协议提供客户端接口
+- 简介
+  collapsed:: true
+	- 基于 [[Erlang]] 的跨平台消息队列，天然具有高性能，使用[[AMQP]]协议提供客户端接口
 - RabbitMQ安装
   collapsed:: true
 	- [[RabbitMQ Windows 安装]]
@@ -8,7 +10,6 @@
 - 命令行工具使用
   collapsed:: true
 	- 状态
-	  collapsed:: true
 		- 查看状态
 			- ```sh
 			  rabbitmqctl status
@@ -85,13 +86,11 @@
 			  rabbitmqctl stop
 			  ```
 	- 集群
-	  collapsed:: true
 		- 加入集群
 			- ```sh
 			  rabbitmqctl join_cluster
 			  ```
 		- 离开集群
-		  collapsed:: true
 			- ```sh
 			  rabbitmqctl reset
 			  ```
@@ -106,6 +105,7 @@
 			  rabbitmqctl cancel_sync_queue
 			  ```
 - 集群
+  collapsed:: true
 	- ![Replaced by Image Uploder](https://cdn.jsdelivr.net/gh/GayHub1/images@master/img/image_1656731662352_0.png)
 	- 优势
 	  collapsed:: true
@@ -235,6 +235,7 @@
 			  ```
 		- 若能创建成功，则节点健康，若创建失败（抛异常）则节点挂机或与节点的网络连接异常
 	- 通过HTTP Rest API监控集群状态
+	  collapsed:: true
 		- 使用api/nodes/接口获得节点信息
 		- 使用api/exchanges/{vhost}/{name}/接口获得exchange状态信息
 		- 使用api/queues/{vhost}/{name}/接口获得queue状态信息
@@ -1098,5 +1099,3 @@
 	  置绑定关系
 	- 交换机/队列的参数一定要由双方开发团队确认，否则重复
 	  声明时，若参数不一致，会导致声明失败
--
--

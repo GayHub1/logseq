@@ -1,6 +1,7 @@
 - [官网](https://www.vmware.com/)
-  title:: VMWare
-- [果核](https://www.ghxi.com/vmware15.html)
+  title:: VMware
+- [果核破解版](https://www.ghxi.com/vmware15.html)
+  collapsed:: true
 	- [16版本网盘](https://www.123pan.com/s/HQeA-aX1Sh)
 	- 激活码
 		- 16版本
@@ -10,3 +11,7 @@
 			- FG78K-0UZ15-085TQ-TZQXV-XV0CD
 			- ZA11U-DVY97-M81LP-4MNEZ-X3AW0
 			- YU102-44D86-48D2Z-Z4Q5C-MFAWD
+- Ubuntu for server live 下安装
+  collapsed:: true
+	- [安装包下载地址](https://customerconnect.vmware.com/downloads/info/slug/desktop_end_user_computing/vmware_workstation_pro/16_0)
+- JA0W8-AX216-08E19-A995H-1PHH2

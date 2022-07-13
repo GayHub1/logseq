@@ -1,12 +1,10 @@
 - tags:  #[[docker]] #[[RabbitMQ]] 
   ---
 - # 启动单节点Rabbit MQ
-  collapsed:: true
 	- ```sh
 	  docker run -d --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 	  ```
 - # 使用 Docker Compose 启动3个 RabbitMQ 节点
-  collapsed:: true
 	- ```sh
 	  vi docker-compose.yml	
 	  ```
@@ -47,7 +45,6 @@
 	  ```
 - # 将3个 RabbitMQ 节点搭建为集群
   id:: 62c1573c-6d96-48e8-8a3e-1e668d9b3838
-  collapsed:: true
 	- 启动docker-compose，按照脚本启动集群
 	  ```sh
 	  docker-compose up -d
