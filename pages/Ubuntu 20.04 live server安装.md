@@ -77,6 +77,7 @@ title:: Ubuntu 20.04 live server安装
 		- ![image.png](../assets/image_1657072324051_0.png)
 	- 安装完成重启即可
 - 系统配置
+  collapsed:: true
 	- SSH配置
 	  collapsed:: true
 		- 默认Ubuntu不允许root远程登录，后期如果想通过root登陆系统则必须修改SSH配置文件中的相关参数 才行。

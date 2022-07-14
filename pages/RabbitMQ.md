@@ -1010,7 +1010,6 @@
 			  channel.basicQos(2)
 			  ```
 			-
-			-
 		- 消息过期机制 ttl
 		  collapsed:: true
 			- > 消息ttl 长于业务高峰期时间 与 服务的平均重启时间

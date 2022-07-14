@@ -277,6 +277,9 @@
  {:block/name "erlang",
   :block/created-at 1656691428245,
   :block/updated-at 1656691428245}
+ {:block/name "esxi",
+  :block/created-at 1657765882644,
+  :block/updated-at 1657766959395}
  {:block/name "eureka",
   :block/created-at 1655726439748,
   :block/updated-at 1655726439748}
@@ -712,6 +715,9 @@
  {:block/name "thu, 2022/07/07",
   :block/created-at 1657725120602,
   :block/updated-at 1657725120602}
+ {:block/name "thu, 2022/07/14",
+  :block/created-at 1657765706798,
+  :block/updated-at 1657765882646}
  {:block/name "todo",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -771,7 +777,7 @@
   :block/updated-at 1657725120683}
  {:block/name "tue, 2022/07/12",
   :block/created-at 1657725120477,
-  :block/updated-at 1657725120477}
+  :block/updated-at 1657767004418}
  {:block/name "typora",
   :block/created-at 1655728825246,
   :block/updated-at 1655728864840}
@@ -848,7 +854,7 @@
   :block/updated-at 1657725120646}
  {:block/name "wed, 2022/07/13",
   :block/created-at 1657725120417,
-  :block/updated-at 1657725120417}
+  :block/updated-at 1657765733447}
  {:block/name "werf",
   :block/created-at 1657008045824,
   :block/updated-at 1657008045824}
@@ -918,9 +924,9 @@
  {:block/name "区块链",
   :block/created-at 1653814788239,
   :block/updated-at 1653828795402}
- {:block/name "华为服务器环境安装",
+ {:block/name "华为服务器",
   :block/created-at 1657530474892,
-  :block/updated-at 1657675547719}
+  :block/updated-at 1657767624528}
  {:block/name "同步直接调用的问题",
   :block/created-at 1656691428355,
   :block/updated-at 1656691428355}
