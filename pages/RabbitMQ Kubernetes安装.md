@@ -1,5 +1,6 @@
-- tags:  #[[Kubernetes]] #[[RabbitMQ]] 
-  ---
+tags::  #[[Kubernetes]] #[[RabbitMQ]] 
+---
+
 - 编排脚本
 	- ```yml
 	  kind: Service

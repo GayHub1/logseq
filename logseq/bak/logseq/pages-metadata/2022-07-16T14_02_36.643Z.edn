@@ -201,7 +201,13 @@
   :block/updated-at 1652802656183}
  {:block/name "centos",
   :block/created-at 1655730514081,
-  :block/updated-at 1657982215525}
+  :block/updated-at 1655730514081}
+ {:block/name "centos安装npm",
+  :block/created-at 1655730474416,
+  :block/updated-at 1655730529372}
+ {:block/name "centos配置java环境",
+  :block/created-at 1655730584447,
+  :block/updated-at 1655730606279}
  {:block/name "cmd",
   :block/created-at 1655726440494,
   :block/updated-at 1655726440494}
@@ -241,9 +247,6 @@
  {:block/name "done",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
- {:block/name "draws/2022-07-16-21-59-14.excalidraw",
-  :block/created-at 1657980156385,
-  :block/updated-at 1657980156385}
  {:block/name "easypoi",
   :block/created-at 1655726439419,
   :block/updated-at 1655726439419}
@@ -283,9 +286,6 @@
  {:block/name "esxi",
   :block/created-at 1657765882644,
   :block/updated-at 1657766959395}
- {:block/name "esxi 安装",
-  :block/created-at 1657939118357,
-  :block/updated-at 1657939118357}
  {:block/name "eureka",
   :block/created-at 1655726439748,
   :block/updated-at 1655726439748}
@@ -418,9 +418,6 @@
  {:block/name "jetbrains gateway  远程开发",
   :block/created-at 1653119133783,
   :block/updated-at 1653119133783}
- {:block/name "k8s",
-  :block/created-at 1658071318665,
-  :block/updated-at 1658071318665}
  {:block/name "keepalived",
   :block/created-at 1657008046849,
   :block/updated-at 1657008046849}
@@ -429,7 +426,7 @@
   :block/updated-at 1653810522371}
  {:block/name "kubernetes",
   :block/created-at 1657008046929,
-  :block/updated-at 1658065558712}
+  :block/updated-at 1657815700129}
  {:block/name "later",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -484,9 +481,6 @@
  {:block/name "mon, 2022/07/11",
   :block/created-at 1657725120507,
   :block/updated-at 1657725120507}
- {:block/name "mon, 2022/07/18",
-  :block/created-at 1658073625188,
-  :block/updated-at 1658073625188}
  {:block/name "mq",
   :block/created-at 1654610950676,
   :block/updated-at 1654610950676}
@@ -552,7 +546,7 @@
   :block/updated-at 1657008047003}
  {:block/name "rabbitmq kubernetes安装",
   :block/created-at 1657008047159,
-  :block/updated-at 1657983068969}
+  :block/updated-at 1657008047159}
  {:block/name "rabbitmq linux 安装",
   :block/created-at 1657008047214,
   :block/updated-at 1657008047214}
@@ -607,9 +601,6 @@
  {:block/name "sat, 2022/07/09",
   :block/created-at 1657332743736,
   :block/updated-at 1657332743736}
- {:block/name "sat, 2022/07/16",
-  :block/created-at 1657939117937,
-  :block/updated-at 1658071399888}
  {:block/name "screw 生成数据库文档",
   :block/created-at 1655726440449,
   :block/updated-at 1655726440449}
@@ -693,10 +684,7 @@
   :block/updated-at 1657725120539}
  {:block/name "sun, 2022/07/10",
   :block/created-at 1657725120537,
-  :block/updated-at 1658034727045}
- {:block/name "sun, 2022/07/17",
-  :block/created-at 1657987200177,
-  :block/updated-at 1658052164177}
+  :block/updated-at 1657725120537}
  {:block/name "test",
   :block/created-at 1653119134940,
   :block/updated-at 1653119134940}
@@ -878,7 +866,7 @@
   :block/updated-at 1657725120419}
  {:block/name "wed, 2022/07/06",
   :block/created-at 1657725120646,
-  :block/updated-at 1658026380605}
+  :block/updated-at 1657725120646}
  {:block/name "wed, 2022/07/13",
   :block/created-at 1657725120417,
   :block/updated-at 1657765733447}
@@ -924,9 +912,6 @@
  {:block/name "人体系统调优不完全指南",
   :block/created-at 1657013148249,
   :block/updated-at 1657013151460}
- {:block/name "从技术难题中学习",
-  :block/created-at 1657939118212,
-  :block/updated-at 1657939118212}
  {:block/name "任意时间延时消息原理讲解",
   :block/created-at 1654610951263,
   :block/updated-at 1654610951263}
@@ -972,9 +957,6 @@
  {:block/name "如何运行python项目",
   :block/created-at 1655460339533,
   :block/updated-at 1655460339533}
- {:block/name "如何阅读一份代码",
-  :block/created-at 1657939118214,
-  :block/updated-at 1657939118214}
  {:block/name "学历信息",
   :block/created-at 1653813725116,
   :block/updated-at 1653813725116}

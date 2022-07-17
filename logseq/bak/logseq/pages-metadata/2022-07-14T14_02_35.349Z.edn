@@ -34,15 +34,9 @@
  {:block/name "\"tue, 06/14/2022\"",
   :block/created-at 1657008067484,
   :block/updated-at 1657008067484}
- {:block/name "\"tue, 06/21",
-  :block/created-at 1657724776849,
-  :block/updated-at 1657724776849}
  {:block/name "\"tue, 06/21\"",
   :block/created-at 1657499651227,
   :block/updated-at 1657499651227}
- {:block/name "\"tue, 06/21/2022\"",
-  :block/created-at 1657724776848,
-  :block/updated-at 1657724776848}
  {:block/name "\"wed, 06",
   :block/created-at 1657154864115,
   :block/updated-at 1657154864115}
@@ -137,8 +131,8 @@
   :block/created-at 1657121448326,
   :block/updated-at 1657121448326}
  {:block/name "62ce15ac-f1c9-4d48-b844-8836f236aa2e",
-  :block/created-at 1657801287649,
-  :block/updated-at 1657801287649}
+  :block/created-at 1657673154213,
+  :block/updated-at 1657673154213}
  {:block/name "8.0.3",
   :block/created-at 1653810521583,
   :block/updated-at 1653810521583}
@@ -201,7 +195,13 @@
   :block/updated-at 1652802656183}
  {:block/name "centos",
   :block/created-at 1655730514081,
-  :block/updated-at 1657982215525}
+  :block/updated-at 1655730514081}
+ {:block/name "centos安装npm",
+  :block/created-at 1655730474416,
+  :block/updated-at 1655730529372}
+ {:block/name "centos配置java环境",
+  :block/created-at 1655730584447,
+  :block/updated-at 1655730606279}
  {:block/name "cmd",
   :block/created-at 1655726440494,
   :block/updated-at 1655726440494}
@@ -241,9 +241,6 @@
  {:block/name "done",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
- {:block/name "draws/2022-07-16-21-59-14.excalidraw",
-  :block/created-at 1657980156385,
-  :block/updated-at 1657980156385}
  {:block/name "easypoi",
   :block/created-at 1655726439419,
   :block/updated-at 1655726439419}
@@ -283,9 +280,6 @@
  {:block/name "esxi",
   :block/created-at 1657765882644,
   :block/updated-at 1657766959395}
- {:block/name "esxi 安装",
-  :block/created-at 1657939118357,
-  :block/updated-at 1657939118357}
  {:block/name "eureka",
   :block/created-at 1655726439748,
   :block/updated-at 1655726439748}
@@ -364,9 +358,6 @@
  {:block/name "fri, 2022/07/08",
   :block/created-at 1657725120570,
   :block/updated-at 1657725120570}
- {:block/name "fri, 2022/07/15",
-  :block/created-at 1657814402248,
-  :block/updated-at 1657814402248}
  {:block/name "godeng",
   :block/created-at 1657008045833,
   :block/updated-at 1657008045833}
@@ -380,8 +371,8 @@
   :block/created-at 1655726441376,
   :block/updated-at 1655726441376}
  {:block/name "hls__rh2288h_v3_服务器_v100r003_用户指南_43_1657673098179_0",
-  :block/created-at 1657801287527,
-  :block/updated-at 1657801287527}
+  :block/created-at 1657674951844,
+  :block/updated-at 1657674951844}
  {:block/name "hls__the-fenix-project_1655709041362_0",
   :block/created-at 1655726439811,
   :block/updated-at 1655726439811}
@@ -389,8 +380,8 @@
   :block/created-at 1654096261576,
   :block/updated-at 1654096261576}
  {:block/name "hls__华为v2&v3服务器_raid控制卡_用户指南_49_1657590039514_0",
-  :block/created-at 1657801287546,
-  :block/updated-at 1657801287546}
+  :block/created-at 1657673064410,
+  :block/updated-at 1657673064410}
  {:block/name "home",
   :block/created-at 1652894301337,
   :block/updated-at 1652894301337}
@@ -418,9 +409,6 @@
  {:block/name "jetbrains gateway  远程开发",
   :block/created-at 1653119133783,
   :block/updated-at 1653119133783}
- {:block/name "k8s",
-  :block/created-at 1658071318665,
-  :block/updated-at 1658071318665}
  {:block/name "keepalived",
   :block/created-at 1657008046849,
   :block/updated-at 1657008046849}
@@ -429,7 +417,7 @@
   :block/updated-at 1653810522371}
  {:block/name "kubernetes",
   :block/created-at 1657008046929,
-  :block/updated-at 1658065558712}
+  :block/updated-at 1657122855033}
  {:block/name "later",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -437,8 +425,8 @@
   :block/created-at 1657008045817,
   :block/updated-at 1657008045817}
  {:block/name "linux",
-  :block/created-at 1657801287845,
-  :block/updated-at 1657801287845}
+  :block/created-at 1657499730642,
+  :block/updated-at 1657499730642}
  {:block/name "logcenter-server",
   :block/created-at 1653453230610,
   :block/updated-at 1653453230610}
@@ -484,9 +472,6 @@
  {:block/name "mon, 2022/07/11",
   :block/created-at 1657725120507,
   :block/updated-at 1657725120507}
- {:block/name "mon, 2022/07/18",
-  :block/created-at 1658073625188,
-  :block/updated-at 1658073625188}
  {:block/name "mq",
   :block/created-at 1654610950676,
   :block/updated-at 1654610950676}
@@ -546,22 +531,19 @@
   :block/updated-at 1657113710899}
  {:block/name "rabbitmq",
   :block/created-at 1654097423945,
-  :block/updated-at 1657809703049}
+  :block/updated-at 1657720558044}
  {:block/name "rabbitmq docker安装",
   :block/created-at 1657008047003,
   :block/updated-at 1657008047003}
  {:block/name "rabbitmq kubernetes安装",
   :block/created-at 1657008047159,
-  :block/updated-at 1657983068969}
+  :block/updated-at 1657008047159}
  {:block/name "rabbitmq linux 安装",
   :block/created-at 1657008047214,
   :block/updated-at 1657008047214}
  {:block/name "rabbitmq windows 安装",
   :block/created-at 1656691428425,
   :block/updated-at 1656691428425}
- {:block/name "rabbitmq 持久化失效的问题",
-  :block/created-at 1657809481034,
-  :block/updated-at 1657809679601}
  {:block/name "redis",
   :block/created-at 1655730945997,
   :block/updated-at 1655864871224}
@@ -604,21 +586,12 @@
  {:block/name "sat, 2022/07/02",
   :block/created-at 1657725120763,
   :block/updated-at 1657725120763}
- {:block/name "sat, 2022/07/09",
-  :block/created-at 1657332743736,
-  :block/updated-at 1657332743736}
- {:block/name "sat, 2022/07/16",
-  :block/created-at 1657939117937,
-  :block/updated-at 1658071399888}
  {:block/name "screw 生成数据库文档",
   :block/created-at 1655726440449,
   :block/updated-at 1655726440449}
  {:block/name "shardingshpere",
   :block/created-at 1655738419646,
   :block/updated-at 1655738553261}
- {:block/name "showdoc",
-  :block/created-at 1657801287064,
-  :block/updated-at 1657801287064}
  {:block/name "simpread",
   :block/created-at 1654610951063,
   :block/updated-at 1654610951063}
@@ -628,6 +601,9 @@
  {:block/name "spring-data-elasticsearch 使用记录",
   :block/created-at 1653810522393,
   :block/updated-at 1653810522393}
+ {:block/name "spring-data-elasticsearch 使用记录/md",
+  :block/created-at 1653810522820,
+  :block/updated-at 1653810522820}
  {:block/name "springboot",
   :block/created-at 1655460340300,
   :block/updated-at 1655460340300}
@@ -693,10 +669,7 @@
   :block/updated-at 1657725120539}
  {:block/name "sun, 2022/07/10",
   :block/created-at 1657725120537,
-  :block/updated-at 1658034727045}
- {:block/name "sun, 2022/07/17",
-  :block/created-at 1657987200177,
-  :block/updated-at 1658052164177}
+  :block/updated-at 1657725120537}
  {:block/name "test",
   :block/created-at 1653119134940,
   :block/updated-at 1653119134940}
@@ -744,7 +717,7 @@
   :block/updated-at 1657725120602}
  {:block/name "thu, 2022/07/14",
   :block/created-at 1657765706798,
-  :block/updated-at 1657814248977}
+  :block/updated-at 1657765882646}
  {:block/name "todo",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -821,7 +794,7 @@
   :block/updated-at 1653181392629}
  {:block/name "vmware",
   :block/created-at 1655460340483,
-  :block/updated-at 1657814575085}
+  :block/updated-at 1657531257609}
  {:block/name "wait",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -878,7 +851,7 @@
   :block/updated-at 1657725120419}
  {:block/name "wed, 2022/07/06",
   :block/created-at 1657725120646,
-  :block/updated-at 1658026380605}
+  :block/updated-at 1657725120646}
  {:block/name "wed, 2022/07/13",
   :block/created-at 1657725120417,
   :block/updated-at 1657765733447}
@@ -924,15 +897,12 @@
  {:block/name "人体系统调优不完全指南",
   :block/created-at 1657013148249,
   :block/updated-at 1657013151460}
- {:block/name "从技术难题中学习",
-  :block/created-at 1657939118212,
-  :block/updated-at 1657939118212}
  {:block/name "任意时间延时消息原理讲解",
   :block/created-at 1654610951263,
   :block/updated-at 1654610951263}
  {:block/name "企业日志收集系统",
-  :block/created-at 1657801287786,
-  :block/updated-at 1657801287786}
+  :block/created-at 1657673064107,
+  :block/updated-at 1657673064107}
  {:block/name "企业附件存储系统",
   :block/created-at 1657113711209,
   :block/updated-at 1657113711209}
@@ -972,9 +942,6 @@
  {:block/name "如何运行python项目",
   :block/created-at 1655460339533,
   :block/updated-at 1655460339533}
- {:block/name "如何阅读一份代码",
-  :block/created-at 1657939118214,
-  :block/updated-at 1657939118214}
  {:block/name "学历信息",
   :block/created-at 1653813725116,
   :block/updated-at 1653813725116}
