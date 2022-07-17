@@ -49,9 +49,6 @@
  {:block/name "\"wed, 06/01\"",
   :block/created-at 1657154864113,
   :block/updated-at 1657154864113}
- {:block/name ".v-eisenhower-matrix",
-  :block/created-at 1657245640417,
-  :block/updated-at 1657245640417}
  {:block/name "2022",
   :block/created-at 1653813725226,
   :block/updated-at 1653813725226}
@@ -241,9 +238,6 @@
  {:block/name "done",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
- {:block/name "draws/2022-07-16-21-59-14.excalidraw",
-  :block/created-at 1657980156385,
-  :block/updated-at 1657980156385}
  {:block/name "easypoi",
   :block/created-at 1655726439419,
   :block/updated-at 1655726439419}
@@ -280,9 +274,6 @@
  {:block/name "erlang",
   :block/created-at 1656691428245,
   :block/updated-at 1656691428245}
- {:block/name "esxi",
-  :block/created-at 1657765882644,
-  :block/updated-at 1657766959395}
  {:block/name "esxi 安装",
   :block/created-at 1657939118357,
   :block/updated-at 1657939118357}
@@ -418,9 +409,6 @@
  {:block/name "jetbrains gateway  远程开发",
   :block/created-at 1653119133783,
   :block/updated-at 1653119133783}
- {:block/name "k8s",
-  :block/created-at 1658071318665,
-  :block/updated-at 1658071318665}
  {:block/name "keepalived",
   :block/created-at 1657008046849,
   :block/updated-at 1657008046849}
@@ -428,8 +416,8 @@
   :block/created-at 1653810522371,
   :block/updated-at 1653810522371}
  {:block/name "kubernetes",
-  :block/created-at 1657008046929,
-  :block/updated-at 1658065558712}
+  :block/created-at 1658071318665,
+  :block/updated-at 1658074613604}
  {:block/name "later",
   :block/created-at 1652802656183,
   :block/updated-at 1652802656183}
@@ -696,7 +684,7 @@
   :block/updated-at 1658034727045}
  {:block/name "sun, 2022/07/17",
   :block/created-at 1657987200177,
-  :block/updated-at 1658052164177}
+  :block/updated-at 1658074390373}
  {:block/name "test",
   :block/created-at 1653119134940,
   :block/updated-at 1653119134940}
