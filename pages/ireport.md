@@ -9,4 +9,10 @@
   collapsed:: true
 	- > 需要环境 [JDK1.7 ](https://www.oracle.com/java/technologies/javase/javase7-archive-downloads.html) ，并修改JAVA_HOME系统变量
 	- [5.6下载地址](https://sourceforge.net/projects/ireport/files/iReport/iReport-5.6.0/iReport-5.6.0.zip/download)
--
+- 平时一些问题
+  collapsed:: true
+	- ### 给某一字段加下划线或横线
+	  collapsed:: true
+		- 在字段$F{sdaddress}的properties设置的Font标签下，把Underline前的复选框选上，这就类似于word中个文字加下划线。
+	- 报错定位
+		- 组件单独粘到一个尝试能否编译

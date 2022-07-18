@@ -156,5 +156,5 @@
  :ui/show-brackets? true
  :journal/page-title-format "EEE, yyyy/MM/dd"
  :journal/file-name-format "yyyy-MM-dd"
- :favorites ["HOME" "react hot module reloading" "jsplay"]
+ :favorites ["个人技术栈" "HOME" "react hot module reloading" "jsplay"]
  :graph/settings {:builtin-pages? true, :journal? false, :orphan-pages? true}}
