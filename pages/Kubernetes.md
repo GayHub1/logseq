@@ -70,6 +70,10 @@ title:: Kubernetes
 	  collapsed:: true
 		- 只是一个 K8S 集群模拟器，只有一个节点的集群，只为测试用，master 和 worker 都在一起
 		- [安装方法](https://minikube.sigs.k8s.io/docs/start/)
+		- Windows
+			- ```sh
+			  winget install minikube
+			  ```
 	- ### 云平台 Kubernetes
 	  collapsed:: true
 		- 可视化搭建，只需简单几步就可以创建好一个集群。
@@ -5000,6 +5004,7 @@ title:: Kubernetes
 			             kubectx minikube
 			             ```
 - ## Ingress
+  collapsed:: true
 	- ![image.png](../assets/image_1658065297029_0.png)
 	- ### 介绍
 		- Ingress 为外部访问集群提供了一个 **统一** 入口，避免了对外暴露集群端口；
