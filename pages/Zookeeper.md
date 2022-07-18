@@ -47,8 +47,16 @@
 	- >  每个节点中存储了节点value和对应的状态属性（多个） **value: data 与 znode status**
 	- zookeeper本身是一个**树形目录服务**（名称空间），**非常类似于标准文件系统**，key-value 的形式存储。名称 key 由斜线 / 分
 	  割的一系列路径元素，zookeeper 名称空间中的每个节点都是由一个路径来标识的。
-- ## Java 客户端
+	- Znode结构
+	  collapsed:: true
+		- ![image.png](../assets/image_1658162556095_0.png)
+	- 节点类型
+	  collapsed:: true
+		- ![image.png](../assets/image_1658162710304_0.png)
+- 基础命令
   collapsed:: true
+	- ![image.png](../assets/image_1658162670710_0.png)
+- ## Java 客户端
 	- zookeeper 原生Api
 	  collapsed:: true
 		- 缺点
@@ -74,6 +82,7 @@
   collapsed:: true
 	- ![image.png](../assets/image_1658160014157_0.png)
 - 集群搭建
+  collapsed:: true
 	- 奇数
 		- 容错率
 		- 防脑裂
